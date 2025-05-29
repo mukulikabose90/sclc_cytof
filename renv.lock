@@ -3,10 +3,6 @@
     "Version": "4.4.2",
     "Repositories": [
       {
-        "Name": "CRAN",
-        "URL": "https://packagemanager.posit.co/cran/latest"
-      },
-      {
         "Name": "BioCsoft",
         "URL": "https://bioconductor.org/packages/3.20/bioc"
       },
@@ -19,16 +15,24 @@
         "URL": "https://bioconductor.org/packages/3.20/data/experiment"
       },
       {
+        "Name": "BioCworkflows",
+        "URL": "https://bioconductor.org/packages/3.20/workflows"
+      },
+      {
+        "Name": "BioCbooks",
+        "URL": "https://bioconductor.org/packages/3.20/books"
+      },
+      {
+        "Name": "CRAN",
+        "URL": "https://packagemanager.posit.co/cran/latest"
+      },
+      {
         "Name": "CRANextra",
         "URL": "https://www.stats.ox.ac.uk/pub/RWin"
       },
       {
         "Name": "R-Forge",
         "URL": "https://R-Forge.R-project.org"
-      },
-      {
-        "Name": null,
-        "URL": null
       }
     ]
   },

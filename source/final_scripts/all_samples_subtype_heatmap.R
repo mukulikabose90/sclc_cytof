@@ -24,7 +24,6 @@ ctcs <- ctcs[rowData(ctcs)$marker_class == "state",]
 colData(ctcs)$cell_id <- 1:nrow(colData(ctcs))
 colData(ctcs)$cell_id <- paste0("cell_",1:nrow(colData(ctcs)))
 
-
 ################################################################################
 # Create heatmap
 ################################################################################

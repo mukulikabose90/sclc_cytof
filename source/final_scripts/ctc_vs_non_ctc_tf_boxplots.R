@@ -21,7 +21,7 @@ gg_df <- melt(df, value.name = "expression", variable.name = "antigen",
 
 sclc_tfs <- c("NeuroD1","ASCL1","POU2F3","p-Rb")
 
-# sclc_tfs <- markers
+sclc_tfs <- markers
 
 temp <- gg_df %>%
   dplyr::filter(antigen %in% sclc_tfs)

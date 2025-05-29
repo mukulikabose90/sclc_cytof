@@ -1,9 +1,8 @@
 source("source/sclc_cytof_functions.R")
 
 create_metadata <- function(files,experiment_id){
-  
-  # Meta-data: experiment information
-  # experiment_id <- strsplit(experiment_id,"_")[[1]][2]
+
+  # This function creates metadata for each file that acts as linker to full metadata csv
   
   filenames <- as.character(files)
   
@@ -16,7 +15,6 @@ create_metadata <- function(files,experiment_id){
   
   data_id <- paste0(data_id,"_",experiment_id)
   
-  # experiment_metadata <- data.frame(cbind(filenames,data_id,sample_id,patient_id,sample_num,experiment_id))
   experiment_metadata <- data.frame(cbind(filenames,data_id))
   rownames(experiment_metadata) <- NULL
   
@@ -38,12 +36,10 @@ all_experiments <- all_experiments[!grepl("old",all_experiments)]
 marker_info <- read.csv("data/cytof_panel_info.csv")
 marker_info <- data.frame(marker_info, stringsAsFactors = FALSE)
 
-# Read in markers to use for each experiment
-# markers_to_use <- readRDS("data/markers_to_use.rds")
 markers_to_use <- marker_info$fcs_colname
 
 ################################################################################
-# Read in all cytof files
+# Read in all CyTOF files
 ################################################################################
 
 all_metadata <- list()
@@ -100,20 +96,17 @@ clinical_metadata$data_id[!clinical_metadata$data_id %in% all_metadata$data_id]
 names(final_flowset@frames)[!names(final_flowset@frames) %in% all_metadata$filenames]
 
 ################################################################################
-
+# Only retain files/samples that appear in both flowset and metadata
+################################################################################
 files_to_keep <- intersect(all_metadata$filenames,names(final_flowset@frames))
-
-# blood_samples <- all_metadata %>% 
-#   dplyr::filter(sample_type == "blood") %>% 
-#   pull(filenames)
-# 
-# files_to_keep <- intersect(blood_samples,names(final_flowset@frames))
 
 final_flowset <- final_flowset[files_to_keep]
 
 metadata_to_use <- all_metadata %>% 
   dplyr::filter(filenames %in% files_to_keep)
 
+################################################################################
+# Generate SingleCellExperiment object
 ################################################################################
 #Get colnames for metadata factors
 factor_colnames <- colnames(metadata_to_use)[-which(colnames(metadata_to_use) == "filenames")]
@@ -127,8 +120,4 @@ sce <- prepData(final_flowset, panel = marker_info, md=metadata_to_use, features
 
 saveRDS(sce, "data/cytof_objects/sclc_all_samples_object_no_qc.rds")
 
-# Filter to only use first draw
-# sce_first <- sce[,colData(sce)$sample_num == 1]
-# 
-# saveRDS(sce_first, "data/cytof_objects/sclc_first_draw_object.rds")
 

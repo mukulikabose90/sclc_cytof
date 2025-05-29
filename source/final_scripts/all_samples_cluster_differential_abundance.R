@@ -1,13 +1,16 @@
 source("source/sclc_cytof_functions.R")
 
-script_seed <- 42
-set.seed(script_seed)
-################################################################################
-# Differential abundance
+set.seed(42)
 FDR_cutoff <- 0.05
+################################################################################
+# Read in data
+################################################################################
 
 sce <- readRDS("data/cytof_objects/sclc_all_samples_with_clusters.rds")
 
+################################################################################
+# Calculate differential abundance using Fisher's exact test
+################################################################################
 clusters <- levels(colData(sce)$new_clusters)
 
 pvals <- c()
@@ -31,6 +34,10 @@ for(curr_cluster in clusters){
 # Select significant clusters
 signif_clusters <- which(p.adjust(pvals) < 0.05)
 
+################################################################################
+# Create DA barplot 
+################################################################################
+
 cluster_prop_df <- as.data.frame(colData(sce)) %>% 
   dplyr::count(new_clusters,condition) %>% 
   group_by(condition) %>% 
@@ -43,7 +50,7 @@ cluster_prop_df <- cluster_prop_df %>%
   group_by(new_clusters) %>% 
   mutate(height = max(freq))
 
-
+# reorder condition factor
 cluster_prop_df$condition <- ifelse(cluster_prop_df$condition == "cancer", "Cancer", "Normal")
 cluster_prop_df$condition <- factor(cluster_prop_df$condition, levels=c("Normal","Cancer"))
   
@@ -64,9 +71,6 @@ p1 <- ggplot(cluster_prop_df,aes(x=new_clusters,y=freq,fill=condition))+
         legend.text = element_text(size=6),
         legend.title = element_text(size=8))
 
-
-
-
 p1
 
 jpeg("figures/all_samples_cluster_diff_abundance_barplots.jpg", width=120,height=100, units = "mm", res=1000)
@@ -74,7 +78,8 @@ print(p1)
 dev.off()
 
 ################################################################################
-
+# Identify and save CTC clusters
+################################################################################
 ctc_clusters <- c()
 for(i in unique(cluster_prop_df$new_clusters)){
   cancer_freq <- cluster_prop_df %>% 

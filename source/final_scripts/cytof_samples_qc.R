@@ -2,11 +2,13 @@ source("source/sclc_cytof_functions.R")
 
 set.seed(42)
 ################################################################################
+# Read in data
+################################################################################
 
 sce <- readRDS("data/cytof_objects/sclc_all_samples_object_no_qc.rds")
 
 ################################################################################
-# Remove cell line samples
+# Remove cell line and PE samples
 ################################################################################
 blood_samples <- as.data.frame(sce@colData) %>%
   dplyr::filter(sample_type == "blood") %>%
@@ -16,8 +18,14 @@ blood_samples <- as.data.frame(sce@colData) %>%
 sce <- sce[,sce$collection_id %in% blood_samples]
 
 ################################################################################
-# Proportional downsampling
+# Proportional down-sampling
 ################################################################################
+sce$cell_id <- 1:ncol(sce)
+
+original_sce <- sce
+
+all_cell_ids <- sce$cell_id
+
 downsample_df <- as.data.frame(colData(sce)) %>% 
   dplyr::count(collection_id,experiment_id) %>% 
   dplyr::count(collection_id) %>% 
@@ -41,51 +49,13 @@ for(i in 1:nrow(downsample_df)){
 
 sce <- do.call(cbind, downsampled_objs)
 
-################################################################################
-# markers <- as.data.frame(rowData(sce)) %>%
-#   dplyr::filter(marker_class == "state") %>%
-#   pull(marker_name)
-# 
-# temp <- sce[markers,sce$collection_id == "H1105-1"]
-# 
-# p1 <- plotExprs(temp, color_by = "experiment_id", assay = "exprs")
-# 
-# p1
+remaining_cell_ids <- sce$cell_id
 
-# temp <- sce[markers,sce$collection_id == "NJH29-1"]
-# 
-# p1 <- plotExprs(temp, color_by = "experiment_id", assay = "exprs")
-# # 
-# temp <- sce_corrected[markers,sce_corrected$collection_id == "NJH29-1"]
-# 
-# p2 <- plotExprs(temp, color_by = "experiment_id", assay = "exprs")
-# 
-# p1+ggtitle("NJH29 (no batch correction)")
-# p2+ggtitle("NJH29 (batch corrected)")
-# 
-# ################################################################################
+left_out_cell_ids <- all_cell_ids[!all_cell_ids %in% remaining_cell_ids]
 
-# Get samples that are run in multiple experiments
-# to_test <- as.data.frame(sce@colData) %>%
-#   dplyr::select(experiment_id,collection_id) %>%
-#   distinct() %>%
-# dplyr::count(collection_id) %>%
-#   arrange(desc(n)) %>%
-#   dplyr::filter(n > 1) %>%
-#   pull(collection_id) %>%
-#   as.character()
-# 
-# 
-# sort(to_test)
-# 
-# # Checking SC454-1
-# temp <- sce[markers,sce$collection_id == "SC454-1"]
-# 
-# plotExprs(temp, color_by = "experiment_id", assay = "exprs")
-# 
-# temp <- sce_corrected[markers,sce_corrected$collection_id == "SC414-1"]
-# plotExprs(temp, color_by = "experiment_id",assay = "exprs")
+removed_sce <- original_sce[,original_sce$cell_id %in% left_out_cell_ids]
 
+saveRDS(removed_sce, "data/cytof_objects/sce_not_sampled.rds")
 ################################################################################
 # Remove outlier experiments
 ################################################################################
@@ -123,20 +93,7 @@ samples_to_remove <- as.data.frame(sce@colData) %>%
 sce <- sce[,!sce$collection_id %in% samples_to_remove]
 
 ################################################################################
-# limma batch correction
-################################################################################
-
-# batch <- as.factor(colData(sce)$experiment_id)
-# 
-# design <- model.matrix(~ 0 + factor(colData(sce)$condition))  # one-hot encoding of conditions
-# colnames(design) <- levels(factor(colData(sce)$condition))
-# 
-# corrected_exprs <- removeBatchEffect(assay(sce, "exprs"), batch = batch, design = design)
-# 
-# assay(sce, "exprs") <- corrected_exprs
-
-################################################################################
-# cyCombine batch correction
+# Get protein markers
 ################################################################################
 marker_info <- read.csv("data/cytof_panel_info.csv")
 marker_info <- data.frame(marker_info, stringsAsFactors = FALSE)
@@ -145,21 +102,45 @@ markers <- marker_info %>%
   dplyr::filter(marker_class != "none") %>%
   pull(antigen)
 
+saveRDS(markers, "data/protein_markers.rds")
+
+################################################################################
+# cyCombine batch correction
+################################################################################
+# Set replicates as anchor
+replicates <- as.data.frame(colData(sce)) %>% 
+  dplyr::count(collection_id,experiment_id) %>% 
+  dplyr::count(collection_id) %>% 
+  filter(n > 1) %>% 
+  pull(collection_id) %>% 
+  as.character()
+
+sce$anchor <- ifelse(as.character(sce$collection_id) %in% replicates, as.character(sce$collection_id), as.character(sce$sample_id))
+
+# get expression data
 y <- assay(sce, "exprs")
 
+# Set cell IDs
 colnames(y) <- paste0("cell_",1:ncol(y))
 
+# Merge metadata and expression
 df <- data.frame(t(y), colData(sce), check.names = FALSE)
 
+# Change experiment id column to batch
 colnames(df)[which(colnames(df) == "experiment_id")] <- "batch"
 
+# Run batch correction function
 corrected <- batch_correct(df,
-                           markers = markers)
+                           markers = markers,
+                           anchor = "anchor")
 
+# Remove metadata columns. Only proteins remain
 corrected <- as.matrix(t(corrected[,3:40]))
 
+# Reorder cells to match orignal order
 corrected <- corrected[rownames(y),]
 
+# Replace old expression matrix with corrected
 assay(sce, "exprs") <- corrected
 
 ################################################################################

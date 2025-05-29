@@ -17,6 +17,52 @@ blood_samples <- as.data.frame(sce@colData) %>%
 sce <- sce[,sce$collection_id %in% blood_samples]
 
 ################################################################################
+
+################################################################################
+# markers <- as.data.frame(rowData(sce)) %>%
+#   dplyr::filter(marker_class == "state") %>%
+#   pull(marker_name)
+# 
+# temp <- sce[markers,sce$collection_id == "H1105-1"]
+# 
+# p1 <- plotExprs(temp, color_by = "experiment_id", assay = "exprs")
+# 
+# p1
+
+# temp <- sce[markers,sce$collection_id == "NJH29-1"]
+# 
+# p1 <- plotExprs(temp, color_by = "experiment_id", assay = "exprs")
+# # 
+# temp <- sce_corrected[markers,sce_corrected$collection_id == "NJH29-1"]
+# 
+# p2 <- plotExprs(temp, color_by = "experiment_id", assay = "exprs")
+# 
+# p1+ggtitle("NJH29 (no batch correction)")
+# p2+ggtitle("NJH29 (batch corrected)")
+# 
+# ################################################################################
+
+# Get samples that are run in multiple experiments
+# to_test <- as.data.frame(sce@colData) %>%
+#   dplyr::select(experiment_id,collection_id) %>%
+#   distinct() %>%
+# dplyr::count(collection_id) %>%
+#   arrange(desc(n)) %>%
+#   dplyr::filter(n > 1) %>%
+#   pull(collection_id) %>%
+#   as.character()
+# 
+# 
+# sort(to_test)
+# 
+# # Checking SC454-1
+# temp <- sce[markers,sce$collection_id == "SC454-1"]
+# 
+# plotExprs(temp, color_by = "experiment_id", assay = "exprs")
+# 
+# temp <- sce_corrected[markers,sce_corrected$collection_id == "SC414-1"]
+# plotExprs(temp, color_by = "experiment_id",assay = "exprs")
+################################################################################
 # Proportional downsampling
 ################################################################################
 downsample_df <- as.data.frame(colData(sce)) %>% 

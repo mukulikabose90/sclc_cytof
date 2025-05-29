@@ -11,6 +11,7 @@ set.seed(42)
 sce <- readRDS("data/cytof_objects/sclc_all_samples_with_clusters.rds")
 
 ctc_clusters <- readRDS("data/ctc_clusters.rds")
+# ctc_clusters <- c(6)
 
 # Subset to cancer cells in CTC cluster
 ctcs <- sce[,colData(sce)$new_clusters %in% ctc_clusters]

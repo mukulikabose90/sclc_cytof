@@ -35,7 +35,7 @@ x_axis_label <- gsub("m","M",metric_to_use)
 # c("royalblue4","lightgray", "firebrick4"))
 
 p1 <- ggplot(signif_df,aes(x=as.numeric(logfc), y=protein, fill=logfc))+
-  geom_col(color="darkgray",size=.001)+
+  geom_col(color="darkgray",linewidth=.001)+
   geom_text(aes(x=star_x, label=significance), size = 3)+
   facet_wrap(~ident_list, scales = "free_y",nrow=1)+
   scale_y_reordered()+

@@ -115,7 +115,6 @@ metadata_to_use <- all_metadata %>%
   dplyr::filter(filenames %in% files_to_keep)
 
 ################################################################################
-
 #Get colnames for metadata factors
 factor_colnames <- colnames(metadata_to_use)[-which(colnames(metadata_to_use) == "filenames")]
 factor_colnames <- factor_colnames[-which(colnames(metadata_to_use) == "data_id")]

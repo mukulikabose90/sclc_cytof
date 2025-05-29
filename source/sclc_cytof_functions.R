@@ -13,6 +13,8 @@ library(RColorBrewer)
 library(circlize)
 library(limma)
 library(factoextra)
+library(iMUBAC)
+library(cyCombine)
 
 scale_values <- function(x){(x-min(x))/(max(x)-min(x))}
 
@@ -37,7 +39,7 @@ cytof_de <- function(sce, method = "wilcox", metric = "median", ident = "new_clu
   if(method == "wilcox"){
     
     for(i in 1:length(state_markers)){
-     
+      
       for(curr_ident in idents){
         protein <- append(protein, state_markers[i])
         ident_list <- append(ident_list, curr_ident)
@@ -63,7 +65,7 @@ cytof_de <- function(sce, method = "wilcox", metric = "median", ident = "new_clu
   if(method == "glm"){
     
     for(i in 1:length(state_markers)){
-
+      
       # Set up data for fitting model
       data_i <- cbind(counts[i,],colData(sce))
       colnames(data_i)[1] <- "protein"

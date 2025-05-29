@@ -30,14 +30,17 @@ sce <- runDR(sce, "UMAP", cells = 5e3, features = "state")
 
 sce@metadata$delta_area
 
-plotDR(sce, color_by = "meta8",facet_by = "experiment_id")
 
-plotDR(sce, color_by = "experiment_id", facet_by = "sample_type")
+# CATALYST::plotDR(sce, color_by = "meta9",facet_by = "experiment_id")
+
+
+# CATALYST::plotDR(sce, color_by = "experiment_id")
+
 
 ################################################################################
 
 # Add new cluster assignments to colData
-colData(sce)$new_clusters <- cluster_ids(sce, "meta8")
+colData(sce)$new_clusters <- cluster_ids(sce, "meta9")
 
 # Save data with cluster assignments
 saveRDS(sce, "data/cytof_objects/sclc_all_samples_with_clusters.rds")
@@ -74,7 +77,7 @@ p1 <- ggplot(df)+
   xlab("UMAP 1")+
   ylab("UMAP 2")+
   labs(color = "Clusters")+
-  scale_color_manual(name = "Clusters",values=cluster_colors)+
+  # scale_color_manual(name = "Clusters",values=cluster_colors)+
   theme_classic() +
   guides(color = guide_legend(override.aes = list(size=5)))+
   theme(panel.grid.minor = element_blank(), 
@@ -86,6 +89,22 @@ p1 <- ggplot(df)+
   
 p1
 
+ggplot(df)+
+  geom_point(aes(x=x, y=y, color=new_clusters),size=.1)+
+  facet_wrap(~experiment_id)+
+  xlab("UMAP 1")+
+  ylab("UMAP 2")+
+  labs(color = "Clusters")+
+  # scale_color_manual(name = "Clusters",values=cluster_colors)+
+  theme_classic() +
+  guides(color = guide_legend(override.aes = list(size=5)))+
+  theme(panel.grid.minor = element_blank(), 
+        strip.text = element_text(face = "bold", size=8), 
+        axis.text = element_text(color = "black", size=8),
+        axis.title = element_text(size=8),
+        legend.text = element_text(size=6),
+        legend.title = element_text(size=8))
+
 
 facet_names <- c('normal'="Normal",'cancer'="Cancer")
 p2 <- ggplot(df)+
@@ -94,7 +113,7 @@ p2 <- ggplot(df)+
   xlab("UMAP 1")+
   ylab("UMAP 2")+
   labs(color = "Clusters")+
-  scale_color_manual(name = "Clusters",values=cluster_colors)+
+  # scale_color_manual(name = "Clusters",values=cluster_colors)+
   guides(color = guide_legend(override.aes = list(size=5)))+
   scale_alpha_manual(values = c("ctc" = 1, "non-ctc" = 0.05))+
   theme_classic() +

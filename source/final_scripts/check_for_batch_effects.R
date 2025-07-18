@@ -1,5 +1,65 @@
-
+source("source/sclc_cytof_functions.R")
+library(PCAtools)
+set.seed(42)
+################################################################################
+# Read in data
+################################################################################
 sce <- readRDS("data/cytof_objects/sclc_all_samples_object_no_qc.rds")
+sce <- sce[,sce$experiment_id != "531050"]
+
+pca_result <- pca(sce@assays@data$exprs)
+
+xy <- pca_result$rotated[,c(1,2)]
+
+colnames(xy) <- c("x", "y")
+df <- data.frame(colData(sce), xy, check.names = FALSE)
+
+# Generate and save cluster colors
+cluster_colors <- c(
+  "#E57373",  # muted red
+  "#FFB74D",  # muted orange
+  "#81C784",  # muted green
+  "#BA68C8",  # muted purple
+  "#FFF176",  # soft yellow
+  "#F48FB1",  # muted pink
+  "#A1887F",  # warm tan
+  "#64B5F6",  # muted blue
+  "#4DB6AC",
+  "gray",
+  "darkred",
+  "darkblue",
+  "magenta"
+)
+
+
+# Plot UMAP
+p1 <- ggplot(df)+
+  geom_point(aes(x=x, y=y, color=date_run),size=.1)+
+  
+  xlab("UMAP 1")+
+  ylab("UMAP 2")+
+  labs(color = "Clusters")+
+  scale_color_manual(name = "Clusters",values=cluster_colors)+
+  theme_classic() +
+  guides(color = guide_legend(override.aes = list(size=5)))+
+  theme(panel.grid.minor = element_blank(), 
+        strip.text = element_text(face = "bold", size=8), 
+        axis.text = element_text(color = "black", size=8),
+        axis.title = element_text(size=8),
+        legend.text = element_text(size=6),
+        legend.title = element_text(size=8))
+
+p1
+
+pbMDS(sce,color_by = "experiment_id", label_by = NULL)
+pbMDS(sce,color_by = "condition", label_by = NULL)
+pbMDS(sce,color_by = "patient_id", label_by = "patient_id")
+
+sce %>% 
+  colData() %>% 
+  as.data.frame() %>% 
+  count(experiment_id,condition,sample_id) %>% 
+  count(experiment_id,sample_id)
 
 ################################################################################
 # Remove cell line samples
@@ -9,34 +69,56 @@ blood_samples <- as.data.frame(sce@colData) %>%
   pull(collection_id) %>%
   as.character()
 
-blood_samples <- as.data.frame(sce@colData) %>%
-  dplyr::filter(sample_type == "cell_line") %>%
-  pull(collection_id) %>%
-  as.character()
+# blood_samples <- as.data.frame(sce@colData) %>%
+#   dplyr::filter(sample_type == "cell_line") %>%
+#   pull(collection_id) %>%
+#   as.character()
 
 sce <- sce[,sce$collection_id %in% blood_samples]
 
-################################################################################
+sce@metadata$experiment_info <- sce@metadata$experiment_info %>% 
+  dplyr::filter(sample_id %in% sce$sample_id)
 
 ################################################################################
-# markers <- as.data.frame(rowData(sce)) %>%
-#   dplyr::filter(marker_class == "state") %>%
-#   pull(marker_name)
-# 
-# temp <- sce[markers,sce$collection_id == "H1105-1"]
-# 
-# p1 <- plotExprs(temp, color_by = "experiment_id", assay = "exprs")
-# 
-# p1
 
-# temp <- sce[markers,sce$collection_id == "NJH29-1"]
-# 
-# p1 <- plotExprs(temp, color_by = "experiment_id", assay = "exprs")
-# # 
+sce$experiment_id <- factor(sce$experiment_id, levels = unique(sce$experiment_id))
+
+
+pbMDS(sce)
+
+p$data %>% 
+  filter(!is.na(experiment_id))
+
+################################################################################
+markers <- as.data.frame(rowData(sce)) %>%
+  dplyr::filter(marker_class == "state") %>%
+  pull(marker_name)
+
+sce <- readRDS("data/cytof_objects/sclc_all_samples_object_no_qc.rds")
+
+sce <- sce[,sce$experiment_id != "531050"]
+sce <- sce[,sce$experiment_id != "508095"]
+sce <- sce[,sce$experiment_id != "511467"]
+sce <- sce[,sce$experiment_id != "508814"]
+sce <- sce[,sce$experiment_id != "508814"]
+
+temp <- sce[markers,sce$collection_id == "NJH29-1"]
+
+p1 <- plotExprs(temp, color_by = "experiment_id", assay = "exprs")
+
+p1
+
+temp <- sce[markers,sce$collection_id == "SC414-1"]
+
+p1 <- plotExprs(temp, color_by = "experiment_id", assay = "exprs")
+p1
+
+
+
 # temp <- sce_corrected[markers,sce_corrected$collection_id == "NJH29-1"]
-# 
+#
 # p2 <- plotExprs(temp, color_by = "experiment_id", assay = "exprs")
-# 
+#
 # p1+ggtitle("NJH29 (no batch correction)")
 # p2+ggtitle("NJH29 (batch corrected)")
 # 

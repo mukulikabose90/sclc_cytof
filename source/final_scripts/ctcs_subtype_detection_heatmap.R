@@ -4,25 +4,17 @@
 ################################################################################
 source("source/sclc_cytof_functions.R")
 
-set.seed(42)
+script_seed <- 42
+set.seed(script_seed)
 ################################################################################
 # Read in CyTOF data with cluster assignments
 ################################################################################
-sce <- readRDS("data/cytof_objects/sclc_all_samples_with_clusters.rds")
+cancer_enriched <- readRDS("data/cytof_objects/cancer_enriched_with_clusters.rds")
 
-ctc_clusters <- readRDS("data/ctc_clusters.rds")
-ctc_clusters <- c(1,4)
 
-# Subset to cancer cells in CTC cluster
-ctcs <- sce[,colData(sce)$new_clusters %in% ctc_clusters]
-ctcs <- ctcs[,colData(ctcs)$condition == "cancer"]
-
-# Subset to only state markers
-ctcs <- ctcs[rowData(ctcs)$marker_class == "state",]
-
-# Give each cell an ID
-colData(ctcs)$cell_id <- 1:nrow(colData(ctcs))
-colData(ctcs)$cell_id <- paste0("cell_",1:nrow(colData(ctcs)))
+#Subset to clusters with known CTC marker profiles
+# ctcs <- cancer_enriched[,cancer_enriched$new_clusters %in% c(2,5,6,7,8)]
+ctcs <- cancer_enriched[,cancer_enriched$new_clusters %in% c(2,4,5,6,7,8)]
 
 ################################################################################
 # Create heatmap
@@ -51,7 +43,7 @@ heatmap_tf_scaled <- heatmap_scaled[,colnames(heatmap_scaled) %in% c("POU2F3","N
 
 #Set up metadata table to create annotations
 heatmap_metadata <- data.frame(colData(ctcs)) %>% 
-  dplyr::select(cell_id,collection_id,sample_id,patient_id,condition,sample_num, treatment_status) %>% 
+  dplyr::select(cell_id,collection_id,sample_id,patient_id,condition,sample_num, treatment_status,experiment_id) %>% 
   select(-c(sample_id)) %>% 
   distinct()
 
@@ -62,7 +54,20 @@ treated_heatmap <- all_samples_heatmap[,colnames(all_samples_heatmap) %in% ctcs[
 #############################################################################
 # Create heatmap with all samples
 #############################################################################
-col_fun = colorRamp2(c(-2, 0, 2), c("royalblue4","lightgray", "firebrick4"))
+# col_fun = colorRamp2(c(-2, 0, 2), c("royalblue4","lightgray", "firebrick4"))
+col_fun = colorRamp2(c(-2, -1, 0, 1, 2), 
+                     c("#313695",  # deep blue
+                       "#74add1",  # light blue
+                       "#f7f7f7",  # white (center, 0)
+                       "#f46d43",  # light red
+                       "#a50026"))
+# Create experiment ID annotation
+# colors_to_use <- colorRampPalette(brewer.pal(12,"Paired"))(length(unique(heatmap_metadata$experiment_id)))
+# names(colors_to_use) <- unique(heatmap_metadata$experiment_id)
+# experiment_anno <- HeatmapAnnotation("Experiment ID" = heatmap_metadata$experiment_id, 
+#                                  col = list("Experiment ID"= colors_to_use),
+#                                  show_annotation_name = T,
+#                                  annotation_legend_param = list(ncol=3))
 
 # Create collection ID annotation
 colors_to_use <- colorRampPalette(brewer.pal(12,"Paired"))(length(unique(heatmap_metadata$collection_id)))
@@ -80,8 +85,22 @@ patient_anno <- HeatmapAnnotation("Patient ID" = heatmap_metadata$patient_id,
                                   show_annotation_name = T,
                                   annotation_legend_param = list(ncol=2))
 
+# Get optimal k for kmeans
+# silh_res <- fviz_nbclust(t(all_samples_heatmap), kmeans, method='silhouette')
+# num_subclusters <- which(silh_res$data$y == max(silh_res$data$y))
+# num_subclusters
+num_subclusters <- 4
 
-ht <- Heatmap(all_samples_heatmap, column_km = 4, top_annotation = sample_anno, name="Expression",
+# col_fun = colorRamp2(c(min(heatmap_scaled), -1, 0, 1, max(heatmap_scaled)), 
+#                      c("#313695",  # deep blue
+#                        "#74add1",  # light blue
+#                        "#f7f7f7",  # white (center, 0)
+#                        "#f46d43",  # light red
+#                        "#a50026"))
+
+
+
+ht <- Heatmap(all_samples_heatmap, column_km = num_subclusters, top_annotation = sample_anno, name="Expression",
               cluster_columns = T, cluster_rows = F, show_column_names=F,col = col_fun,
               row_dend_reorder = F, column_title = c("SCLC-A", "SCLC-P","SCLC-I","SCLC-N"))
 
@@ -109,9 +128,9 @@ patient_anno <- HeatmapAnnotation("Patient ID" = curr_metadata$patient_id,
                                   annotation_legend_param = list(ncol=2))
 
 
-ht <- Heatmap(naive_heatmap, column_km = 4,top_annotation = sample_anno, name="Expression",
+ht <- Heatmap(naive_heatmap, column_km = num_subclusters, top_annotation = sample_anno, name="Expression",
               cluster_columns = T, cluster_rows = F, show_column_names=F,col = col_fun,
-              row_dend_reorder = F, column_title = c("SCLC-A", "SCLC-P","SCLC-I","SCLC-N"))
+              row_dend_reorder = F, column_title = c("SCLC-N", "SCLC-P","SCLC-I","SCLC-A"))
 
 naive_ht <- draw(ht)
 
@@ -136,9 +155,11 @@ patient_anno <- HeatmapAnnotation("Patient ID" = curr_metadata$patient_id,
                                   show_annotation_name = T,
                                   annotation_legend_param = list(ncol=2))
 
-ht <- Heatmap(treated_heatmap, column_km = 4,top_annotation = sample_anno, name="Expression",
+
+
+ht <- Heatmap(treated_heatmap, column_km = num_subclusters, top_annotation = sample_anno, name="Expression",
               cluster_columns = T, cluster_rows = F, show_column_names=F,col = col_fun,
-              row_dend_reorder = F, column_title = c("SCLC-A", "SCLC-P","SCLC-I","SCLC-N"))
+              row_dend_reorder = F, column_title = c("SCLC-P", "SCLC-A","SCLC-I","SCLC-N"))
 
 treated_ht <- draw(ht)
 
@@ -155,7 +176,7 @@ dev.off()
 #############################################################################
 # ALL SAMPLES
 #############################################################################
-jpeg("figures/all_samples_ctcs_subtype_heatmap.jpg", width=300,height=100, units = "mm", res=1000)
+jpeg("figures/all_samples_ctcs_subtype_heatmap.jpg", width=300,height=120, units = "mm", res=1000)
 print(all_samples_ht)
 dev.off()
 #############################################################################
@@ -178,7 +199,8 @@ dev.off()
 clusters <- column_order(all_samples_ht)
 
 # Rename clusters
-names(clusters) <- c("N","I","A","P")
+names(clusters) <- c("A","P","I","N")
+# names(clusters) <- c("P","I","A","N")
 
 # Create dataframe of cell IDs and associated subtypes
 subtypes_df <- list()
@@ -200,4 +222,4 @@ all(subtype_order$cell_id == colData(ctcs)$cell_id)
 colData(ctcs)$subtype <- subtype_order$subtype
 
 # Save data with subtype assignments
-saveRDS(ctcs, "data/cytof_objects/all_samples_ctcs_with_subtype.rds")
+saveRDS(ctcs, "data/cytof_objects/ctcs_with_subtype.rds")

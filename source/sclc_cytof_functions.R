@@ -1,4 +1,3 @@
-library(tidyverse)
 library(glue)
 library(reshape2)
 library(readxl)
@@ -15,6 +14,12 @@ library(limma)
 library(factoextra)
 library(iMUBAC)
 library(cyCombine)
+library(egg)
+library(gridExtra)
+library(rstatix) 
+library(ggalluvial)
+
+library(tidyverse)
 
 scale_values <- function(x){(x-min(x))/(max(x)-min(x))}
 
@@ -51,11 +56,13 @@ cytof_de <- function(sce, method = "wilcox", metric = "median", ident = "new_clu
         
         p_val <- append(p_val,wilcox_res$p.value)
         
+        pseudocount <- 1e-6 
+        
         #calculate log2FC
         if(metric == "mean"){
-          logfc <- append(logfc, log2(mean(a)/mean(b)))
+          logfc <- append(logfc, log2((mean(a)+pseudocount)/(mean(b)+pseudocount)))
         } else if(metric == "median"){
-          logfc <- append(logfc, log2(median(a)/median(b)))
+          logfc <- append(logfc, log2((median(a)+pseudocount)/(median(b)+pseudocount)))
         }
         
       }
@@ -107,11 +114,180 @@ cytof_de <- function(sce, method = "wilcox", metric = "median", ident = "new_clu
     dplyr::filter(!is.infinite(logfc) & !is.nan(logfc))
   
   df <- df %>%
-    dplyr::filter(abs(logfc) > .25)
+    dplyr::filter(abs(logfc) > .05)
   
   return(df)
 }
 
+create_expression_heatmap <- function(sce, group, markers, curr_title="", scale=T){
+  
+  all_groups <- sort(unique(sce[[group]]))
+  
+  if(group == "subtype"){
+    all_groups <- c("A","N","P","I")
+  }
+  
+  
+  heatmap <- matrix(NA, ncol=length(markers),nrow=length(all_groups))
+  for(i in 1:length(all_groups)){
+    
+    curr_group <- all_groups[i]
+    # cat(curr_group,"\n")
+    
+    for(j in 1:length(markers)){
+      
+      curr_marker <- markers[j]
+      # cat(curr_marker,"\n")
+      
+      heatmap[i,j] <- mean(sce@assays@data$exprs[curr_marker,sce[[group]] == curr_group])
+    }
+  }
+  
+  colnames(heatmap) <- markers
+  rownames(heatmap) <- all_groups
+  
+  
+  if(scale){
+    # scaled_heatmap <- t(scale(t(heatmap)))
+    scaled_heatmap <- scale(heatmap)
+  } else{
+    scaled_heatmap <- heatmap
+  }
+  
+  
+  
+  # col_fun = colorRamp2(c(min(scaled_heatmap), 0, max(scaled_heatmap)), c("blue3","lightyellow", "red3"))
+  # col_fun = colorRamp2(c(min(scaled_heatmap), -1, 0, 1, max(scaled_heatmap)), c("blue", "steelblue2","lightyellow", "red1" ,"red3"))
+  # col_fun = colorRamp2(c(min(scaled_heatmap), 0, max(scaled_heatmap)), c("purple","white", "yellow"))
+  # col_fun = colorRamp2(c(min(scaled_heatmap), 0, max(scaled_heatmap)), c("aquamarine3","white", "orange"))
+  # col_fun = colorRamp2(c(min(scaled_heatmap), 0, max(scaled_heatmap)), c("magenta2","white", "limegreen"))
+  
+  col_fun = colorRamp2(c(-3, -1, 0, 1, 3), 
+  c("#313695",  # deep blue
+    "#74add1",  # light blue
+    "#f7f7f7",  # white (center, 0)
+    "#f46d43",  # light red
+    "#a50026"))
+  
+  ht <- Heatmap(t(scaled_heatmap),column_names_rot = 0,col = col_fun,
+                cluster_columns = F, cluster_rows=F, column_title = curr_title,
+                row_names_gp = gpar(fontsize = 12),column_names_gp = gpar(fontsize = 12),
+                heatmap_legend_param = list(
+                  title = "   Scaled\nExpression",      
+                  title_gp = gpar(fontsize = 12), 
+                  labels_gp = gpar(fontsize = 12),
+                  legend_height = unit(1, "cm"))
+  )
+
+  return(ht)
+  
+  # return(t(scaled_heatmap))
+}
+
+create_marker_boxplots <- function(sce, markers_to_use, group, fill = NULL, alpha = NULL, nrow_to_use=3){
+  
+  y <- assay(sce, "exprs")
+  
+  df <- data.frame(t(y), colData(sce), check.names = FALSE)
+  
+  value <- ifelse("exprs" == "exprs", "expression", "exprs")
+  
+  gg_df <- melt(df, value.name = "expression", variable.name = "antigen", 
+                id.vars = names(colData(sce)))
+  
+  ################################################################################
+  
+  if(group == "subtype"){
+    gg_df$subtype <- factor(gg_df$subtype, levels=c("A","N","P",'I'))
+  }
+  
+  plot_df <- gg_df %>%
+    dplyr::filter(antigen %in% markers_to_use)
+  
+  plot_df$antigen <- factor(plot_df$antigen, levels = markers_to_use)
+  
+  if(is.null(fill)){
+    p <- ggboxplot(plot_df, x=group ,y="expression", fill=group, outlier.size = .1)
+  } else{
+    p <- ggboxplot(plot_df, x=group ,y="expression", fill=fill, outlier.size = .1)
+  }
+  
+  if(group == "cancer_enriched"){
+    p <- p+theme(axis.text.x = element_text(size=10),
+                 legend.position = "top")
+  } 
+  
+  
+  p1 <- p + facet_wrap(~antigen,nrow=nrow_to_use)+
+    theme(axis.title = element_text(size=16),
+      strip.text = element_text(face = "bold", size=14), 
+           strip.background = element_blank())
+  
+  return(p1)
+  
+}
+
+# diff_abundance_barpl <- ot <- function(sce, group1, group2){
+#   
+#   all_group1 <- unique(sce[[group1]])
+#   all_group2 <- unique(sce[[group2]])
+#   
+#   pvals <- c()
+#   ORs <- c()
+#   
+#   for(curr_group1 in all_group1){
+#     
+#     a <- sum(colData(treatment_status_sce)$new_clusters == curr_group1 & colData(treatment_status_sce)$treatment_status == "treated")
+#     b <- sum(colData(treatment_status_sce)$new_clusters == curr_group1 & colData(treatment_status_sce)$treatment_status != "treated")
+#     c <- sum(colData(treatment_status_sce)$new_clusters != curr_group1 & colData(treatment_status_sce)$treatment_status == "treated")
+#     d <- sum(colData(treatment_status_sce)$new_clusters != curr_group1 & colData(treatment_status_sce)$treatment_status != "treated")
+#     
+#     contin_table <- matrix(c(a+.5,c+.5,b+.5,d+.5),ncol=2)
+#     
+#     fisher_res <- fisher.test(contin_table)
+#     
+#     ORs <- append(ORs,fisher_res$estimate)
+#     pvals <- append(pvals,fisher_res$p.value)
+#   }
+#   
+#   # Select significant clusters
+#   signif_clusters <- which(p.adjust(pvals) < 0.05)
+#   
+#   cluster_prop_df <- as.data.frame(colData(treatment_status_sce)) %>% 
+#     dplyr::count(new_clusters,treatment_status) %>% 
+#     group_by(treatment_status) %>% 
+#     mutate(total = sum(n)) %>% 
+#     mutate(freq = (n / total)*100)
+#   
+#   # Add star for significance
+#   cluster_prop_df <- cluster_prop_df %>% 
+#     mutate(significant = ifelse(new_clusters %in% signif_clusters, "*","")) %>% 
+#     group_by(new_clusters) %>% 
+#     mutate(height = max(freq))
+#   
+#   
+#   cluster_prop_df$tarla <- ifelse(cluster_prop_df$treatment_status == "treated", "Treated", "Naive")
+#   
+#   condition_colors <- c("Treated" = "#FFB74D","Naive"="#64B5F6")
+#   
+#   p1 <- ggplot(cluster_prop_df,aes(x=new_clusters,y=freq,fill=tarla))+
+#     geom_col(position = "dodge")+
+#     geom_text(aes(y = height+.01,label=significant),size=6)+
+#     xlab("Cluster")+
+#     ylab("Percentage")+
+#     labs(fill="Condition")+
+#     scale_fill_manual(values=condition_colors)+
+#     theme_classic()+
+#     theme(panel.grid.minor = element_blank(), 
+#           strip.text = element_text(face = "bold", size=8), 
+#           axis.text = element_text(color = "black", size=8),
+#           axis.title = element_text(size=8),
+#           legend.text = element_text(size=6),
+#           legend.title = element_text(size=8))
+#   
+#   
+#   return(p1)
+# }
 
 # Write sessionInfo to text file
 writeLines(capture.output(sessionInfo()), "sessionInfo.txt")

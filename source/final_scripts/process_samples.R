@@ -1,5 +1,8 @@
 source("source/sclc_cytof_functions.R")
 
+script_seed <- 42
+set.seed(script_seed)
+
 create_metadata <- function(files,experiment_id){
 
   # This function creates metadata for each file that acts as linker to full metadata csv
@@ -59,6 +62,7 @@ for(curr_experiment in all_experiments){
     ff[, markers_to_use]
   })
   
+  
   # Append current flowset
   all_flowsets <- append(all_flowsets,curr_flowSet_subset)
   
@@ -77,7 +81,7 @@ all_metadata <- do.call(rbind, all_metadata)
 clinical_metadata <- read.csv("data/cytof_metadata.csv")
 
 # Select the clinical metadata rows and cols you want to keep
-clinical_metadata <- clinical_metadata[,2:11]
+clinical_metadata <- clinical_metadata[,2:13]
 
 # Merge file info with metadata by data_id
 all_metadata <- merge(clinical_metadata, all_metadata, by = "data_id")
@@ -98,9 +102,14 @@ names(final_flowset@frames)[!names(final_flowset@frames) %in% all_metadata$filen
 ################################################################################
 # Only retain files/samples that appear in both flowset and metadata
 ################################################################################
+
+# Filter out non-blood samples
+all_metadata <- all_metadata[all_metadata$sample_type == "blood",]
+
 files_to_keep <- intersect(all_metadata$filenames,names(final_flowset@frames))
 
 final_flowset <- final_flowset[files_to_keep]
+
 
 metadata_to_use <- all_metadata %>% 
   dplyr::filter(filenames %in% files_to_keep)
@@ -117,6 +126,8 @@ sce <- prepData(final_flowset, panel = marker_info, md=metadata_to_use, features
                 md_cols = list(file = "filenames", id = "data_id", factors = factor_colnames),
                 transform = T)
 
+
+sce$tarla[which(sce$tarla == "NA ")] <- NA
 
 saveRDS(sce, "data/cytof_objects/sclc_all_samples_object_no_qc.rds")
 

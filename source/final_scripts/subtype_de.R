@@ -5,7 +5,7 @@ set.seed(script_seed)
 ################################################################################
 # Differential expression
 
-metric_to_use <- "median"
+metric_to_use <- "mean"
 ctcs <- readRDS("data/cytof_objects/all_samples_ctcs_with_subtype.rds")
 
 length(as.character(unique(ctcs$patient_id)))
@@ -28,7 +28,7 @@ x_axis_label <- gsub("m","M",metric_to_use)
 p1 <- ggplot(plot_df,aes(x=as.numeric(logfc), y=protein, fill=logfc))+
   geom_col(color="darkgray",size=.001)+
   geom_text(aes(x=star_x, label=significance), size = 3)+
-  facet_wrap(~ident_list, scales = "free_y", nrow=2)+
+  facet_wrap(~ident_list, scales = "free", nrow=2)+
   scale_y_reordered()+
   labs(fill = "")+
   guides(fill="none")+
@@ -46,7 +46,7 @@ p1 <- ggplot(plot_df,aes(x=as.numeric(logfc), y=protein, fill=logfc))+
 
 p1
 
-jpeg(glue("figures/subtype_{metric_to_use}_de_1_4.jpg"), width=140,height=100, units = "mm", res=1000)
+jpeg(glue("figures/subtype_{metric_to_use}_de.jpg"), width=140,height=100, units = "mm", res=1000)
 print(p1)
 dev.off()
 

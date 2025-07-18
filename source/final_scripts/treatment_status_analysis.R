@@ -6,36 +6,39 @@ set.seed(script_seed)
 
 sce <- readRDS("data/cytof_objects/all_samples_ctcs_with_subtype.rds")
 
-ctc_clusters <- readRDS("data/ctc_clusters.rds")
-
 colData(sce)$condition <- factor(colData(sce)$condition, levels=c("normal", "cancer"))
 sce@metadata$experiment_info$condition <- factor(sce@metadata$experiment_info$condition, levels=c("normal", "cancer"))
 
 sce <- sce[,colData(sce)$condition == "cancer"]
 sce <- sce[,colData(sce)$treatment_status != "NA"]
-sce <- sce[,colData(sce)$new_clusters %in% ctc_clusters]
+sce <- sce[,is.na(colData(sce)$tarla)]
 
-dim(sce)
-table(sce$condition)
-table(sce$treatment_status)
+treatment_status_sce <- sce
 
-sce <- CATALYST::cluster(sce, features = "state",
+
+dim(treatment_status_sce)
+table(treatment_status_sce$condition)
+table(treatment_status_sce$treatment_status)
+
+treatment_status_sce <- CATALYST::cluster(treatment_status_sce, features = "state",
                          xdim = 10, ydim = 10, maxK = 20, seed = script_seed)
 
 
-sce <- runDR(sce, "UMAP", cells = 5e3, features = "state")
+treatment_status_sce <- runDR(treatment_status_sce, "UMAP", cells = 5e3, features = "state")
 
-sce@metadata$delta_area
+treatment_status_sce@metadata$delta_area
 
-CATALYST::plotDR(sce, color_by = "meta5",facet_by = "experiment_id")
+CATALYST::plotDR(treatment_status_sce, color_by = "meta4",facet_by = "experiment_id")
+CATALYST::plotDR(treatment_status_sce, color_by = "meta4")
 
-colData(sce)$new_clusters <- cluster_ids(sce, "meta5")
+colData(treatment_status_sce)$new_clusters <- cluster_ids(treatment_status_sce, "meta4")
 
+saveRDS(treatment_status_sce, "data/cytof_objects/treatment_status_sce.rds")
 
 # Plot UMAP manually
-xy <- reducedDim(sce, "UMAP")[, 1:2]
+xy <- reducedDim(treatment_status_sce, "UMAP")[, 1:2]
 colnames(xy) <- c("x", "y")
-df <- data.frame(colData(sce), xy, check.names = FALSE)
+df <- data.frame(colData(treatment_status_sce), xy, check.names = FALSE)
 
 
 cluster_colors <- c(
@@ -49,7 +52,7 @@ cluster_colors <- c(
 
 # Plot UMAP
 p1 <- ggplot(df)+
-  geom_point(aes(x=x, y=y, color=new_clusters),size=.1)+
+  geom_point(aes(x=x, y=y, color=new_clusters),size=.3)+
   xlab("UMAP 1")+
   ylab("UMAP 2")+
   labs(color = "Clusters")+
@@ -101,17 +104,17 @@ dev.off()
 
 ################################################################################
 
-clusters <- levels(colData(sce)$new_clusters)
+clusters <- levels(colData(treatment_status_sce)$new_clusters)
 
 pvals <- c()
 ORs <- c()
 
 for(curr_cluster in clusters){
   
-  a <- sum(colData(sce)$new_clusters == curr_cluster & colData(sce)$treatment_status == "treated")
-  b <- sum(colData(sce)$new_clusters == curr_cluster & colData(sce)$treatment_status != "treated")
-  c <- sum(colData(sce)$new_clusters != curr_cluster & colData(sce)$treatment_status == "treated")
-  d <- sum(colData(sce)$new_clusters != curr_cluster & colData(sce)$treatment_status != "treated")
+  a <- sum(colData(treatment_status_sce)$new_clusters == curr_cluster & colData(treatment_status_sce)$treatment_status == "treated")
+  b <- sum(colData(treatment_status_sce)$new_clusters == curr_cluster & colData(treatment_status_sce)$treatment_status != "treated")
+  c <- sum(colData(treatment_status_sce)$new_clusters != curr_cluster & colData(treatment_status_sce)$treatment_status == "treated")
+  d <- sum(colData(treatment_status_sce)$new_clusters != curr_cluster & colData(treatment_status_sce)$treatment_status != "treated")
   
   contin_table <- matrix(c(a+.5,c+.5,b+.5,d+.5),ncol=2)
   
@@ -124,7 +127,7 @@ for(curr_cluster in clusters){
 # Select significant clusters
 signif_clusters <- which(p.adjust(pvals) < 0.05)
 
-cluster_prop_df <- as.data.frame(colData(sce)) %>% 
+cluster_prop_df <- as.data.frame(colData(treatment_status_sce)) %>% 
   dplyr::count(new_clusters,treatment_status) %>% 
   group_by(treatment_status) %>% 
   mutate(total = sum(n)) %>% 
@@ -163,17 +166,17 @@ jpeg("figures/treatment_status_cluster_diff_abundance_barplots.jpg", width=120,h
 print(p1)
 dev.off()
 ################################################################################
-subtypes <- unique(colData(sce)$subtype)
+subtypes <- unique(colData(treatment_status_sce)$subtype)
 
 pvals <- c()
 ORs <- c()
 
 for(curr_subtype in subtypes){
   
-  a <- sum(colData(sce)$subtype == curr_subtype & colData(sce)$treatment_status == "treated")
-  b <- sum(colData(sce)$subtype == curr_subtype & colData(sce)$treatment_status != "treated")
-  c <- sum(colData(sce)$subtype != curr_subtype & colData(sce)$treatment_status == "treated")
-  d <- sum(colData(sce)$subtype != curr_subtype & colData(sce)$treatment_status != "treated")
+  a <- sum(colData(treatment_status_sce)$subtype == curr_subtype & colData(treatment_status_sce)$treatment_status == "treated")
+  b <- sum(colData(treatment_status_sce)$subtype == curr_subtype & colData(treatment_status_sce)$treatment_status != "treated")
+  c <- sum(colData(treatment_status_sce)$subtype != curr_subtype & colData(treatment_status_sce)$treatment_status == "treated")
+  d <- sum(colData(treatment_status_sce)$subtype != curr_subtype & colData(treatment_status_sce)$treatment_status != "treated")
   
   contin_table <- matrix(c(a+.5,c+.5,b+.5,d+.5),ncol=2)
   
@@ -186,7 +189,7 @@ for(curr_subtype in subtypes){
 # Select significant subtypes
 signif_subtypes <- subtypes[which(p.adjust(pvals) < 0.05)]
 
-subtype_prop_df <- as.data.frame(colData(sce)) %>% 
+subtype_prop_df <- as.data.frame(colData(treatment_status_sce)) %>% 
   dplyr::count(subtype,treatment_status) %>% 
   group_by(treatment_status) %>% 
   mutate(total = sum(n)) %>% 
@@ -228,8 +231,8 @@ dev.off()
 
 signif_clusters <- c(1,3)
 
-metric_to_use <- "median"
-df <- cytof_de(sce, method = "wilcox", metric = metric_to_use, ident = "new_clusters")
+metric_to_use <- "mean"
+df <- cytof_de(treatment_status_sce, method = "wilcox", metric = metric_to_use, ident = "new_clusters")
 
 
 plot_df <- df %>% 

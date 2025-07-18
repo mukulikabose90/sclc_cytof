@@ -1,26 +1,22 @@
 source("source/sclc_cytof_functions.R")
 
-set.seed(42)
+script_seed <- 42
+set.seed(script_seed)
 ################################################################################
 # Read in data
 ################################################################################
 sce <- readRDS("data/cytof_objects/sclc_all_samples_object.rds")
+
 
 # Reorder factors
 colData(sce)$condition <- factor(colData(sce)$condition, levels=c("normal", "cancer"))
 sce@metadata$experiment_info$condition <- factor(sce@metadata$experiment_info$condition, levels=c("normal", "cancer"))
 
 ################################################################################
-# Get and save state markers
+# Get state markers
 ################################################################################
-marker_info <- read.csv("data/cytof_panel_info.csv")
-marker_info <- data.frame(marker_info, stringsAsFactors = FALSE)
+state_markers <- readRDS("data/state_markers.rds")
 
-state_markers <- marker_info %>%
-  dplyr::filter(marker_class == "state") %>%
-  pull(antigen)
-
-saveRDS(state_markers, "data/state_markers.rds")
 ################################################################################
 # Cluster cells using FlowSOM then run UMAP
 ################################################################################
@@ -32,22 +28,20 @@ sce <- CATALYST::cluster(sce, features = markers_to_use,
 
 sce <- runDR(sce, "UMAP", cells = 5e3, features = markers_to_use)
 
-# sce <- CATALYST::cluster(sce, features = "state",
-#                          xdim = 10, ydim = 10, maxK = 20, seed = script_seed)
-# 
-# sce <- runDR(sce, "UMAP", cells = 5e3, features = "state")
-
 ################################################################################
 # Identify optimal number of clusters and assign cells
 ################################################################################
-sce@metadata$delta_area
+delta_plot <- sce@metadata$delta_area
 
-CATALYST::plotDR(sce, color_by = "meta9",facet_by = "experiment_id")
+CATALYST::plotDR(sce, color_by = "meta8")
+
+CATALYST::plotDR(sce, color_by = "meta6",facet_by = "experiment_id")
 
 CATALYST::plotDR(sce, color_by = "experiment_id")
 
 # Add new cluster assignments to colData
-colData(sce)$new_clusters <- cluster_ids(sce, "meta9")
+colData(sce)$new_clusters <- cluster_ids(sce, "meta8")
+
 
 # Save data with cluster assignments
 saveRDS(sce, "data/cytof_objects/sclc_all_samples_with_clusters.rds")
@@ -58,6 +52,8 @@ saveRDS(sce, "data/cytof_objects/sclc_all_samples_with_clusters.rds")
 xy <- reducedDim(sce, "UMAP")[, 1:2]
 colnames(xy) <- c("x", "y")
 df <- data.frame(colData(sce), xy, check.names = FALSE)
+
+saveRDS(df, "data/all_samples_umap_data.rds")
 
 # Generate and save cluster colors
 cluster_colors <- c(
@@ -74,8 +70,6 @@ cluster_colors <- c(
  
 saveRDS(cluster_colors, "data/cluster_colors.rds")
 
-cluster_colors <- readRDS("data/cluster_colors.rds")
-
 # Plot UMAP
 p1 <- ggplot(df)+
   geom_point(aes(x=x, y=y, color=new_clusters),size=.1)+
@@ -87,10 +81,10 @@ p1 <- ggplot(df)+
   guides(color = guide_legend(override.aes = list(size=5)))+
   theme(panel.grid.minor = element_blank(), 
         strip.text = element_text(face = "bold", size=8), 
-        axis.text = element_text(color = "black", size=8),
-        axis.title = element_text(size=8),
-        legend.text = element_text(size=6),
-        legend.title = element_text(size=8))
+        axis.text = element_text(color = "black", size=12),
+        axis.title = element_text(size=12),
+        legend.text = element_text(size=10),
+        legend.title = element_text(size=12))
   
 p1
 
@@ -104,15 +98,16 @@ p2 <- ggplot(df)+
   labs(color = "Clusters")+
   # scale_color_manual(name = "Clusters",values=cluster_colors)+
   guides(color = guide_legend(override.aes = list(size=5)))+
-  scale_alpha_manual(values = c("ctc" = 1, "non-ctc" = 0.05))+
+  scale_alpha_manual(values = c("cancer_enriched" = 1, "non-cancer_enriched" = 0.05))+
   theme_classic() +
   guides(alpha = "none")+
   theme(panel.grid.minor = element_blank(), 
-      strip.text = element_text(face = "bold", size=8), 
-      axis.text = element_text(color = "black", size=8),
-      axis.title = element_text(size=8),
-      legend.text = element_text(size=6),
-      legend.title = element_text(size=8))  
+      strip.text = element_text(face = "bold", size=14), 
+      strip.background = element_blank(),
+      axis.text = element_text(color = "black", size=12),
+      axis.title = element_text(size=12),
+      legend.text = element_text(size=10),
+      legend.title = element_text(size=12))  
 
 p2
 
@@ -126,4 +121,9 @@ dev.off()
 
 jpeg("figures/all_samples_normal_vs_cancer_cluster.jpg", width=180,height=100, units = "mm", res=1000)
 print(p2)
+dev.off()
+
+
+jpeg("figures/all_samples_cluster_delta_plot.jpg", width=180,height=100, units = "mm", res=1000)
+print(delta_plot)
 dev.off()

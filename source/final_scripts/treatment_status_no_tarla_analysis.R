@@ -6,14 +6,12 @@ set.seed(script_seed)
 
 sce <- readRDS("data/cytof_objects/all_samples_ctcs_with_subtype.rds")
 
-ctc_clusters <- readRDS("data/ctc_clusters.rds")
 
 colData(sce)$condition <- factor(colData(sce)$condition, levels=c("normal", "cancer"))
 sce@metadata$experiment_info$condition <- factor(sce@metadata$experiment_info$condition, levels=c("normal", "cancer"))
 
 sce <- sce[,colData(sce)$condition == "cancer"]
 sce <- sce[,colData(sce)$treatment_status != "unknown"]
-sce <- sce[,colData(sce)$new_clusters %in% ctc_clusters]
 
 # Remove cells treated with tarla
 sce <- sce[,is.na(colData(sce)$tarla) | colData(sce)$tarla != "post"]
@@ -31,7 +29,7 @@ sce <- runDR(sce, "UMAP", cells = 5e3, features = "state")
 
 sce@metadata$delta_area
 
-colData(sce)$new_clusters <- cluster_ids(sce, "meta6")
+colData(sce)$new_clusters <- cluster_ids(sce, "meta3")
 
 
 # Plot UMAP manually
@@ -51,7 +49,7 @@ cluster_colors <- c(
 
 # Plot UMAP
 p1 <- ggplot(df)+
-  geom_point(aes(x=x, y=y, color=new_clusters),size=.1)+
+  geom_point(aes(x=x, y=y, color=new_clusters),size=2)+
   xlab("UMAP 1")+
   ylab("UMAP 2")+
   labs(color = "Clusters")+
@@ -72,7 +70,7 @@ p1
 
 facet_names <- c('naive'="Naive",'treated'="Treated")
 p2 <- ggplot(df)+
-  geom_point(aes(x=x, y=y, color=new_clusters),size=.01)+
+  geom_point(aes(x=x, y=y, color=new_clusters),size=2)+
   facet_wrap(~treatment_status,labeller=as_labeller(facet_names))+
   xlab("UMAP 1")+
   ylab("UMAP 2")+
@@ -230,7 +228,7 @@ dev.off()
 
 signif_clusters <- c(1,3)
 
-metric_to_use <- "median"
+metric_to_use <- "mean"
 df <- cytof_de(sce, method = "wilcox", metric = metric_to_use, ident = "new_clusters")
 
 

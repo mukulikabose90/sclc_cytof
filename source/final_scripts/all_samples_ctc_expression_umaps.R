@@ -2,8 +2,15 @@ source("source/sclc_cytof_functions.R")
 
 set.seed(42)
 ################################################################################
-# Save data with cluster assignments
-sce <- readRDS("data/cytof_objects/sclc_all_samples_with_clusters.rds")
+
+sce <- readRDS("data/cytof_objects/all_samples_ctcs_with_subtype.rds")
+
+
+sce <- CATALYST::cluster(sce, features = markers_to_use,
+                          xdim = 10, ydim = 10, maxK = 20, seed = script_seed)
+
+sce <- runDR(sce, "UMAP", cells = 5e3, features = markers_to_use)
+
 
 markers_to_use <- rowData(sce)$marker_name[rowData(sce)$marker_class == "state"]
 y <- assay(sce, "exprs")

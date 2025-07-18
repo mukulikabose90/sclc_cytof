@@ -1,28 +1,16 @@
-# This script plots a heatmap of the SCLC subtype TFs expression. Then assigns each cell
-# to a heatmap based on the expression of the TFs.
 
 ################################################################################
 source("source/sclc_cytof_functions.R")
 
-set.seed(42)
+script_seed <- 42
+set.seed(script_seed)
 ################################################################################
 # Read in CyTOF data with cluster assignments
 ################################################################################
-sce <- readRDS("data/cytof_objects/sclc_all_samples_with_clusters.rds")
+cancer_enriched <- readRDS("data/cytof_objects/cancer_enriched_with_clusters.rds")
 
-ctc_clusters <- readRDS("data/ctc_clusters.rds")
-
-# Subset to cancer cells NOT in CTC cluster
-ctcs <- sce[,!colData(sce)$new_clusters %in% ctc_clusters]
-ctcs <- ctcs[,colData(ctcs)$condition == "cancer"]
-
-# Subset to only state markers
-ctcs <- ctcs[rowData(ctcs)$marker_class == "state",]
-
-# Give each cell an ID
-colData(ctcs)$cell_id <- 1:nrow(colData(ctcs))
-colData(ctcs)$cell_id <- paste0("cell_",1:nrow(colData(ctcs)))
-
+#Subset to non CTC clusters
+ctcs <- cancer_enriched[,cancer_enriched$new_clusters %in% c(1,3)]
 
 ################################################################################
 # Create heatmap
@@ -62,8 +50,13 @@ all_samples_heatmap <- t(heatmap_tf_scaled)
 #############################################################################
 # Create heatmap with all samples
 #############################################################################
-col_fun = colorRamp2(c(-2, 0, 2), c("royalblue4","lightgray", "firebrick4"))
-
+# col_fun = colorRamp2(c(-2, 0, 2), c("royalblue4","lightgray", "firebrick4"))
+col_fun = colorRamp2(c(-2, -1, 0, 1, 2), 
+                     c("#313695",  # deep blue
+                       "#74add1",  # light blue
+                       "#f7f7f7",  # white (center, 0)
+                       "#f46d43",  # light red
+                       "#a50026"))
 # Create collection ID annotation
 colors_to_use <- colorRampPalette(brewer.pal(12,"Paired"))(length(unique(heatmap_metadata$collection_id)))
 names(colors_to_use) <- unique(heatmap_metadata$collection_id)
@@ -78,12 +71,18 @@ names(colors_to_use) <- unique(heatmap_metadata$patient_id)
 patient_anno <- HeatmapAnnotation("Patient ID" = heatmap_metadata$patient_id, 
                                   col = list("Patient ID"= colors_to_use),
                                   show_annotation_name = T,
-                                  annotation_legend_param = list(ncol=2))
+                                   annotation_legend_param = list(ncol=2))
+
+# Get optimal k for kmeans
+silh_res <- fviz_nbclust(t(all_samples_heatmap), kmeans, method='silhouette')
+num_subclusters <- which(silh_res$data$y == max(silh_res$data$y))
+
+num_subclusters <- 4
 
 
-ht <- Heatmap(all_samples_heatmap, column_km = 4, top_annotation = sample_anno, name="Expression",
+ht <- Heatmap(all_samples_heatmap, column_km = num_subclusters, top_annotation = sample_anno, name="Expression",
               cluster_columns = T, cluster_rows = F, show_column_names=F,col = col_fun,
-              row_dend_reorder = F)
+              row_dend_reorder = F, column_title = c("SCLC-A", "SCLC-P","SCLC-I","SCLC-N"))
 
 all_samples_ht <- draw(ht)
 
@@ -100,8 +99,39 @@ dev.off()
  #############################################################################
 # ALL SAMPLES
 #############################################################################
-jpeg("figures/all_samples_non_ctcs_subtype_heatmap.jpg", width=300,height=100, units = "mm", res=1000)
+jpeg("figures/all_samples_non_ctcs_subtype_heatmap.jpg", width=300,height=120, units = "mm", res=1000)
 print(all_samples_ht)
 dev.off()
+#############################################################################
+# Assign subtype to each cell based on kmeans clustering
+#############################################################################
+# Get column row from heatmap
+clusters <- column_order(all_samples_ht)
+
+# Rename clusters
+names(clusters) <- c("A","P","I","N")
+# names(clusters) <- c("P","I","A","N")
+
+# Create dataframe of cell IDs and associated subtypes
+subtypes_df <- list()
+for(curr_subtype in names(clusters)){
+  subtypes_df <- append(subtypes_df, list(cbind(colnames(all_samples_heatmap[,clusters[[curr_subtype]]]),curr_subtype)))
+}
+subtypes_df <- do.call(rbind,subtypes_df)
+colnames(subtypes_df) <- c("cell_id","subtype")
+
+# Add original order of cell in colData, then merge based on cell ID. Finally rearragne to orignal order
+colData(ctcs)$original_order  <- 1:nrow(colData(ctcs))
+subtype_order <- merge(colData(ctcs), subtypes_df, by="cell_id")
+subtype_order <- subtype_order[order(subtype_order$original_order), ]
+
+# Check that cell order is back to orginal order
+all(subtype_order$cell_id == colData(ctcs)$cell_id)
+
+# Add subtypes to colData
+colData(ctcs)$subtype <- subtype_order$subtype
+
+# Save data with subtype assignments
+saveRDS(ctcs, "data/cytof_objects/all_samples_non_ctcs_with_subtype.rds")
 
 

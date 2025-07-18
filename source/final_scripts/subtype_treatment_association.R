@@ -3,13 +3,11 @@ source("source/sclc_cytof_functions.R")
 script_seed <- 42
 set.seed(script_seed)
 ################################################################################
-ctcs <- readRDS("data/cytof_objects/all_samples_ctcs_with_subtype.rds")
+ctcs <- readRDS("data/cytof_objects/ctcs_with_subtype.rds")
 
 ################################################################################
 # Treatment status and subtype association
 ################################################################################
-ctc_clusters <- readRDS("data/ctc_clusters.rds")
-ctcs <- ctcs[,colData(ctcs)$new_clusters %in% ctc_clusters]
 
 contin_table <- table(ctcs$treatment_status, ctcs$subtype) %>% 
   as.data.frame.matrix()
@@ -17,7 +15,8 @@ contin_table <- table(ctcs$treatment_status, ctcs$subtype) %>%
 # colnames(contin_table) <- c("ASCL1","Inflamed","NeuroD1","POU2F3")
 
 
-contin_table <- contin_table[c(2,4),]
+contin_table <- contin_table[c(1,3),]
+# contin_table <- contin_table[c(2,4),]
 
 test_res <- chisq.test(contin_table)
 
@@ -42,19 +41,23 @@ res_df <- as.data.frame(as.table(residuals)) %>%
 
 colnames(res_df) <- c("status","subtype","residual","adj_pval","stars")
 res_df$status <- ifelse(res_df$status == "naive", "Naive","Treated")
-res_df$status <- factor(res_df$status, levels=c("Treated","Naive"))
+res_df$status <- factor(res_df$status, levels=c("Naive","Treated"))
 
-status_plot <- ggplot(res_df, aes(x = subtype, y = status)) +
+res_df$subtype <- factor(res_df$subtype, levels=c("I","P","N",'A'))
+
+status_plot <- ggplot(res_df, aes(x = status, y = subtype)) +
   geom_point(aes(size = abs(residual), fill = residual), shape = 21, color = "black", stroke = 0.6) +
   geom_text(aes(label = stars), vjust = -1.5, size = 4) +  # Stars above dots
-  scale_fill_gradient2(low = "royalblue", mid = "white", high = "firebrick", midpoint = 0) +
+  scale_fill_gradient2(low = "#457B9D", mid = "white", high = "#dd4b33", midpoint = 0) +
   scale_size(range = c(2, 8)) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 0, hjust = 1)) +
+  theme_minimal()+
+  theme(axis.text = element_text(size=12,angle = 0, hjust = 1),
+        axis.title = element_text(size=14),
+        axis.text.x = element_text(angle = 0, hjust = .5))+
   labs(title = "",
        size = "|Residual|", fill = "Residual",
-       x = "Subtype",
-       y = "Treatment Status")
+       y = "Subtype",
+       x = "")
 
 status_plot
 
@@ -65,7 +68,7 @@ status_plot
 contin_table <- table(ctcs$tarla, ctcs$subtype) %>% 
   as.data.frame.matrix()
 
-contin_table <- contin_table[c(2,3),]
+# contin_table <- contin_table[c(2,3),]
 
 test_res <- chisq.test(contin_table)
 
@@ -91,17 +94,24 @@ res_df <- as.data.frame(as.table(residuals)) %>%
 colnames(res_df) <- c("status","subtype","residual","adj_pval","stars")
 res_df$status <- ifelse(res_df$status == "post", "Post-Tarlatamab","Pre-Tarlatamab")
 
-tarla_plot <- ggplot(res_df, aes(x = subtype, y = status)) +
+# res_df$subtype <- factor(res_df$subtype, levels=c("A","N","P",'I'))
+res_df$subtype <- factor(res_df$subtype, levels=c("I","P","N",'A'))
+
+res_df$status <- factor(res_df$status, levels=c("Pre-Tarlatamab","Post-Tarlatamab"))
+
+tarla_plot <- ggplot(res_df, aes(x = status, y = subtype)) +
   geom_point(aes(size = abs(residual), fill = residual), shape = 21, color = "black", stroke = 0.6) +
   geom_text(aes(label = stars), vjust = -1.5, size = 4) +  # Stars above dots
-  scale_fill_gradient2(low = "royalblue", mid = "white", high = "firebrick", midpoint = 0) +
+  scale_fill_gradient2(low = "#457B9D", mid = "white", high = "#dd4b33", midpoint = 0) +
   scale_size(range = c(2, 8)) +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 0, hjust = 1)) +
+  theme(axis.text = element_text(size=12,angle = 0, hjust = 1),
+        axis.title = element_text(size=14),
+        axis.text.x = element_text(size=10,angle = 0, hjust = .5))+
   labs(title = "",
        size = "|Residual|", fill = "Residual",
-       x = "Subtype",
-       y = "Treatment Status")
+       y = "Subtype",
+       x = "")
 
 tarla_plot
 
@@ -109,10 +119,10 @@ tarla_plot
 # SAVE FIGURES
 ################################################################################
 
-jpeg("figures/all_samples_treatment_subtype_chi_results.jpg", width=180,height=100, units = "mm", res=1000)
+jpeg("figures/all_samples_treatment_subtype_chi_results.jpg", width=100,height=180, units = "mm", res=1000)
 print(status_plot)
 dev.off()
 
-jpeg("figures/all_samples_tarla_subtype_chi_results.jpg", width=180,height=100, units = "mm", res=1000)
+jpeg("figures/all_samples_tarla_subtype_chi_results.jpg", width=100,height=180, units = "mm", res=1000)
 print(tarla_plot)
 dev.off()

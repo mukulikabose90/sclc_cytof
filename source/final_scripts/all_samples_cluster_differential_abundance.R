@@ -1,6 +1,7 @@
 source("source/sclc_cytof_functions.R")
 
-set.seed(42)
+script_seed <- 42
+set.seed(script_seed)
 FDR_cutoff <- 0.05
 ################################################################################
 # Read in data
@@ -38,22 +39,22 @@ signif_clusters <- which(p.adjust(pvals) < 0.05)
 # Create DA barplot 
 ################################################################################
 
-cluster_prop_df <- as.data.frame(colData(sce)) %>% 
-  dplyr::count(new_clusters,condition) %>% 
-  group_by(condition) %>% 
-  mutate(total = sum(n)) %>% 
+cluster_prop_df <- as.data.frame(colData(sce)) %>%
+  dplyr::count(new_clusters,condition) %>%
+  group_by(condition) %>%
+  mutate(total = sum(n)) %>%
   mutate(freq = (n / total)*100)
 
 # Add star for significance
-cluster_prop_df <- cluster_prop_df %>% 
-  mutate(significant = ifelse(new_clusters %in% signif_clusters, "*","")) %>% 
-  group_by(new_clusters) %>% 
+cluster_prop_df <- cluster_prop_df %>%
+  mutate(significant = ifelse(new_clusters %in% signif_clusters, "*","")) %>%
+  group_by(new_clusters) %>%
   mutate(height = max(freq))
 
 # reorder condition factor
 cluster_prop_df$condition <- ifelse(cluster_prop_df$condition == "cancer", "Cancer", "Normal")
 cluster_prop_df$condition <- factor(cluster_prop_df$condition, levels=c("Normal","Cancer"))
-  
+
 condition_colors <- c("Cancer" = "#E57373","Normal"="#64B5F6")
 
 p1 <- ggplot(cluster_prop_df,aes(x=new_clusters,y=freq,fill=condition))+
@@ -64,23 +65,23 @@ p1 <- ggplot(cluster_prop_df,aes(x=new_clusters,y=freq,fill=condition))+
   labs(fill="Condition")+
   scale_fill_manual(values=condition_colors)+
   theme_classic()+
-  theme(panel.grid.minor = element_blank(), 
-        strip.text = element_text(face = "bold", size=8), 
+  theme(panel.grid.minor = element_blank(),
+        strip.text = element_text(face = "bold", size=8),
         axis.text = element_text(color = "black", size=8),
         axis.title = element_text(size=8),
         legend.text = element_text(size=6),
         legend.title = element_text(size=8))
 
-p1
-
-jpeg("figures/all_samples_cluster_diff_abundance_barplots.jpg", width=120,height=100, units = "mm", res=1000)
-print(p1)
-dev.off()
+# p1
+# 
+# jpeg("figures/all_samples_cluster_diff_abundance_barplots.jpg", width=120,height=100, units = "mm", res=1000)
+# print(p1)
+# dev.off()
 
 ################################################################################
-# Identify and save CTC clusters
+# Identify and save cancer_enriched clusters
 ################################################################################
-ctc_clusters <- c()
+cancer_enriched_clusters <- c()
 for(i in unique(cluster_prop_df$new_clusters)){
   cancer_freq <- cluster_prop_df %>% 
     dplyr::filter(significant == "*" & new_clusters == i & condition == "Cancer") %>%
@@ -99,9 +100,10 @@ for(i in unique(cluster_prop_df$new_clusters)){
   }
   
   if(cancer_freq > normal_freq){
-    ctc_clusters <- append(ctc_clusters, i)
+    cancer_enriched_clusters <- append(cancer_enriched_clusters, i)
   }
 }
 
-saveRDS(as.numeric(ctc_clusters), "data/ctc_clusters.rds")
+
+saveRDS(as.numeric(cancer_enriched_clusters), "data/cancer_enriched_clusters.rds")
 

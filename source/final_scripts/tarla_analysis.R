@@ -6,32 +6,40 @@ set.seed(script_seed)
 
 sce <- readRDS("data/cytof_objects/all_samples_ctcs_with_subtype.rds")
 
-ctc_clusters <- readRDS("data/ctc_clusters.rds")
-
 colData(sce)$condition <- factor(colData(sce)$condition, levels=c("normal", "cancer"))
 sce@metadata$experiment_info$condition <- factor(sce@metadata$experiment_info$condition, levels=c("normal", "cancer"))
 
 sce <- sce[,colData(sce)$condition == "cancer"]
-sce <- sce[,!is.na(colData(sce)$tarla)]
-sce <- sce[,colData(sce)$new_clusters %in% ctc_clusters]
 
-dim(sce)
-table(sce$tarla)
+sce$tarla <- as.character(sce$tarla)
 
-sce <- CATALYST::cluster(sce, features = "state",
+sce <- sce[,(!is.na(sce$tarla)) & sce$tarla != "NA "]
+
+tarla_sce <- sce
+
+
+
+dim(tarla_sce)
+table(tarla_sce$tarla)
+
+tarla_sce <- CATALYST::cluster(tarla_sce, features = "state",
                          xdim = 10, ydim = 10, maxK = 20, seed = script_seed)
 
 
-sce <- runDR(sce, "UMAP", cells = 5e3, features = "state")
+tarla_sce <- runDR(tarla_sce, "UMAP", cells = 5e3, features = "state")
 
-sce@metadata$delta_area
+CATALYST::plotDR(tarla_sce, color_by = "meta4")
 
-colData(sce)$new_clusters <- cluster_ids(sce, "meta5")
+tarla_sce@metadata$delta_area
+
+colData(tarla_sce)$new_clusters <- cluster_ids(tarla_sce, "meta4")
+
+saveRDS(tarla_sce, "data/cytof_objects/tarla_sce.rds")
 
 # Plot UMAP manually
-xy <- reducedDim(sce, "UMAP")[, 1:2]
+xy <- reducedDim(tarla_sce, "UMAP")[, 1:2]
 colnames(xy) <- c("x", "y")
-df <- data.frame(colData(sce), xy, check.names = FALSE)
+df <- data.frame(colData(tarla_sce), xy, check.names = FALSE)
 
 
 # cluster_colors <- c(
@@ -52,7 +60,7 @@ cluster_colors <- c(
 
 # Plot UMAP
 p1 <- ggplot(df)+
-  geom_point(aes(x=x, y=y, color=new_clusters),size=.1)+
+  geom_point(aes(x=x, y=y, color=new_clusters),size=3)+
   xlab("UMAP 1")+
   ylab("UMAP 2")+
   labs(color = "Clusters")+
@@ -74,7 +82,7 @@ df$tarla <- factor(df$tarla, levels=c("pre","post"))
 
 facet_names <- c('pre'="Pre-Tarlatamab",'post'="Post-Tarlatamab")
 p2 <- ggplot(df)+
-  geom_point(aes(x=x, y=y, color=new_clusters),size=.01)+
+  geom_point(aes(x=x, y=y, color=new_clusters),size=3)+
   facet_wrap(~tarla,labeller=as_labeller(facet_names))+
   xlab("UMAP 1")+
   ylab("UMAP 2")+
@@ -105,17 +113,17 @@ dev.off()
 
 ################################################################################
 
-clusters <- levels(colData(sce)$new_clusters)
+clusters <- levels(tarla_sce$new_clusters)
 
 pvals <- c()
 ORs <- c()
 
 for(curr_cluster in clusters){
   
-  a <- sum(colData(sce)$new_clusters == curr_cluster & colData(sce)$tarla == "T")
-  b <- sum(colData(sce)$new_clusters == curr_cluster & colData(sce)$tarla != "T")
-  c <- sum(colData(sce)$new_clusters != curr_cluster & colData(sce)$tarla == "T")
-  d <- sum(colData(sce)$new_clusters != curr_cluster & colData(sce)$tarla != "T")
+  a <- sum(colData(tarla_sce)$new_clusters == curr_cluster & colData(tarla_sce)$tarla == "T")
+  b <- sum(colData(tarla_sce)$new_clusters == curr_cluster & colData(tarla_sce)$tarla != "T")
+  c <- sum(colData(tarla_sce)$new_clusters != curr_cluster & colData(tarla_sce)$tarla == "T")
+  d <- sum(colData(tarla_sce)$new_clusters != curr_cluster & colData(tarla_sce)$tarla != "T")
   
   contin_table <- matrix(c(a+.5,c+.5,b+.5,d+.5),ncol=2)
   
@@ -128,7 +136,7 @@ for(curr_cluster in clusters){
 # Select significant clusters
 signif_clusters <- which(p.adjust(pvals) < 0.05)
 
-cluster_prop_df <- as.data.frame(colData(sce)) %>% 
+cluster_prop_df <- as.data.frame(colData(tarla_sce)) %>% 
   dplyr::count(new_clusters,tarla) %>% 
   group_by(tarla) %>% 
   mutate(total = sum(n)) %>% 
@@ -169,17 +177,17 @@ jpeg("figures/tarla_cluster_diff_abundance_barplots.jpg", width=120,height=100, 
 print(p1)
 dev.off()
 ################################################################################
-subtypes <- unique(colData(sce)$subtype)
+subtypes <- unique(colData(tarla_sce)$subtype)
 
 pvals <- c()
 ORs <- c()
 
 for(curr_subtype in subtypes){
   
-  a <- sum(colData(sce)$subtype == curr_subtype & colData(sce)$tarla == "T")
-  b <- sum(colData(sce)$subtype == curr_subtype & colData(sce)$tarla != "T")
-  c <- sum(colData(sce)$subtype != curr_subtype & colData(sce)$tarla == "T")
-  d <- sum(colData(sce)$subtype != curr_subtype & colData(sce)$tarla != "T")
+  a <- sum(colData(tarla_sce)$subtype == curr_subtype & colData(tarla_sce)$tarla == "T")
+  b <- sum(colData(tarla_sce)$subtype == curr_subtype & colData(tarla_sce)$tarla != "T")
+  c <- sum(colData(tarla_sce)$subtype != curr_subtype & colData(tarla_sce)$tarla == "T")
+  d <- sum(colData(tarla_sce)$subtype != curr_subtype & colData(tarla_sce)$tarla != "T")
   
   contin_table <- matrix(c(a+.5,c+.5,b+.5,d+.5),ncol=2)
   
@@ -192,7 +200,7 @@ for(curr_subtype in subtypes){
 # Select significant subtypes
 signif_subtypes <- subtypes[which(p.adjust(pvals) < 0.05)]
 
-subtype_prop_df <- as.data.frame(colData(sce)) %>% 
+subtype_prop_df <- as.data.frame(colData(tarla_sce)) %>% 
   dplyr::count(subtype,tarla) %>% 
   group_by(tarla) %>% 
   mutate(total = sum(n)) %>% 
@@ -236,8 +244,8 @@ dev.off()
 ################################################################################
 signif_clusters <- c(1,2)
 
-metric_to_use <- "median"
-df <- cytof_de(sce, method = "wilcox", metric = metric_to_use, ident = "new_clusters")
+metric_to_use <- "mean"
+df <- cytof_de(tarla_sce, method = "wilcox", metric = metric_to_use, ident = "new_clusters")
 
 
 plot_df <- df %>% 
@@ -260,7 +268,7 @@ x_axis_label <- gsub("m","M",metric_to_use)
 p2 <- ggplot(plot_df,aes(x=as.numeric(logfc), y=protein, fill=logfc))+
   geom_col(color="darkgray",size=.001)+
   geom_text(aes(x=star_x, label=significance), size = 3)+
-  facet_wrap(~ident_list, scales = "free_y", nrow=2)+
+  facet_wrap(~ident_list, scales = "free", nrow=2)+
   scale_y_reordered()+
   labs(fill = "")+
   guides(fill="none")+
@@ -275,6 +283,8 @@ p2 <- ggplot(plot_df,aes(x=as.numeric(logfc), y=protein, fill=logfc))+
         axis.title = element_text(size=8),
         legend.text = element_text(size=6),
         legend.title = element_text(size=8))
+
+p2
 
 jpeg(glue("figures/tarla_cluster_{metric_to_use}_de_all.jpg"), width=140,height=100, units = "mm", res=1000)
 print(p2)

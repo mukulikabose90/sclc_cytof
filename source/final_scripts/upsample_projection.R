@@ -1,89 +1,31 @@
+library(FNN)
+library(scater)
+library(RANN)
 
-
-sce <- readRDS("data/cytof_objects/sce_not_sampled.rds")
-
-################################################################################
-# Remove outlier experiments
-################################################################################
-sce <- sce[,sce$experiment_id != "531050"]
-# sce <- sce[,sce$experiment_id != "508814"]
-# sce <- sce[,sce$experiment_id != "513549"]
-
-################################################################################
-# Remove low viability samples
-################################################################################
-low_viability_samples <- paste0("NORMAL", c(10,11,15,18))
-
-sce <- sce[,!sce$patient_id %in% low_viability_samples]
-
-################################################################################
-# Remove blood bank samples
-################################################################################
-# blood_bank_samples <- paste0("NORMAL", 7:20)
-# 
-# length(unique(sce$patient_id))
-# 
-# sce <- sce[,!sce$patient_id %in% blood_bank_samples]
-# 
-# as.character(unique(colData(sce)$patient_id))
-
-################################################################################
-# remove collections with < 30 cells
-################################################################################
-samples_to_remove <- as.data.frame(sce@colData) %>%
-  dplyr::count(collection_id) %>%
-  dplyr::filter(n<30) %>%
-  pull(collection_id) %>%
-  as.character()
-
-sce <- sce[,!sce$collection_id %in% samples_to_remove]
-
-################################################################################
-# cyCombine batch correction
-################################################################################
-marker_info <- read.csv("data/cytof_panel_info.csv")
-marker_info <- data.frame(marker_info, stringsAsFactors = FALSE)
-
-markers <- marker_info %>%
-  dplyr::filter(marker_class != "none") %>%
-  pull(antigen)
-
-# get expression data
-y <- assay(sce, "exprs")
-
-colnames(y) <- paste0("cell_",1:ncol(y))
-
-df <- data.frame(t(y), colData(sce), check.names = FALSE)
-
-colnames(df)[which(colnames(df) == "experiment_id")] <- "batch"
-
-corrected <- batch_correct(df,markers = markers)
-
-corrected <- as.matrix(t(corrected[,3:40]))
-
-corrected <- corrected[rownames(y),]
-
-assay(sce, "exprs") <- corrected
-
-
-
-sce <- CATALYST::cluster(sce, features = "state",
-                         xdim = 10, ydim = 10, maxK = 20, seed = script_seed)
-
-sce <- runDR(sce, "UMAP", cells = 5e3, features = "state")
-
-sce@metadata$delta_area
-
-
-
-
-
-sce_query <- sce
+sce_query <- readRDS("data/cytof_objects/sce_not_sampled.rds")
 sce_ref <- readRDS("data/cytof_objects/sclc_all_samples_with_clusters.rds")
 
+# Extract expression matrix 
+ref_exprs <- t(assay(sce_ref, "exprs"))  
+query_exprs <- t(assay(sce_query, "exprs"))
 
-# Extract expression matrix (transpose: cells x features)
-ref_exprs <- t(assay(sce_ref, "exprs"))  # replace "exprs" with appropriate assay
+# Find nearest neighbor in reference for each query cell
+# nn_result <- nn2(data = ref_exprs, query = query_exprs, k = 1)
+# nearest_indices <- nn_result$nn.idx[, 1]
+# 
+# # Assign query cells to cluster of nearest neighbor
+# query_clusters <- sce_ref$new_clusters[nearest_indices]
+# sce_query$predicted_cluster <- query_clusters
+
+
+
+
+
+
+
+
+
+
 
 # Run PCA using prcomp (centered and scaled)
 pca_ref_model <- prcomp(ref_exprs, center = TRUE, scale. = TRUE)
@@ -102,7 +44,6 @@ query_scaled <- scale(query_exprs,
 # Project query cells into the same PCA space
 pca_query <- as.matrix(query_scaled) %*% pca_ref_model$rotation[, 1:10]
 
-library(FNN)
 
 # Find nearest neighbor in reference PCA space
 nn <- get.knnx(pca_ref, pca_query, k = 1)
@@ -116,7 +57,8 @@ colData(sce_query)$projected_cluster <- ref_clusters[nn$nn.index[, 1]]
 reducedDim(sce_query, "PCA") <- pca_query
 
 # Run UMAP on projected PCA
-library(scater)
+
+sce_query <- runUMAP(sce_query, dimred = "PCA")
 sce_query <- runUMAP(sce_query, dimred = "PCA")
 
 plotUMAP(sce_query, color_by="projected_cluster")

@@ -1,6 +1,7 @@
 source("source/sclc_cytof_functions.R")
 
-set.seed(42)
+script_seed <- 42
+set.seed(script_seed)
 ################################################################################
 # Read in data
 ################################################################################
@@ -8,15 +9,15 @@ set.seed(42)
 sce <- readRDS("data/cytof_objects/sclc_all_samples_with_clusters.rds")
 
 ################################################################################
-# Read in CTC clusters
+# Read in cancer_enriched clusters
 ################################################################################
 
-ctc_clusters <- readRDS("data/ctc_clusters.rds")
+cancer_enriched_clusters <- readRDS("data/cancer_enriched_clusters.rds")
 
 ################################################################################
 # Run differential expression 
 ################################################################################
-metric_to_use <- "median"
+metric_to_use <- "mean"
 
 df <- cytof_de(sce, method = "wilcox", metric = metric_to_use, ident = "new_clusters")
 
@@ -31,17 +32,17 @@ plot_df <- df %>%
 
 # Reorder cluster factor
 plot_df$ident_list <- paste0("Cluster ",plot_df$ident_list)
-plot_df$ident_list <- factor(plot_df$ident_list, levels=paste0("Cluster ", c(1:10)))
+plot_df$ident_list <- factor(plot_df$ident_list, levels=paste0("Cluster ", 1:nlevels(sce$new_clusters)))
 
-# Dataframe for plotting only CTC clusters
-ctc_df <- plot_df %>% 
-  dplyr::filter(ident_list %in% paste0("Cluster ", ctc_clusters))
+# Dataframe for plotting only cancer_enriched clusters
+cancer_enriched_df <- plot_df %>% 
+  dplyr::filter(ident_list %in% paste0("Cluster ", cancer_enriched_clusters))
 
 
 x_axis_label <- gsub("m","M",metric_to_use)
 
-# Create plot for CTC clusters
-p1 <- ggplot(ctc_df,aes(x=as.numeric(logfc), y=protein, fill=logfc))+
+# Create plot for cancer_enriched clusters
+p1 <- ggplot(cancer_enriched_df,aes(x=as.numeric(logfc), y=protein, fill=logfc))+
   geom_col(color="darkgray",linewidth=.001)+
   geom_text(aes(x=star_x, label=significance), size = 3)+
   facet_wrap(~ident_list, scales = "free_y",nrow=1)+
@@ -66,7 +67,7 @@ p1
 p2 <- ggplot(plot_df,aes(x=as.numeric(logfc), y=protein, fill=logfc))+
   geom_col(color="darkgray",size=.001)+
   geom_text(aes(x=star_x, label=significance), size = 3)+
-  facet_wrap(~ident_list, scales = "free_y", nrow=3)+
+  facet_wrap(~ident_list, scales = "free_y", nrow=2)+
   scale_y_reordered()+
   labs(fill = "")+
   guides(fill="none")+

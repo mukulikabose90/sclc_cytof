@@ -1,0 +1,193 @@
+---
+title: "Subtype Changes Across Treatment Stages"
+output: html_notebook
+---
+
+```{r}
+source("source/sclc_cytof_functions.R")
+
+script_seed <- 42
+set.seed(script_seed)
+```
+
+# NO SCALING
+```{r}
+
+ctcs <- readRDS("data/cytof_objects/all_samples_ctcs_with_subtype.rds")
+
+subtypes <- c("A","N","P","I")
+heatmaps <- list()
+for(curr_subtype in subtypes){
+  sce <- ctcs[,ctcs$subtype == curr_subtype]
+  
+  curr_title <- curr_subtype
+  
+  all_groups <- sort(unique(sce[["treatment_status"]]))
+  markers <- rownames(curr_sce)
+  
+  
+  heatmap <- matrix(NA, ncol=length(markers),nrow=length(all_groups))
+  for(i in 1:length(all_groups)){
+    
+    curr_group <- all_groups[i]
+    # cat(curr_group,"\n")
+    
+    for(j in 1:length(markers)){
+      
+      curr_marker <- markers[j]
+      # cat(curr_marker,"\n")
+      
+      heatmap[i,j] <- mean(sce@assays@data$exprs[curr_marker,sce[["treatment_status"]] == curr_group])
+    }
+  }
+  
+  colnames(heatmap) <- markers
+  rownames(heatmap) <- all_groups
+  
+  scaled_heatmap <- t(scale(t(heatmap)))
+  
+  
+  curr_ht <- Heatmap(t(scaled_heatmap), name="Expression",column_names_rot = 0,
+                cluster_columns = F, cluster_rows=F, column_title = curr_title)
+
+
+  heatmaps <- append(heatmaps, list(curr_ht))
+   
+}
+
+heatmaps[[1]]+heatmaps[[2]]+heatmaps[[3]]+heatmaps[[4]]
+
+```
+
+# SCALING WITHIN ALL MARKERS THEN TAKING MEAN
+
+```{r}
+
+ctcs <- readRDS("data/cytof_objects/all_samples_ctcs_with_subtype.rds")
+
+assay(ctcs, "exprs") <- t(scale(t(assay(ctcs, "exprs"))))
+
+subtypes <- c("A","N","P","I")
+heatmaps <- list()
+for(curr_subtype in subtypes){
+  sce <- ctcs[,ctcs$subtype == curr_subtype]
+  
+  curr_title <- curr_subtype
+  
+  all_groups <- sort(unique(sce[["treatment_status"]]))
+  markers <- rownames(curr_sce)
+  
+  heatmap <- matrix(NA, ncol=length(markers),nrow=length(all_groups))
+  for(i in 1:length(all_groups)){
+    
+    curr_group <- all_groups[i]
+    # cat(curr_group,"\n")
+    
+    for(j in 1:length(markers)){
+      
+      curr_marker <- markers[j]
+      # cat(curr_marker,"\n")
+      
+      heatmap[i,j] <- mean(sce@assays@data$exprs[curr_marker,sce[["treatment_status"]] == curr_group])
+    }
+  }
+  
+  colnames(heatmap) <- markers
+  rownames(heatmap) <- all_groups
+  
+  scaled_heatmap <- (heatmap)
+  
+  
+  curr_ht <- Heatmap(t(scaled_heatmap), name="Expression",column_names_rot = 0,
+                cluster_columns = F, cluster_rows=F, column_title = curr_title)
+
+
+  heatmaps <- append(heatmaps, list(curr_ht))
+   
+}
+
+heatmaps[[1]]+heatmaps[[2]]+heatmaps[[3]]+heatmaps[[4]]
+```
+
+# TAKING MEAN THEN SCALING ACROSS SUBTYPES
+```{r}
+ctcs <- readRDS("data/cytof_objects/all_samples_ctcs_with_subtype.rds")
+
+all_markers <- readRDS("data/state_markers.rds")
+
+naive <- ctcs[,ctcs$treatment_status == "naive"]
+naive_ht <- create_expression_heatmap(naive, "subtype", all_markers)
+
+sce <- ctcs[,ctcs$treatment_status == "naive"]
+  
+curr_title <- "naive"
+
+all_groups <- sort(unique(sce[["subtype"]]))
+markers <- rownames(curr_sce)
+
+heatmap <- matrix(NA, ncol=length(markers),nrow=length(all_groups))
+for(i in 1:length(all_groups)){
+  
+  curr_group <- all_groups[i]
+  # cat(curr_group,"\n")
+  
+  for(j in 1:length(markers)){
+    
+    curr_marker <- markers[j]
+    # cat(curr_marker,"\n")
+    
+    heatmap[i,j] <- mean(sce@assays@data$exprs[curr_marker,sce[["subtype"]] == curr_group])
+  }
+}
+
+colnames(heatmap) <- markers
+rownames(heatmap) <- all_groups
+
+scaled_heatmap <- scale(heatmap)
+
+
+naive_ht <- Heatmap(t(scaled_heatmap), name="Expression",column_names_rot = 0,
+              cluster_columns = F, cluster_rows=F, column_title = curr_title)
+
+############
+sce <- ctcs[,ctcs$treatment_status == "treated"]
+  
+curr_title <- "treated"
+
+all_groups <- sort(unique(sce[["subtype"]]))
+markers <- rownames(curr_sce)
+
+heatmap <- matrix(NA, ncol=length(markers),nrow=length(all_groups))
+for(i in 1:length(all_groups)){
+  
+  curr_group <- all_groups[i]
+  # cat(curr_group,"\n")
+  
+  for(j in 1:length(markers)){
+    
+    curr_marker <- markers[j]
+    # cat(curr_marker,"\n")
+    
+    heatmap[i,j] <- mean(sce@assays@data$exprs[curr_marker,sce[["subtype"]] == curr_group])
+  }
+}
+
+colnames(heatmap) <- markers
+rownames(heatmap) <- all_groups
+
+scaled_heatmap <- scale(heatmap)
+
+
+treated_ht <- Heatmap(t(scaled_heatmap), name="Expression",column_names_rot = 0,
+              cluster_columns = F, cluster_rows=F, column_title = curr_title)
+
+# naive_ht+treated_ht
+
+Heatmap(cbind(naive_ht@matrix[,1],treated_ht@matrix[,1]),cluster_rows = F,cluster_columns = F,column_title="A",name ="Expression")+
+Heatmap(cbind(naive_ht@matrix[,3],treated_ht@matrix[,3]),cluster_rows = F,cluster_columns = F,column_title ="N",name ="Expression")+
+Heatmap(cbind(naive_ht@matrix[,4],treated_ht@matrix[,4]),cluster_rows = F,cluster_columns = F,column_title ="P",name ="Expression")+
+Heatmap(cbind(naive_ht@matrix[,2],treated_ht@matrix[,2]),cluster_rows = F,cluster_columns = F,column_title ="I",name ="Expression")
+
+```
+
+

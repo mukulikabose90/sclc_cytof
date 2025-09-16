@@ -13,22 +13,12 @@ cluster_colors <- c("#dd4b33", "#F1FAEE", "#A8DADC", "#457B9D")
 ################################################################################
 curr_data <- ctcs
 
-patients_to_use <- as.data.frame(curr_data@colData) %>% 
-  count(patient_id,treatment_status) %>% 
-  count(patient_id) %>% 
-  filter(n > 1) %>% 
-  pull(patient_id) %>% 
-  as.character()
-
-
-plot_df <- as.data.frame(curr_data@colData) %>% 
-  filter(tarla != "post" | is.na(tarla)) %>%
-  filter(patient_id %in% patients_to_use) %>% 
-  select(treatment_status,subtype) %>% 
-  dplyr::count(treatment_status,subtype) %>% 
-  group_by(treatment_status) %>% 
-  mutate(total = sum(n)) %>% 
-  mutate(freq = (n/total)*100) 
+# patients_to_use <- as.data.frame(curr_data@colData) %>% 
+#   count(patient_id,treatment_status) %>% 
+#   count(patient_id) %>% 
+#   filter(n > 1) %>% 
+#   pull(patient_id) %>% 
+#   as.character()
 
 plot_df <- as.data.frame(curr_data@colData) %>% 
   filter(tarla != "post" | is.na(tarla)) %>%
@@ -42,8 +32,7 @@ plot_df$total <- ifelse(plot_df$subtype == "I", plot_df$total,"")
 
 plot_df$subtype <- factor(plot_df$subtype, levels=c("A","N","P",'I'))
 
-plot_df$treatment_status <- ifelse(plot_df$treatment_status == "naive","Naive","Treated")
-
+plot_df$treatment_status <- ifelse(plot_df$treatment_status == "naive","Naive","SOC")
 
 p <- ggplot(plot_df)+
   geom_col(aes(x=treatment_status,y=freq,fill=subtype))+

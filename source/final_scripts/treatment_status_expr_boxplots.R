@@ -6,7 +6,7 @@ set.seed(script_seed)
 
 ctcs <- readRDS("data/cytof_objects/ctcs_with_subtype.rds")
 
-markers_to_use <- c("ASCL1", "NeuroD1", "POU2F3", "E-Cad", "EpCAM", "MUC-1", "Vimentin", "Twist", "DLL3", "Alcam","SLUG", "PD-L1", "p-YAP", "CD44", "CD24")
+markers_to_use <- c("ASCL1", "NeuroD1", "POU2F3", "DLL3", "Alcam","SLUG", "PD-L1", "p-YAP", "CD44", "CD24","E-Cad", "EpCAM", "MUC-1", "Vimentin", "Twist")
 ################################################################################
 # Select patients to use
 ################################################################################
@@ -51,9 +51,9 @@ plot_df <- gg_df %>%
 
 plot_df$antigen <- factor(plot_df$antigen, levels = markers_to_use)
 
-plot_df$treatment_status <- ifelse(plot_df$treatment_status == "naive", "Naive", "Treated")
+plot_df$treatment_status <- ifelse(plot_df$treatment_status == "naive", "Naive", "SOC")
 
-plot_df$treatment_status <- factor(plot_df$treatment_status, levels = c("Naive", "Treated"))
+plot_df$treatment_status <- factor(plot_df$treatment_status, levels = c("Naive", "SOC"))
 
 # Remove post-tarla samples
 plot_df <- plot_df %>%
@@ -74,7 +74,7 @@ stat.test
 
 p <- ggviolin(plot_df, x="treatment_status" ,y="expression", fill="treatment_status", lwd=.3, outlier.size = .1,draw_quantiles =0.5)+
   # stat_compare_means(aes(group = treatment_status), label = "p.signif", label.x.npc = "center", label.y = 5.5,size=4.5)+
-  facet_wrap(~antigen,nrow=2)+
+  facet_wrap(~antigen,nrow=3)+
   ylim(0,9)+
   labs(y="Expression",
        x= "")+
@@ -91,7 +91,7 @@ p <- p + stat_pvalue_manual(stat.test, label = "p.adj.signif",size=5)
 
 p
 
-tiff(glue("figures/treatment_status_expression_violinplot.tiff"), width=360,height=140, units = "mm", res=600)
+tiff(glue("figures/treatment_status_expression_violinplot.tiff"), width=360,height=200, units = "mm", res=600)
 print(p)
 dev.off()
 

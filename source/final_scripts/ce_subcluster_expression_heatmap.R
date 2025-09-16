@@ -22,15 +22,15 @@ col_fun = colorRamp2(c(-3, -1, 0, 1, 3),
 
 ht <- Heatmap(t(scaled_heatmap),column_names_rot = 0,col = col_fun,
               cluster_columns = F, cluster_rows=F, column_title = "",
-              row_names_gp = gpar(fontsize = 20),column_names_gp = gpar(fontsize = 20),
+              row_names_gp = gpar(fontsize = 10),column_names_gp = gpar(fontsize = 10),
               heatmap_legend_param = list(
                 title = "   Scaled\nExpression",      
-                title_gp = gpar(fontsize = 18), 
-                labels_gp = gpar(fontsize = 14),
+                title_gp = gpar(fontsize = 8), 
+                labels_gp = gpar(fontsize = 6),
                 legend_height = unit(3, "cm"),
                 grid_width = unit(.5,"cm")))
 
-tiff("figures/cancer_enriched_cluster_expression_heatmap.tiff", width=200,height=100, units = "mm", res=600)
+tiff("figures/cancer_enriched_cluster_expression_heatmap.tiff", width=200,height=60, units = "mm", res=600)
 print(ht)
 dev.off()
 

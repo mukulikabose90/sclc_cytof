@@ -48,6 +48,8 @@ markers_to_use <- marker_info$fcs_colname
 all_metadata <- list()
 all_files <- c()
 all_flowsets <- list()
+
+curr_experiment <- all_experiments[1]
 for(curr_experiment in all_experiments){
   curr_experiment_id <- strsplit(curr_experiment, "_")[[1]][2]
   

@@ -18,6 +18,8 @@ library(egg)
 library(gridExtra)
 library(rstatix) 
 library(ggalluvial)
+library(broom)
+library(broom.mixed)
 
 library(tidyverse)
 

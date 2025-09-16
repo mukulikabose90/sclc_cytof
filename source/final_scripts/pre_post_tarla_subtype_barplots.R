@@ -13,6 +13,13 @@ cluster_colors <- c("#dd4b33", "#F1FAEE", "#A8DADC", "#457B9D")
 ################################################################################
 curr_data <- ctcs
 
+as.data.frame(curr_data@colData) %>% 
+  filter(!is.na(tarla)) %>% 
+  select(patient_id,tarla) %>% 
+  distinct() %>% 
+  count(patient_id) %>% 
+  filter(n > 1)
+
 plot_df <- as.data.frame(curr_data@colData) %>% 
   filter(!is.na(tarla)) %>% 
   select(tarla,subtype) %>% 
@@ -46,6 +53,8 @@ p <- ggplot(plot_df)+
         legend.text = element_text(size=18))
 
 p
+
+
 
 tiff("figures/tarla_subtype_barplots.tiff", width=140,height=100, units = "mm", res=600)
 print(p)

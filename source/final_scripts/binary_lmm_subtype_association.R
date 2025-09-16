@@ -35,7 +35,7 @@ for(curr_subtype in c("A","N","P","I")){
   
   or <- exp(fixef(model)[2])
   
-  tidy_out <- tidy(model,effects='fixed')
+  tidy_out <- broom.mixed::tidy(model,effects='fixed')
   curr_pval <- tidy_out$p.value[2]
   
   
@@ -228,19 +228,20 @@ plot_df$subtype <- factor(plot_df$subtype,levels=c("A","N","P","I"))
 
 
 p3 <- ggplot(plot_df,aes(x=log_or,y=fct_rev(subtype),color=subtype))+
-  geom_point(aes(shape = factor(signif)),size=9,fill="white",show.legend = F)+
+  geom_point(aes(shape = factor(signif)),size=12,fill="white",show.legend = F, stroke=3)+
   scale_shape_manual(values = c("ns" = 1, "s" = 16)) +
-  geom_errorbarh(aes(xmin = log_lower_or, xmax = log_upper_or), height = 0.1, linewidth = .5,show.legend = F)+
+  geom_errorbarh(aes(xmin = log_lower_or, xmax = log_upper_or), height = 0.1, linewidth = 1,show.legend = F)+
   geom_vline(xintercept = 0, linetype = 2)+
   scale_color_manual(values = cluster_colors)+
   xlim(-1.5,1.5)+
   labs(y="Subtype",
        x="log(OR)")+
   theme_classic()+
-  annotate("text", x=-1, y=4.5, label = "Naive", angle=0,size=5) +
-  annotate("text", x=1, y=4.5, label = "Treated", angle=0,size=5) +
-  theme(axis.text = element_text(size=18,angle = 0, hjust = 1),
-        axis.title = element_text(size=20),
+  annotate("text", x=-.85, y=4.5, label = "Naive", angle=0,size=6) +
+  annotate("text", x=.85, y=4.5, label = "SOC", angle=0,size=6) +
+  theme(axis.text = element_text(size=22,angle = 0, hjust = 1),
+        axis.title = element_text(size=24),
+        ,
         axis.text.x = element_text(angle = 0, hjust = .5))
 
 p3
@@ -311,9 +312,9 @@ plot_df <- all_results %>%
 plot_df$subtype <- factor(plot_df$subtype,levels=c("A","N","P","I"))
 
 p4 <- ggplot(plot_df,aes(x=log_or,y=fct_rev(subtype),color=subtype))+
-  geom_point(aes(shape = factor(signif)),size=9,fill="white",show.legend = F)+
+  geom_point(aes(shape = factor(signif)),size=12,fill="white",show.legend = F,stroke=3)+
   scale_shape_manual(values = c("ns" = 1, "s" = 16)) +
-  geom_errorbarh(aes(xmin = log_lower_or, xmax = log_upper_or), height = 0.1, linewidth = .5,show.legend = F)+
+  geom_errorbarh(aes(xmin = log_lower_or, xmax = log_upper_or), height = 0.1, linewidth = 1,show.legend = F)+
   geom_vline(xintercept = 0, linetype = 2)+
   scale_color_manual(values = cluster_colors)+
   xlim(-1.5,1.5)+
@@ -322,8 +323,8 @@ p4 <- ggplot(plot_df,aes(x=log_or,y=fct_rev(subtype),color=subtype))+
   theme_classic()+
   annotate("text", x=-.75, y=4.5, label = "Pre-Tarlatamab", angle=0,size=4) +
   annotate("text", x=.75, y=4.5, label = "Post-Tarlatamab", angle=0,size=4) +
-  theme(axis.text = element_text(size=18,angle = 0, hjust = 1),
-        axis.title = element_text(size=20),
+  theme(axis.text = element_text(size=22,angle = 0, hjust = 1),
+        axis.title = element_text(size=24),
         axis.text.x = element_text(angle = 0, hjust = .5)) 
   
   

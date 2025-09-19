@@ -1,9 +1,13 @@
+################################################################################
+# This script plots barplots displaying the proportion of cell of each subtype
+# between pre-tarla CTCs and post-tarla CTCs 
+################################################################################
 source("source/sclc_cytof_functions.R")
 
-script_seed <- 42
-set.seed(script_seed)
+set.seed(42)
 ################################################################################
-
+# Read in data
+################################################################################
 ctcs <- readRDS("data/cytof_objects/ctcs_with_subtype.rds")
 
 cluster_colors <- c("#dd4b33", "#F1FAEE", "#A8DADC", "#457B9D")
@@ -51,9 +55,6 @@ p <- ggplot(plot_df)+
         strip.background = element_blank(),
         legend.title = element_text(size=20),
         legend.text = element_text(size=18))
-
-p
-
 
 
 tiff("figures/tarla_subtype_barplots.tiff", width=140,height=100, units = "mm", res=600)
@@ -130,9 +131,7 @@ p <- ggplot(plot_df)+
         legend.title = element_text(size=12),
         legend.text = element_text(size=12))
 
-p
-
-jpeg("figures/tarla_patient_subtype_barplots.jpg", width=250,height=100, units = "mm", res=1000)
+tiff("figures/tarla_patient_subtype_barplots.tiff", width=250,height=100, units = "mm", res=1000)
 print(p)
 dev.off()
 

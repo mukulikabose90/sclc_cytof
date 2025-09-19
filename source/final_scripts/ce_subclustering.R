@@ -85,7 +85,7 @@ p1 <- ggplot(df)+
 ################################################################################
 # Save figures
 ################################################################################
-jpeg("figures/cancer_enriched_cluster.jpg", width=120,height=100, units = "mm", res=1000)
+tiff("figures/cancer_enriched_cluster.tiff", width=120,height=100, units = "mm", res=1000)
 print(p1)
 dev.off()
 

@@ -1,15 +1,20 @@
+################################################################################
+# This script plots barplots displaying the proportion of cell of each subtype
+# in each sample from longitudinal patients
+################################################################################
 source("source/sclc_cytof_functions.R")
 
-script_seed <- 42
-set.seed(script_seed)
+set.seed(42)
 ################################################################################
-
+# Read in data
+################################################################################
 ctcs <- readRDS("data/cytof_objects/ctcs_with_subtype.rds")
 
 cluster_colors <- c("#dd4b33", "#F1FAEE", "#A8DADC", "#457B9D")
 
 ################################################################################
 # Plot subtype proportions for each patient across all samples
+################################################################################
 
 long_patients <- as.data.frame(ctcs@colData) %>% 
   select(patient_id,sample_num) %>% 
@@ -29,9 +34,7 @@ samples_to_remove <- ctcs %>%
   unique() %>% 
   as.character()
 
-
 long_data <- ctcs[,ctcs$patient_id %in% long_patients & !ctcs$collection_id %in% samples_to_remove]
-
 
 long_patients <- long_data@colData %>% 
   as.data.frame() %>% 
@@ -96,7 +99,9 @@ p <- ggplot(plot_df)+
 
 p
 
-
+################################################################################
+# Save figure
+################################################################################
 tiff("figures/all_patients_longitudinal_subtype_barplots.tiff", width=225,height=150, units = "mm", res=600)
 print(p)
 dev.off()

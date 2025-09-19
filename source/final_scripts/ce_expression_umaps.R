@@ -1,7 +1,6 @@
 source("source/sclc_cytof_functions.R")
 
-script_seed <- 42
-set.seed(script_seed)
+set.seed(42)
 ################################################################################
 # Read in CyTOF data with cluster assignments
 ################################################################################

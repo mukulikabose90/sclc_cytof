@@ -1,9 +1,19 @@
+################################################################################
+# This script plots a heatmap of the expression of all protein markers in 
+# each sample from longitudinal patientssthat have > 10 cells in both
+# treatment status
+################################################################################
 source("source/sclc_cytof_functions.R")
 
-script_seed <- 42
-set.seed(script_seed)
+set.seed(42)
 ################################################################################
+# Read in data
+################################################################################
+ctcs <- readRDS("data/cytof_objects/ctcs_with_subtype.rds")
 
+################################################################################
+# Set up plot data
+################################################################################
 markers_to_use <- c("ASCL1", "NeuroD1", "POU2F3", "DLL3", "Alcam", "E-Cad", "EpCAM", "MUC-1", "Vimentin", "Twist", "SLUG", "PD-L1", "p-YAP", "CD44", "CD24")
 
 col_fun = colorRamp2(c(-2, -1, 0, 1, 2), 
@@ -13,7 +23,6 @@ col_fun = colorRamp2(c(-2, -1, 0, 1, 2),
                        "#f46d43",  # light red
                        "#a50026"))
 
-ctcs <- readRDS("data/cytof_objects/ctcs_with_subtype.rds")
 
 long_patients <- as.data.frame(ctcs@colData) %>% 
   select(patient_id,sample_num) %>% 
@@ -36,7 +45,6 @@ samples_to_remove <- ctcs %>%
 
 long_data <- ctcs[,ctcs$patient_id %in% long_patients & !ctcs$collection_id %in% samples_to_remove]
 
-
 long_patients <- long_data@colData %>% 
   as.data.frame() %>% 
   count(patient_id,sample_num) %>% 
@@ -44,11 +52,13 @@ long_patients <- long_data@colData %>%
   filter(n > 1) %>% 
   pull(patient_id)
 
-
-
 #Scale expression
 assay(long_data, "exprs") <- t(scale(t(assay(long_data, "exprs"))))
 
+
+################################################################################
+# Create heatmap for each patient
+################################################################################
 heatmap_list <- list()
 for(curr_patient in long_patients){
   
@@ -91,6 +101,10 @@ for(curr_patient in long_patients){
 dummy_ht <- draw(heatmap_list[[1]])
 
 legend_obj <- color_mapping_legend(dummy_ht@ht_list[[1]]@matrix_color_mapping, plot = FALSE)
+
+################################################################################
+# Save figure
+################################################################################
 
 tiff(glue("figures/longitudinal_expression_heatmap.tiff"), width=260,height=150, units = "mm", res=600)
 

@@ -1,8 +1,19 @@
+################################################################################
+# This script plots a heatmap of the expression of all protein markers between
+# naive CTCs and CTCs treated with SOC in patients that have > 10 cells in both
+# treatment status
+################################################################################
 source("source/sclc_cytof_functions.R")
 
-script_seed <- 42
-set.seed(script_seed)
+set.seed(42)
+################################################################################
+# Read in data
+################################################################################
+ctcs <- readRDS("data/cytof_objects/ctcs_with_subtype.rds")
 
+################################################################################
+# Set up colors and proteins
+################################################################################
 col_fun = colorRamp2(c(-2, -1, 0, 1, 2), 
                      c("#313695",  # deep blue
                        "#74add1",  # light blue
@@ -11,8 +22,6 @@ col_fun = colorRamp2(c(-2, -1, 0, 1, 2),
                        "#a50026"))
 
 markers_to_use <- c("ASCL1", "NeuroD1", "POU2F3", "DLL3", "Alcam", "E-Cad", "EpCAM", "MUC-1", "Vimentin", "Twist", "SLUG", "PD-L1", "p-YAP", "CD44", "CD24")
-
-ctcs <- readRDS("data/cytof_objects/ctcs_with_subtype.rds")
 
 ################################################################################
 # Select patients to use
@@ -74,8 +83,9 @@ for(curr_patient in patients_to_use){
   all_ht <- append(all_ht, list(curr_ht))
 }
 
-
-
+################################################################################
+# Save figure
+################################################################################
 tiff(glue("figures/treatment_status_expression_heatmap.tiff"), width=160,height=160, units = "mm", res=600)
 print(all_ht[[1]])
 dev.off()

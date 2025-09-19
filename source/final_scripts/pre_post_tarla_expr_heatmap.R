@@ -1,7 +1,15 @@
+################################################################################
+# This script plots a heatmap of the expression of all protein markers between
+# pre-tarla CTCs and post-tarla CTCs in patients that have > 10 cells in both
+# treatment status
+################################################################################
 source("source/sclc_cytof_functions.R")
 
-script_seed <- 42
-set.seed(script_seed)
+set.seed(42)
+################################################################################
+# Read in data
+################################################################################
+ctcs <- readRDS("data/cytof_objects/ctcs_with_subtype.rds")
 
 col_fun = colorRamp2(c(-2, -1, 0, 1, 2), 
                      c("#313695",  # deep blue
@@ -11,10 +19,8 @@ col_fun = colorRamp2(c(-2, -1, 0, 1, 2),
                        "#a50026"))
 
 ################################################################################
-
-ctcs <- readRDS("data/cytof_objects/ctcs_with_subtype.rds")
-
-
+# Create plot data
+################################################################################
 patients_to_use <- ctcs %>% 
   colData() %>% 
   as.data.frame() %>% 
@@ -24,7 +30,6 @@ patients_to_use <- ctcs %>%
   count(patient_id) %>% 
   filter(n > 1) %>% 
   pull(patient_id)
-
 
 # Remove samples with too few cells
 patients_to_remove <- ctcs %>%
@@ -38,16 +43,16 @@ patients_to_remove <- ctcs %>%
 
 patients_to_use <- patients_to_use[!patients_to_use %in% patients_to_remove]
 
-
 tarla_ctcs <- ctcs[,ctcs$patient_id %in% patients_to_use]
 
 #Scale expression
 assay(tarla_ctcs, "exprs") <- t(scale(t(assay(tarla_ctcs, "exprs"))))
 
-
+################################################################################
+# Create heatmaps for each patient
+################################################################################
 all_ht <- list()
 for(curr_patient in patients_to_use){
-  
   
   curr_heatmap <- list()
   
@@ -71,8 +76,10 @@ for(curr_patient in patients_to_use){
   all_ht <- append(all_ht, list(curr_ht))
 }
 
-
-jpeg(glue("figures/pre_post_tarla_expression_heatmap.jpg"), width=300,height=160, units = "mm", res=1000)
+################################################################################
+# Save figure
+################################################################################
+tiff(glue("figures/pre_post_tarla_expression_heatmap.tiff"), width=300,height=160, units = "mm", res=1000)
 print(all_ht[[1]]+all_ht[[2]]+all_ht[[3]])
 dev.off()
 

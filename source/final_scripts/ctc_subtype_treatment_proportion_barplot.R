@@ -1,11 +1,19 @@
+################################################################################
+# This script plots barplots displaying the proportion of cell of each subtype
+# in every sample in the analysis. Split by treatment status
+################################################################################
 source("source/sclc_cytof_functions.R")
 
-script_seed <- 42
-set.seed(script_seed)
+set.seed(42)
+################################################################################
+# Read in data
+################################################################################
+ctcs <- readRDS("data/cytof_objects/ctcs_with_subtype.rds")
+
+################################################################################
+# Set up plot dataframe
 ################################################################################
 cluster_colors <- c("#dd4b33", "#F1FAEE", "#A8DADC", "#457B9D")
-
-ctcs <- readRDS("data/cytof_objects/ctcs_with_subtype.rds")
 
 plot_df <-  ctcs@colData %>% 
   as.data.frame()  %>% 
@@ -48,11 +56,9 @@ p1 <- ggplot(plot_df)+
         legend.text = element_text(size=18),
         strip.text = element_text(size=20))
 
-p1
-  
-
+################################################################################
+# Save figure
+################################################################################
 tiff("figures/ctc_subtype_sample_proportion_barplots.tiff", width=300,height=100, units = "mm", res=600)
 print(p1)
 dev.off()
-
-length(unique(plot_df$collection_id))

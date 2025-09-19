@@ -1,13 +1,12 @@
-
+################################################################################
+# This script runs the subtype detection approach on normal cells as a control
 ################################################################################
 source("source/sclc_cytof_functions.R")
 
-script_seed <- 42
-set.seed(script_seed)
+set.seed(42)
 ################################################################################
 # Read in CyTOF data with cluster assignments
 ################################################################################
-
 sce <- readRDS("data/cytof_objects/sclc_all_samples_with_clusters.rds")
 
 cancer_enriched_clusters <- readRDS("data/cancer_enriched_clusters.rds")
@@ -15,7 +14,6 @@ cancer_enriched_clusters <- readRDS("data/cancer_enriched_clusters.rds")
 # Subset to cancer cells in cancer_enriched cluster
 cancer_enriched <- sce[,!colData(sce)$new_clusters %in% cancer_enriched_clusters]
 ctcs <- cancer_enriched[,colData(cancer_enriched)$condition == "cancer"]
-
 
 ################################################################################
 # Create heatmap
@@ -62,6 +60,7 @@ col_fun = colorRamp2(c(-2, -1, 0, 1, 2),
                        "#f7f7f7",  # white (center, 0)
                        "#f46d43",  # light red
                        "#a50026"))
+
 # Create collection ID annotation
 colors_to_use <- colorRampPalette(brewer.pal(12,"Paired"))(length(unique(heatmap_metadata$collection_id)))
 names(colors_to_use) <- unique(heatmap_metadata$collection_id)
@@ -92,21 +91,12 @@ ht <- Heatmap(all_samples_heatmap, column_km = num_subclusters, top_annotation =
 all_samples_ht <- draw(ht)
 
 #############################################################################
-# Find optimal number of subclusters
-#############################################################################
-p1 <- fviz_nbclust(t(all_samples_heatmap), kmeans, method='silhouette')+
-  ggtitle("Optimal Number of Subclusters (Non-CTCs)")
-
-# jpeg("figures/normal_optimal_clusters.jpg", width = 200, height = 100, units = "mm", res = 1200)
-# print(p1)
-# dev.off()
-
-#############################################################################
 # ALL SAMPLES
 #############################################################################
-jpeg("figures/normal_subtype_heatmap.jpg", width=300,height=120, units = "mm", res=1000)
+tiff("figures/normal_subtype_heatmap.tiff", width=300,height=120, units = "mm", res=1000)
 print(all_samples_ht)
 dev.off()
+
 #############################################################################
 # Assign subtype to each cell based on kmeans clustering
 #############################################################################

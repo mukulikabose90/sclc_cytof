@@ -46,11 +46,11 @@ p2 <- p2+
 ################################################################################
 # Save figures
 ################################################################################
-# jpeg(glue("figures/cancer_enriched_cluster_tf_expression_boxplot.jpg"), width=160,height=160, units = "mm", res=1000)
-# print(p1)
-# dev.off()
+tiff(glue("figures/cancer_enriched_cluster_tf_expression_boxplot.tiff"), width=160,height=160, units = "mm", res=1000)
+print(p1)
+dev.off()
 
-jpeg(glue("figures/cancer_enriched_cluster_expression_boxplot.jpg"), width=300,height=200, units = "mm", res=1000)
+tiff(glue("figures/cancer_enriched_cluster_expression_boxplot.tiff"), width=300,height=200, units = "mm", res=1000)
 print(p2)
 dev.off()
 

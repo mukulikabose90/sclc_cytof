@@ -1,9 +1,13 @@
+################################################################################
+# This script plots barplots displaying the proportion of cell of each subtype
+# between naive CTCs and CTCs treated with SOC
+################################################################################
 source("source/sclc_cytof_functions.R")
 
-script_seed <- 42
-set.seed(script_seed)
+set.seed(42)
 ################################################################################
-
+# Read in data
+################################################################################
 ctcs <- readRDS("data/cytof_objects/ctcs_with_subtype.rds")
 
 cluster_colors <- c("#dd4b33", "#F1FAEE", "#A8DADC", "#457B9D")
@@ -13,13 +17,7 @@ cluster_colors <- c("#dd4b33", "#F1FAEE", "#A8DADC", "#457B9D")
 ################################################################################
 curr_data <- ctcs
 
-# patients_to_use <- as.data.frame(curr_data@colData) %>% 
-#   count(patient_id,treatment_status) %>% 
-#   count(patient_id) %>% 
-#   filter(n > 1) %>% 
-#   pull(patient_id) %>% 
-#   as.character()
-
+# Calculate proportions of each subtype
 plot_df <- as.data.frame(curr_data@colData) %>% 
   filter(tarla != "post" | is.na(tarla)) %>%
   select(treatment_status,subtype) %>% 
@@ -34,7 +32,8 @@ plot_df$subtype <- factor(plot_df$subtype, levels=c("A","N","P",'I'))
 
 plot_df$treatment_status <- ifelse(plot_df$treatment_status == "naive","Naive","SOC")
 
-p <- ggplot(plot_df)+
+# Plot barplot
+p1 <- ggplot(plot_df)+
   geom_col(aes(x=treatment_status,y=freq,fill=subtype))+
   geom_text(aes(label=total,x=treatment_status), y=105,size = 5)+
   ylim(0,105)+
@@ -50,10 +49,8 @@ p <- ggplot(plot_df)+
         legend.title = element_text(size=20),
         legend.text = element_text(size=18))
 
-p
-
 tiff("figures/treatment_status_subtype_barplots.tiff", width=140,height=100, units = "mm", res=600)
-print(p)
+print(p1)
 dev.off()
 
 ################################################################################
@@ -84,6 +81,7 @@ patients_to_remove <- ctcs %>%
 patients_to_use <- patients_to_use[!patients_to_use %in% patients_to_remove]
 
 curr_data <- ctcs[,ctcs$patient_id %in% patients_to_use]
+
 plot_df <- as.data.frame(curr_data@colData) %>% 
   select(patient_id,treatment_status,subtype) %>% 
   dplyr::count(patient_id,treatment_status,subtype) %>% 
@@ -107,7 +105,7 @@ plot_df$treatment_status <- ifelse(plot_df$treatment_status == "naive","Naive","
 
 plot_df$subtype <- factor(plot_df$subtype, levels=c("A","N","P",'I'))
 
-p <- ggplot(plot_df)+
+p2 <- ggplot(plot_df)+
   geom_col(aes(x=treatment_status,y=freq,fill=subtype))+
   geom_text(aes(label=total,x=treatment_status), y=105,size = 3)+
   facet_wrap(~patient_id, scales="free",ncol=5)+
@@ -124,9 +122,9 @@ p <- ggplot(plot_df)+
         legend.title = element_text(size=12),
         legend.text = element_text(size=12))
 
-p
+p2
 
-jpeg("figures/treatment_status_patient_barplots.jpg", width=100,height=100, units = "mm", res=1000)
-print(p)
+tiff("figures/treatment_status_patient_barplots.tiff", width=100,height=100, units = "mm", res=1000)
+print(p2)
 dev.off()
 

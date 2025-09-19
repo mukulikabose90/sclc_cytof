@@ -1,46 +1,45 @@
 ################################################################################
 # Process and QC
 ################################################################################
-# source("source/final_scripts/process_samples.R")
-# source("source/final_scripts/cytof_samples_qc.R")
+source("source/final_scripts/process_samples.R")
+source("source/final_scripts/cytof_samples_qc.R")
 
 ################################################################################
 # Identify cancer-enriched populations
 ################################################################################
-# source("source/final_scripts/all_samples_clustering.R")
-# source("source/final_scripts/differential_abundance_lm.R")
-# source("source/final_scripts/all_samples_clustering_opacity.R")
+source("source/final_scripts/all_samples_clustering.R")
+source("source/final_scripts/differential_abundance_lm.R")
+source("source/final_scripts/all_samples_clustering_opacity.R")
 
-# source("source/final_scripts/all_samples_cluster_expression_heatmap.R")
-# source("source/final_scripts/all_samples_cluster_expression_boxplots.R")
+source("source/final_scripts/all_samples_cluster_expression_heatmap.R")
+source("source/final_scripts/all_samples_cluster_expression_boxplots.R")
 
 ################################################################################
 # CTC detection 
 ################################################################################
-# source("source/final_scripts/ce_subclustering.R")
-# source("source/final_scripts/ce_subcluster_expression_heatmap.R")
-# source("source/final_scripts/ce_subcluster_expression_boxplots.R")
-# source("source/final_scripts/ce_expression_umaps.R")
+source("source/final_scripts/ce_subclustering.R")
+source("source/final_scripts/ce_subcluster_expression_heatmap.R")
+source("source/final_scripts/ce_subcluster_expression_boxplots.R")
 
 ################################################################################
 # pRb of cell groups
 ################################################################################
-# source("source/final_scripts/ctcs_vs_normal_cells_expression.R")
+source("source/final_scripts/ctcs_vs_normal_cells_expression.R")
 
 ################################################################################
 # CTC analysis
 ################################################################################
-# source("source/final_scripts/ctcs_subtype_detection_heatmap.R")
-# source("source/final_scripts/subtype_expression_heatmap.R")
-# source("source/final_scripts/subtype_expression_boxplots.R")
+source("source/final_scripts/ctcs_subtype_detection_heatmap.R")
+source("source/final_scripts/subtype_expression_heatmap.R")
+source("source/final_scripts/subtype_expression_boxplots.R")
 
-# source("source/final_scripts/non_ctc_subtype_detection_heatmap.R")
-# source("source/final_scripts/non_ctc_subtype_expression_heatmap.R")
+source("source/final_scripts/non_ctc_subtype_detection_heatmap.R")
+source("source/final_scripts/non_ctc_subtype_expression_heatmap.R")
 source("source/final_scripts/non_ctc_subtype_expression_boxplots.R")
 
-# source("source/final_scripts/normal_subtype_detection_heatmap.R")
-# source("source/final_scripts/normal_subtype_expression_heatmap.R")
-# source("source/final_scripts/normal_subtype_expression_boxplots.R")
+source("source/final_scripts/normal_subtype_detection_heatmap.R")
+source("source/final_scripts/normal_subtype_expression_heatmap.R")
+source("source/final_scripts/normal_subtype_expression_boxplots.R")
 
 source("source/final_scripts/binary_lmm_subtype_association.R")
 
@@ -79,11 +78,6 @@ source("source/final_scripts/xenograft_samples_barplots.R")
 source("source/final_scripts/xenograft_samples_violin_plots.R")
 source("source/final_scripts/xenograft_samples_heatmap.R")
 
-################################################################################
- # Protein Expression UMAPs
-################################################################################
-# source("source/final_scripts/all_samples_ctc_expression_umaps.R")
-# source("source/final_scripts/tarla_ctc_expression_umaps.R")
 
 
 

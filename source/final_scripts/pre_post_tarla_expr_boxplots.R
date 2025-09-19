@@ -1,25 +1,28 @@
+################################################################################
+# This script plots violin plots of the expression of all protein markers between
+# pre-tarla CTCs and post-tarla CTCs
+################################################################################
 source("source/sclc_cytof_functions.R")
 
-script_seed <- 42
-set.seed(script_seed)
+set.seed(42)
 ################################################################################
-
+# Read in data
+################################################################################
 ctcs <- readRDS("data/cytof_objects/ctcs_with_subtype.rds")
 
+################################################################################
+# Set up plot dataframe
+################################################################################
 markers_to_use <- c("ASCL1", "NeuroD1", "POU2F3", "DLL3", "Alcam","SLUG", "PD-L1", "p-YAP", "CD44", "CD24","E-Cad", "EpCAM", "MUC-1", "Vimentin", "Twist")
 
-################################################################################
+y <- assay(ctcs, "exprs")
 
-sce <- ctcs
-
-y <- assay(sce, "exprs")
-
-df <- data.frame(t(y), colData(sce), check.names = FALSE)
+df <- data.frame(t(y), colData(ctcs), check.names = FALSE)
 
 value <- ifelse("exprs" == "exprs", "expression", "exprs")
 
 gg_df <- melt(df, value.name = "expression", variable.name = "antigen", 
-              id.vars = names(colData(sce)))
+              id.vars = names(colData(ctcs)))
 
 
 plot_df <- gg_df %>%
@@ -38,7 +41,8 @@ plot_df$tarla <- ifelse(plot_df$tarla == "pre", "Pre", "Post")
 plot_df$tarla <- factor(plot_df$tarla, levels=c("Pre", "Post"))
 
 ################################################################################
-
+# Plot violin plots
+################################################################################
 stat.test <- plot_df %>%
   group_by(antigen) %>%
   wilcox_test(expression ~ tarla) %>%
@@ -61,7 +65,9 @@ p <- ggviolin(plot_df, x="tarla" ,y="expression", fill="tarla", lwd=.3, outlier.
 stat.test <- stat.test %>% add_xy_position(x = "tarla")
 p <- p + stat_pvalue_manual(stat.test, label = "p.adj.signif",size=5)
 
-
+################################################################################
+# Save figure
+################################################################################
 tiff(glue("figures/pre_post_tarla_expression_violinplot.tiff"), width=360,height=200, units = "mm", res=600)
 print(p)
 dev.off()

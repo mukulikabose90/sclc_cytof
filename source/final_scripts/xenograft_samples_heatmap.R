@@ -1,9 +1,18 @@
+################################################################################
+# This script plots a heatmap for protein expression for the patients that had
+# PDXs 
+################################################################################
 source("source/sclc_cytof_functions.R")
 
-script_seed <- 42
-set.seed(script_seed)
+set.seed(42)
 ################################################################################
+# Read in data
+################################################################################
+ctcs <- readRDS("data/cytof_objects/ctcs_with_subtype.rds")
 
+################################################################################
+# Create heatmap
+################################################################################
 markers_to_use <- c("ASCL1", "NeuroD1", "POU2F3", "DLL3", "Alcam", "E-Cad", "EpCAM", "MUC-1", "Vimentin", "Twist", "SLUG", "PD-L1", "p-YAP", "CD44", "CD24")
 
 col_fun = colorRamp2(c(-2, -1, 0, 1, 2), 
@@ -13,10 +22,8 @@ col_fun = colorRamp2(c(-2, -1, 0, 1, 2),
                        "#f46d43",  # light red
                        "#a50026"))
 
-ctcs <- readRDS("data/cytof_objects/ctcs_with_subtype.rds")
 
 patients_to_use <- c("SC293","SC506","SC443")
-
 
 curr_data <- ctcs
 
@@ -42,13 +49,18 @@ for(curr_patient in patients_to_use){
 colnames(curr_heatmap) <- patients_to_use
 rownames(curr_heatmap) <- markers_to_use
 
+################################################################################
+# Plot heatmap
+################################################################################
 curr_ht <- Heatmap(curr_heatmap, cluster_rows = F, cluster_columns = F,column_names_rot = 0,
                    name="Median Scaled\n   Expression", column_title = "", col = col_fun)
 
 
 p1 <- draw(curr_ht)
-p1
 
+################################################################################
+# Save figure
+################################################################################
 tiff(glue("figures/xenograft_expression_heatmap.tiff"), width=260,height=150, units = "mm", res=600)
 print(p1)
 dev.off()

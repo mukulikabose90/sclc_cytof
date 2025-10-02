@@ -27,10 +27,10 @@ col_fun = colorRamp2(c(-3, -1, 0, 1, 3),
 
 ht <- Heatmap(t(scaled_heatmap),column_names_rot = 0,col = col_fun,
               cluster_columns = F, cluster_rows=F, column_title = "",
-              row_names_gp = gpar(fontsize = 20),column_names_gp = gpar(fontsize = 20),
+              row_names_gp = gpar(fontsize = 16),column_names_gp = gpar(fontsize = 20),
               heatmap_legend_param = list(
                 title = "   Scaled\nExpression",      
-                title_gp = gpar(fontsize = 18), 
+                title_gp = gpar(fontsize = 15), 
                 labels_gp = gpar(fontsize = 14),
                 legend_height = unit(3, "cm"),
                 grid_width = unit(.5,"cm")))

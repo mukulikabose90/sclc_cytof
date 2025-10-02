@@ -18,6 +18,23 @@ markers_to_use <- c("ASCL1", "NeuroD1", "POU2F3", "DLL3", "Alcam", "E-Cad", "EpC
 
 ht <- create_expression_heatmap(ctcs, "subtype", markers_to_use,"",scale = T)
 
+col_fun = colorRamp2(c(-3, -1, 0, 1, 3), 
+                     c("#313695",  # deep blue
+                       "#74add1",  # light blue
+                       "#f7f7f7",  # white (center, 0)
+                       "#f46d43",  # light red
+                       "#a50026"))
+
+ht <- Heatmap(t(ht),column_names_rot = 0,col = col_fun,
+              cluster_columns = F, cluster_rows=F, column_title = "",
+              row_names_gp = gpar(fontsize = 16),column_names_gp = gpar(fontsize = 20),
+              heatmap_legend_param = list(
+                title = "   Scaled\nExpression",      
+                title_gp = gpar(fontsize = 15), 
+                labels_gp = gpar(fontsize = 14),
+                legend_height = unit(3, "cm"),
+                grid_width = unit(.5,"cm")))
+
 ################################################################################
 # Save figure
 ################################################################################

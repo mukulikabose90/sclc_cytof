@@ -1,4 +1,4 @@
-# Project Title
+# CyTOF-based profiling of circulating tumor cells reveals treatment-associated phenotypes and subtype switching in small cell lung cancer liquid biopsies.
 
 This project is fully reproducible using Docker and `renv`. 
 

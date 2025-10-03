@@ -149,8 +149,16 @@ dev.off()
 ################################################################################
 data_df <- ctcs@colData %>% 
   as.data.frame() %>% 
-  select(subtype,treatment_status,patient_id) %>% 
-  filter(!is.na(treatment_status))
+  select(subtype,treatment_status,patient_id,tarla) %>% 
+  filter(tarla == "pre" | is.na(tarla))
+
+# count cells and patients
+data_df %>% 
+  count(treatment_status)
+
+data_df %>% 
+  count(patient_id,treatment_status) %>% 
+  count(treatment_status)
 
 data_df$treatment_status <- factor(data_df$treatment_status, levels = c("naive","treated"))
 
@@ -198,7 +206,7 @@ p3 <- ggplot(plot_df,aes(x=log_or,y=fct_rev(subtype),color=subtype))+
   geom_errorbarh(aes(xmin = log_lower_or, xmax = log_upper_or), height = 0.1, linewidth = 1,show.legend = F)+
   geom_vline(xintercept = 0, linetype = 2)+
   scale_color_manual(values = cluster_colors)+
-  xlim(-1.5,1.5)+
+  xlim(-2,2)+
   labs(y="Subtype",
        x="log(OR)")+
   theme_classic()+
@@ -222,6 +230,14 @@ data_df <- ctcs@colData %>%
   filter(!is.na(tarla))
 
 data_df$tarla <- factor(data_df$tarla, levels = c("pre","post"))
+
+# count cells and patients
+data_df %>% 
+  count(tarla)
+
+data_df %>% 
+  count(patient_id,tarla) %>% 
+  count(tarla)
 
 results_list <- list()
 for(curr_subtype in c("A","N","P","I")){

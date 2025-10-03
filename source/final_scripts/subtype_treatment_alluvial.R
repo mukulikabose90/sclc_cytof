@@ -23,6 +23,7 @@ plot_df <- ctcs@colData %>%
   cbind(1) %>% 
   rename("n" = "1")
 
+
 plot_df$treatment_status <- ifelse(plot_df$treatment_status == "naive","Naive","SOC")
 plot_df$tarla <- ifelse(plot_df$tarla == "pre","Pre-Tarla","Tarla")
 
@@ -32,6 +33,9 @@ plot_df$treatment_status <- factor(plot_df$treatment_status, levels=c("Naive","S
 
 plot_df$subtype <- factor(plot_df$subtype, levels=c("A","N","P",'I'))
 
+# Count cells
+plot_df %>% 
+  count(treatment_status)
 
 plot_df_long <- to_lodes_form(data.frame(plot_df),
                               key = "category", value = "group", id = "cohort",
@@ -110,7 +114,9 @@ plot_df$treatment_status <- factor(plot_df$treatment_status, levels=c("Naive","S
 
 plot_df$subtype <- factor(plot_df$subtype, levels=c("A","N","P",'I'))
 
-
+# Count cells
+plot_df %>% 
+  count(treatment_status)
 
 plot_df_long <- to_lodes_form(data.frame(plot_df),
                               key = "category", value = "group", id = "cohort",
@@ -179,6 +185,28 @@ patient_level_subtype <- ctcs@colData %>%
   filter(n == max(n)) %>% 
   select(collection_id,subtype) %>% 
   distinct()
+
+# Count cells
+samples_used <- as.character(patient_level_subtype$collection_id)
+
+count_df <- ctcs@colData %>% 
+  as.data.frame() %>% 
+  filter(collection_id %in% samples_used) 
+
+count_df$treatment_status <- ifelse(count_df$treatment_status == "naive","Naive","SOC")
+count_df$tarla <- ifelse(count_df$tarla == "pre","Pre-Tarla","Tarla")
+
+count_df$treatment_status <- ifelse(count_df$treatment_status == "Naive", count_df$treatment_status, ifelse(count_df$tarla == "Pre-Tarla" | is.na(count_df$tarla),count_df$treatment_status,"Tarla"))
+
+count_df$treatment_status <- factor(count_df$treatment_status, levels=c("Naive","SOC","Pre-Tarla","Tarla"))
+
+count_df %>% 
+  count(treatment_status)
+
+count_df %>% 
+  count(subtype)
+
+#######
 
 tied_patients <- patient_level_subtype %>% 
   count(collection_id) %>% 

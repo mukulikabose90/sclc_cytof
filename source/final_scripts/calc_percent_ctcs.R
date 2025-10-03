@@ -59,13 +59,14 @@ all_data <- all_data %>%
 all_data <- merge(all_data,as.data.frame(colData(ctcs)),by="sample_id")
 
 
-  
-
 summary(all_data$pct_ctc)
 
 ctc_table <- all_data %>% 
   select(sample_id,percent_ctc) %>% 
   distinct() 
+
+mean(as.numeric(ctc_table$percent_ctc))
+
 
 
 write.csv(ctc_table,file = "data/ctc_percent_table.csv",row.names = F)
@@ -73,22 +74,3 @@ write.csv(ctc_table,file = "data/ctc_percent_table.csv",row.names = F)
 
 
 
-
-plot_df <- all_data %>% 
-  select(pct_ctc,treatment_status) %>% 
-  distinct()
-
-
-
-
-vec1 <- plot_df %>% 
-  filter(treatment_status == "naive") %>% 
-  pull(pct_ctc)
-  
-
-vec2 <- plot_df %>% 
-  filter(treatment_status == "treated") %>% 
-  pull(pct_ctc)
-
-
-boxplot(vec1,vec2)

@@ -55,7 +55,7 @@ all_results <- bind_rows(results_list)
 ################################################################################
 
 plot_df <- all_results %>% 
-  mutate(padj = p.adjust(pval)) %>% 
+  mutate(padj = p.adjust(pval), method = "BH") %>% 
   mutate(signif = ifelse(padj < 0.05, 16,1)) %>% 
   mutate(log_or = log(or)) %>% 
   mutate(log_upper_or = log(up_or)) %>% 
@@ -77,7 +77,7 @@ p1 <- ggplot(plot_df,aes(x=log_or,y=fct_rev(cluster),color=cluster))+
   theme(axis.text = element_text(size=18,angle = 0, hjust = 1),
         axis.title = element_text(size=20),
         axis.text.x = element_text(angle = 0, hjust = .5))
-
+p1
 ################################################################################
 # Save figures
 ################################################################################

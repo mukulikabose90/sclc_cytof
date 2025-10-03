@@ -46,7 +46,7 @@ my_comparisons <- list(c("SC293", "SC506"), c("SC506", "SC443"), c("SC293", "SC4
 stat.test <- plot_df %>%
   group_by(antigen) %>%
   wilcox_test(expression ~ patient_id, comparisons = my_comparisons) %>%
-  adjust_pvalue(method = "bonferroni") %>%
+  adjust_pvalue(method = "BH") %>%
   add_significance()
 
 plot_df$patient_id <- factor(plot_df$patient_id, levels=c("SC293","SC506","SC443"))

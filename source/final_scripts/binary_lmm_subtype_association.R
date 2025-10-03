@@ -49,7 +49,8 @@ for(curr_subtype in c("A","N","P","I")){
 all_results <- bind_rows(results_list)
 
 plot_df <- all_results %>% 
-  mutate(signif = ifelse(pval < 0.05, "s","ns")) %>% 
+  mutate(padj = p.adjust(pval), method = "BH") %>% 
+  mutate(signif = ifelse(padj < 0.05, "s","ns")) %>% 
   mutate(log_or = log(or)) %>% 
   mutate(log_upper_or = log(up_or)) %>% 
   mutate(log_lower_or = log(low_or)) %>% 
@@ -114,7 +115,7 @@ for(curr_subtype in c("A","N","P","I")){
 all_results <- bind_rows(results_list)
 
 plot_df <- all_results %>% 
-  mutate(padj = p.adjust(pval)) %>% 
+  mutate(padj = p.adjust(pval), method = "BH") %>% 
   mutate(signif = ifelse(padj < 0.05, "s","ns")) %>% 
   mutate(log_or = log(or)) %>% 
   mutate(log_upper_or = log(up_or)) %>% 
@@ -182,7 +183,7 @@ for(curr_subtype in c("A","N","P","I")){
 all_results <- bind_rows(results_list)
 
 plot_df <- all_results %>% 
-  mutate(padj = p.adjust(pval)) %>% 
+  mutate(padj = p.adjust(pval), method = "BH") %>% 
   mutate(signif = ifelse(padj < 0.05, "s","ns")) %>% 
   mutate(log_or = log(or)) %>% 
   mutate(log_upper_or = log(up_or)) %>% 
@@ -251,7 +252,7 @@ for(curr_subtype in c("A","N","P","I")){
 all_results <- bind_rows(results_list)
 
 plot_df <- all_results %>% 
-  mutate(padj = p.adjust(pval)) %>% 
+  mutate(padj = p.adjust(pval), method = "BH") %>% 
   mutate(signif = ifelse(padj < 0.05, "s","ns")) %>% 
   mutate(log_or = log(or)) %>% 
   mutate(log_upper_or = log(up_or)) %>% 

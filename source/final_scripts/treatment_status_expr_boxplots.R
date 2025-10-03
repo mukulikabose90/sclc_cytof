@@ -43,7 +43,7 @@ plot_df <- plot_df %>%
 stat.test <- plot_df %>%
   group_by(antigen) %>%
   wilcox_test(expression ~ treatment_status) %>%
-  adjust_pvalue(method = "bonferroni") %>%
+  adjust_pvalue(method = "BH") %>%
   add_significance()
 stat.test
 

@@ -46,7 +46,7 @@ plot_df$tarla <- factor(plot_df$tarla, levels=c("Pre", "Post"))
 stat.test <- plot_df %>%
   group_by(antigen) %>%
   wilcox_test(expression ~ tarla) %>%
-  adjust_pvalue(method = "bonferroni") %>%
+  adjust_pvalue(method = "BH") %>%
   add_significance()
 
 p <- ggviolin(plot_df, x="tarla" ,y="expression", fill="tarla", lwd=.3, outlier.size = .1, draw_quantiles = .5)+

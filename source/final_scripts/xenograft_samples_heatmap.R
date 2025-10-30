@@ -52,7 +52,7 @@ rownames(curr_heatmap) <- markers_to_use
 ################################################################################
 # Plot heatmap
 ################################################################################
-curr_ht <- Heatmap(curr_heatmap, cluster_rows = F, cluster_columns = F,column_names_rot = 0,
+curr_ht <- Heatmap(curr_heatmap, cluster_rows = F, cluster_columns = F,column_names_rot = 0,column_names_centered = T,
                    name="Median Scaled\n   Expression", column_title = "", col = col_fun)
 
 
@@ -61,6 +61,6 @@ p1 <- draw(curr_ht)
 ################################################################################
 # Save figure
 ################################################################################
-tiff(glue("figures/xenograft_expression_heatmap.tiff"), width=260,height=150, units = "mm", res=600)
+tiff(glue("figures/xenograft_expression_heatmap.tiff"), width=160,height=100, units = "mm", res=600)
 print(p1)
 dev.off()

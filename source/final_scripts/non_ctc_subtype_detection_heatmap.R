@@ -82,7 +82,7 @@ num_subclusters <- 4
 
 ht <- Heatmap(all_samples_heatmap, column_km = num_subclusters, top_annotation = sample_anno, name="Expression",
               cluster_columns = T, cluster_rows = F, show_column_names=F,col = col_fun,
-              row_dend_reorder = F, column_title = c("SCLC-A", "SCLC-P","SCLC-M","SCLC-N"))
+              row_dend_reorder = F, column_title = c("SCLC-A", "SCLC-P","SCLC-Mes","SCLC-N"))
 
 all_samples_ht <- draw(ht)
 
@@ -99,7 +99,7 @@ dev.off()
 clusters <- column_order(all_samples_ht)
 
 # Rename clusters
-names(clusters) <- c("A","P","M","N")
+names(clusters) <- c("A","P","Mes","N")
 # names(clusters) <- c("P","I","A","N")
 
 # Create dataframe of cell IDs and associated subtypes

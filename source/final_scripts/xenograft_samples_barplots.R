@@ -29,7 +29,7 @@ plot_df <- as.data.frame(curr_data@colData) %>%
 
 plot_df$total <- ifelse(plot_df$subtype == "M", plot_df$total,"")
 
-plot_df$subtype <- factor(plot_df$subtype, levels=c("A","N","P","M"))
+plot_df$subtype <- factor(plot_df$subtype, levels=c("A","N","P","Mes"))
 
 plot_df$patient_id <- factor(plot_df$patient_id, levels=c("MDA-SC293","MDA-SC506","MDA-SC443"))
 

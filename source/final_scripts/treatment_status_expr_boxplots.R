@@ -69,7 +69,7 @@ p <- ggviolin(plot_df, x="treatment_status" ,y="expression", fill="treatment_sta
 
 
 stat.test <- stat.test %>% add_xy_position(x = "treatment_status")
-p <- p + stat_pvalue_manual(stat.test, label = "p.adj.signif",size=5)
+p <- p + stat_pvalue_manual(stat.test, label = "p.adj.signif",size=5, tip.length = 0)
 
 p
 ################################################################################

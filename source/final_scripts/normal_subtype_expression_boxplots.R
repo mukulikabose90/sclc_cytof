@@ -22,7 +22,7 @@ p1 <- p1+
   labs(x="Subtype",
        y="Expression")+
   scale_fill_manual(
-    values = c("A" = "#dd4b33","N" = "#F1FAEE","P"= "#A8DADC", "M" = "#457B9D"))
+    values = c("A" = "#dd4b33","N" = "#F1FAEE","P"= "#A8DADC", "Mes" = "#457B9D"))
 
 ################################################################################
 # Plot boxplots for all proteins expression
@@ -36,7 +36,7 @@ p2 <- p2+
   labs(x="Subtype",
        y="Expression")+
   scale_fill_manual(
-    values = c("A" = "#dd4b33","N" = "#F1FAEE","P"= "#A8DADC", "M" = "#457B9D"))
+    values = c("A" = "#dd4b33","N" = "#F1FAEE","P"= "#A8DADC", "Mes" = "#457B9D"))
 
 p2  
 ################################################################################

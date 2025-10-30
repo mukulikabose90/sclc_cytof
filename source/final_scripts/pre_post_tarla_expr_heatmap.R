@@ -70,7 +70,7 @@ for(curr_patient in patients_to_use){
   
   colnames(curr_heatmap) <- c("Pre-Tarlatamab","Post-Tarlatamab")
   rownames(curr_heatmap) <- markers_to_use
-  curr_ht <- Heatmap(curr_heatmap, cluster_rows = F, cluster_columns = F,column_names_rot = 45,
+  curr_ht <- Heatmap(curr_heatmap, cluster_rows = F, cluster_columns = F,column_names_rot = 45,column_names_centered = T,
           name="Median Scaled\n   Expression", column_title = curr_patient, col = col_fun)
   
   all_ht <- append(all_ht, list(curr_ht))

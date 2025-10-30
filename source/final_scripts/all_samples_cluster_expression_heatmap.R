@@ -28,7 +28,7 @@ col_fun = colorRamp2(c(-3, -1, 0, 1, 3),
                        "#a50026"))
 
 ht <- Heatmap(t(scaled_heatmap),column_names_rot = 0,col = col_fun,
-              cluster_columns = F, cluster_rows=F, column_title = "",
+              cluster_columns = F, cluster_rows=F, column_title = "",column_names_centered = T,
               row_names_gp = gpar(fontsize = 10),column_names_gp = gpar(fontsize = 10),
               heatmap_legend_param = list(
                 title = "   Scaled\nExpression",      

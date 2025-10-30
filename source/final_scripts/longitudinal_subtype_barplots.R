@@ -59,7 +59,7 @@ plot_df <- as.data.frame(long_data@colData) %>%
   dplyr::filter(!is.na(patient_id))
 
 #Rearrange subtypes
-plot_df$subtype <- factor(plot_df$subtype, levels=c("A","N","P","M"))
+plot_df$subtype <- factor(plot_df$subtype, levels=c("A","N","P","Mes"))
 
 #Change sample number to sample order
 df_renumbered <- plot_df %>%
@@ -80,13 +80,16 @@ plot_df <- plot_df %>%
   filter(plot_df$patient_id %in% long_patients)
 
 plot_df$patient_id <- factor(plot_df$patient_id, 
-                             levels=c("SC254","SC392", "SC430", "SC293", "SC338", "SC399","SC500","SC454","SC501","SC547"))
+                             levels=c("MDA-SC392","MDA-SC430","MDA-SC293","MDA-SC338","MDA-SC500","MDA-SC454","MDA-SC501","MDA-SC547","MDA-SC254"))
 
+
+plot_df <- plot_df %>% 
+  filter(patient_id != "MDA-SC399")
 unique(plot_df$patient_id)
 p <- ggplot(plot_df)+
   geom_col(aes(x=new_sample_id,y=freq,fill=subtype))+
   geom_text(aes(label=total,x=new_sample_id), y=105,size = 3)+
-  facet_wrap(~patient_id, scales="free",ncol=5)+
+  facet_wrap(~patient_id, scales="free",nrow=2)+
   ylim(0,105)+
   scale_fill_manual(name = "Subtype",values=cluster_colors)+
   labs(x="Sample Number",

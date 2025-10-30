@@ -43,9 +43,9 @@ plot_df$ctc <- ifelse(plot_df$ctc == "normal", "Normal","CTCs")
 plot_df$ctc <- factor(plot_df$ctc, levels=c("CTCs","Normal"))
 
 p1 <- ggviolin(plot_df, x="ctc" ,y="expression", fill="ctc",draw_quantiles = 0.5)+
-  stat_compare_means(comparisons = list(c("CTCs","Normal")))+
+  stat_compare_means(comparisons = list(c("CTCs","Normal")),label.y = 6,tip.length = 0)+
   facet_wrap(~antigen)+
-  ylim(0,NA)+
+  ylim(0,6.5)+
   labs(y="Expression",
        x= "")+
   scale_fill_manual(name = "Subtype",values=c("#E63946","#457B9D"))+
@@ -54,7 +54,7 @@ p1 <- ggviolin(plot_df, x="ctc" ,y="expression", fill="ctc",draw_quantiles = 0.5
         strip.text = element_text(face = "bold", size=12), 
         strip.background = element_blank())+
   rremove("legend")
-
+p1
 ################################################################################
 # Plot CTCs vs non-CTCs in cancer enriched clusters
 ################################################################################
@@ -82,9 +82,9 @@ plot_df$ctc <- factor(plot_df$ctc, levels=c("CTCs","Non-CTCs"))
 
 
 p2 <- ggviolin(plot_df, x="ctc" ,y="expression", fill="ctc",draw_quantiles = 0.5)+
-  stat_compare_means(comparisons = list(c("CTCs","Non-CTCs")))+
+  stat_compare_means(comparisons = list(c("CTCs","Non-CTCs")), label.y = 5.2,tip.length = 0)+
   facet_wrap(~antigen)+
-  ylim(0,NA)+
+  ylim(0,6.5)+
   labs(y="Expression",
        x= "")+
   scale_fill_manual(name = "Subtype",values=c("#E63946","#457B9D"))+

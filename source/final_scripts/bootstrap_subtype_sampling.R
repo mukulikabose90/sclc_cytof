@@ -52,10 +52,10 @@ resamples <- map(1:1000, ~ {
 df_resampled <- bind_rows(resamples)
 
 df_resampled$treatment_status <- factor(df_resampled$treatment_status, levels = c("Naive","CTX ± ICI","Tarla"))
-df_resampled$subtype <- factor(df_resampled$subtype, levels = c("A","N","P","M"))
+df_resampled$subtype <- factor(df_resampled$subtype, levels = c("A","N","P","Mes"))
 df_resampled$treatment_subtype <- paste0(df_resampled$treatment_status,"_",df_resampled$subtype)
 df_resampled$treatment_subtype <- factor(df_resampled$treatment_subtype, levels=c("Naive_A","SOC_A","Tarla_A", "Naive_N","SOC_N","Tarla_N",
-                                                                                  "Naive_P","SOC_P","Tarla_P","Naive_M","SOC_M","Tarla_M"))
+                                                                                  "Naive_P","SOC_P","Tarla_P","Naive_Mes","SOC_Mes","Tarla_Mes"))
 
 
 stat.test <- df_resampled %>%
@@ -67,7 +67,7 @@ stat.test <- df_resampled %>%
 
 p <- ggviolin(df_resampled, x="treatment_status",y="prop",fill="treatment_status",draw_quantiles = 0.5)+
   facet_wrap(~subtype, scales="free_x",nrow=1)+
-  stat_pvalue_manual(stat.test, label = "p.adj.signif",size=5,tip.length = .01)+
+  stat_pvalue_manual(stat.test, label = "p.adj.signif",size=5,tip.length = 0)+
   scale_fill_manual(values = status_colors)+
   ylim(0,NA)+
   scale_y_continuous(breaks = c(0,0.25,0.50,0.75,1))+
@@ -81,6 +81,6 @@ p <- ggviolin(df_resampled, x="treatment_status",y="prop",fill="treatment_status
 
 p
 
-tiff(glue("figures/resampling_treatment_status_proportion_violinplot_alt.tiff"), width=300,height=200, units = "mm", res=600)
+tiff(glue("figures/resampling_treatment_status_proportion_violinplot.tiff"), width=300,height=200, units = "mm", res=600)
 print(p)
 dev.off()

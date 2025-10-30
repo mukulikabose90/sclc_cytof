@@ -40,7 +40,7 @@ data_df %>%
 data_df$treatment_status <- factor(data_df$treatment_status, levels = c("Naive","CTX ± ICI"))
 
 results_list <- list()
-for(curr_subtype in c("A","N","P","M")){
+for(curr_subtype in c("A","N","P","Mes")){
   data_df$curr_subtype <- as.factor(as.integer(data_df$subtype == curr_subtype))
   
   formula_str <- glue("curr_subtype ~ {colnames(data_df)[2]} + (1 | patient_id)")
@@ -75,7 +75,7 @@ plot_df <- all_results %>%
   mutate(log_lower_or = log(low_or)) %>% 
   mutate(star_height = ifelse(log_or > 0, log_or+.1,log_or-.1))
 
-plot_df$subtype <- factor(plot_df$subtype,levels=c("A","N","P","M"))
+plot_df$subtype <- factor(plot_df$subtype,levels=c("A","N","P","Mes"))
 
 plot_df$comparison <- "Naive_CTX ± ICI"
 
@@ -102,7 +102,7 @@ data_df %>%
 data_df$treatment_status <- factor(data_df$treatment_status, levels = c("Naive","Tarla"))
 
 results_list <- list()
-for(curr_subtype in c("A","N","P","M")){
+for(curr_subtype in c("A","N","P","Mes")){
   data_df$curr_subtype <- as.factor(as.integer(data_df$subtype == curr_subtype))
   
   formula_str <- glue("curr_subtype ~ {colnames(data_df)[2]} + (1 | patient_id)")
@@ -137,7 +137,7 @@ plot_df <- all_results %>%
   mutate(log_lower_or = log(low_or)) %>% 
   mutate(star_height = ifelse(log_or > 0, log_or+.1,log_or-.1))
 
-plot_df$subtype <- factor(plot_df$subtype,levels=c("A","N","P","M"))
+plot_df$subtype <- factor(plot_df$subtype,levels=c("A","N","P","Mes"))
 
 plot_df$comparison <- "Naive_Tarla"
 
@@ -162,7 +162,7 @@ data_df %>%
 data_df$treatment_status <- factor(data_df$treatment_status, levels = c("CTX ± ICI","Tarla"))
 
 results_list <- list()
-for(curr_subtype in c("A","N","P","M")){
+for(curr_subtype in c("A","N","P","Mes")){
   data_df$curr_subtype <- as.factor(as.integer(data_df$subtype == curr_subtype))
   
   formula_str <- glue("curr_subtype ~ {colnames(data_df)[2]} + (1 | patient_id)")
@@ -197,7 +197,7 @@ plot_df <- all_results %>%
   mutate(log_lower_or = log(low_or)) %>% 
   mutate(star_height = ifelse(log_or > 0, log_or+.1,log_or-.1))
 
-plot_df$subtype <- factor(plot_df$subtype,levels=c("A","N","P","M"))
+plot_df$subtype <- factor(plot_df$subtype,levels=c("A","N","P","Mes"))
 
 
 plot_df$comparison <- "CTX ± ICI_Tarla"
@@ -217,7 +217,7 @@ plot_df <- plot_df %>%
 plot_df$left_label <- as.character(sapply(plot_df$comparison, function(x) strsplit(x,"_")[[1]][1]))
 plot_df$right_label <- as.character(sapply(plot_df$comparison, function(x) strsplit(x,"_")[[1]][2]))
 
-plot_df$subtype <- factor(plot_df$subtype, levels=c("A","N","P",'M'))
+plot_df$subtype <- factor(plot_df$subtype, levels=c("A","N","P",'Mes'))
 plot_df$comparison <- factor(plot_df$comparison, levels = c("Naive_CTX ± ICI","Naive_Tarla","CTX ± ICI_Tarla"))
 
 p1 <- ggplot(plot_df,aes(x=log_or,y=fct_rev(subtype),color=subtype))+

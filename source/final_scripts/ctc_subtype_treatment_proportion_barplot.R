@@ -33,7 +33,7 @@ sample_order <- plot_df %>%
 
 plot_df$collection_id <- factor(plot_df$collection_id, levels = sample_order)
 
-plot_df$subtype <- factor(plot_df$subtype, levels = c("A","N","P","M"))
+plot_df$subtype <- factor(plot_df$subtype, levels = c("A","N","P","Mes"))
 
 plot_df$treatment_status <- ifelse(plot_df$treatment_status == "naive", "Naive","Treated")
 plot_df$treatment_status <- factor(plot_df$treatment_status, levels = c("Naive","Treated"))
@@ -87,13 +87,13 @@ plot_df <- plot_df %>%
   filter(total >= 10)
 
 sample_order <- plot_df %>% 
-  filter(subtype == "M") %>% 
+  filter(subtype == "Mes") %>% 
   arrange(desc(freq)) %>% 
   pull(collection_id)
 
 plot_df$collection_id <- factor(plot_df$collection_id, levels = sample_order)
 
-plot_df$subtype <- factor(plot_df$subtype, levels = c("A","N","P","M"))
+plot_df$subtype <- factor(plot_df$subtype, levels = c("A","N","P","Mes"))
 
 plot_df$treatment_status <- factor(plot_df$treatment_status, levels = c("Naive","CTX ± ICI","Tarla"))
 

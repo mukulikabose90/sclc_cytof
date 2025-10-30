@@ -42,7 +42,7 @@ sample_order <- plot_df %>%
   pull(collection_id)
 
 
-plot_df$subtype <- factor(plot_df$subtype, levels = c("A","N","P","M"))
+plot_df$subtype <- factor(plot_df$subtype, levels = c("A","N","P","Mes"))
 
 
 p1 <- ggplot(plot_df)+
@@ -95,7 +95,7 @@ sample_order <- plot_df %>%
   arrange(desc(freq)) %>% 
   pull(collection_id)
 
-plot_df$subtype <- factor(plot_df$subtype, levels = c("A","N","P","M"))
+plot_df$subtype <- factor(plot_df$subtype, levels = c("A","N","P","Mes"))
 
 
 p2 <- ggplot(plot_df)+
@@ -154,7 +154,7 @@ plot_df <-  sampled_data %>%
   group_by(patient_id)
 
 
-plot_df$subtype <- factor(plot_df$subtype, levels = c("A","N","P","M"))
+plot_df$subtype <- factor(plot_df$subtype, levels = c("A","N","P","Mes"))
 
 p3 <- ggplot(plot_df)+
   geom_col(aes(x=treatment_status,y=freq,fill=subtype))+

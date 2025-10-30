@@ -32,9 +32,9 @@ plot_df <- as.data.frame(curr_data@colData) %>%
   mutate(total = sum(n)) %>% 
   mutate(freq = (n/total)*100) 
 
-plot_df$total <- ifelse(plot_df$subtype == "I", plot_df$total,"")
+plot_df$total <- ifelse(plot_df$subtype == "Mes", plot_df$total,"")
 
-plot_df$subtype <- factor(plot_df$subtype, levels=c("A","N","P","M"))
+plot_df$subtype <- factor(plot_df$subtype, levels=c("A","N","P","Mes"))
 
 plot_df$tarla <- ifelse(plot_df$tarla == "pre","Pre-Tarlatamab","Post-Tarlatamab")
 plot_df$tarla <- factor(plot_df$tarla, levels=c("Pre-Tarlatamab","Post-Tarlatamab"))
@@ -112,7 +112,7 @@ plot_df <- plot_df %>%
 plot_df$tarla <- ifelse(plot_df$tarla == "pre","Pre-Tarlatamab","Post-Tarlatamab")
 plot_df$tarla <- factor(plot_df$tarla, levels=c("Pre-Tarlatamab","Post-Tarlatamab"))
 
-plot_df$subtype <- factor(plot_df$subtype, levels=c("A","N","P","M"))
+plot_df$subtype <- factor(plot_df$subtype, levels=c("A","N","P","Mes"))
 
 p <- ggplot(plot_df)+
   geom_col(aes(x=tarla,y=freq,fill=subtype))+

@@ -90,7 +90,7 @@ num_subclusters <- 4
 
 ht <- Heatmap(all_samples_heatmap, column_km = num_subclusters, top_annotation = sample_anno, name="Expression",
               cluster_columns = T, cluster_rows = F, show_column_names=F,col = col_fun,
-              row_dend_reorder = F, column_title = c("SCLC-A", "SCLC-P","SCLC-M","SCLC-N"),
+              row_dend_reorder = F, column_title = c("SCLC-A", "SCLC-P","SCLC-Mes","SCLC-N"),
               row_names_gp = gpar(fontsize=20),column_title_gp = gpar(fontsize=20),
               heatmap_legend_param = list(
                 title = "   Scaled\nExpression",      
@@ -125,7 +125,7 @@ patient_anno <- HeatmapAnnotation("Patient ID" = curr_metadata$patient_id,
 
 ht <- Heatmap(naive_heatmap, column_km = num_subclusters, top_annotation = sample_anno, name="Expression",
               cluster_columns = T, cluster_rows = F, show_column_names=F,col = col_fun,
-              row_dend_reorder = F, column_title = c("SCLC-N", "SCLC-P","SCLC-M","SCLC-A"))
+              row_dend_reorder = F, column_title = c("SCLC-N", "SCLC-P","SCLC-Mes","SCLC-A"))
 
 naive_ht <- draw(ht)
 
@@ -154,7 +154,7 @@ patient_anno <- HeatmapAnnotation("Patient ID" = curr_metadata$patient_id,
 
 ht <- Heatmap(treated_heatmap, column_km = num_subclusters, top_annotation = sample_anno, name="Expression",
               cluster_columns = T, cluster_rows = F, show_column_names=F,col = col_fun,
-              row_dend_reorder = F, column_title = c("SCLC-P", "SCLC-A","SCLC-M","SCLC-N"))
+              row_dend_reorder = F, column_title = c("SCLC-P", "SCLC-A","SCLC-Mes","SCLC-N"))
 
 treated_ht <- draw(ht)
 
@@ -162,7 +162,7 @@ treated_ht <- draw(ht)
 # Save figures
 #############################################################################
 # ALL SAMPLES
-tiff("figures/all_samples_ctcs_subtype_heatmap.tiff", width=300,height=120, units = "mm", res=600)
+tiff("figures/all_samples_ctcs_subtype_heatmap.tiff", width=450,height=180, units = "mm", res=600)
 print(all_samples_ht)
 dev.off()
 
@@ -183,7 +183,7 @@ dev.off()
 clusters <- column_order(all_samples_ht)
 
 # Rename clusters
-names(clusters) <- c("A","P","M","N")
+names(clusters) <- c("A","P","Mes","N")
 # names(clusters) <- c("P","I","A","N")
 
 # Create dataframe of cell IDs and associated subtypes

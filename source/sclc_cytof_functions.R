@@ -127,7 +127,7 @@ create_expression_heatmap <- function(sce, group, markers, curr_title="", scale=
   all_groups <- sort(unique(sce[[group]]))
   
   if(group == "subtype"){
-    all_groups <- c("A","N","P","M")
+    all_groups <- c("A","N","P","Mes")
   }
   
   
@@ -179,7 +179,7 @@ create_marker_boxplots <- function(sce, markers_to_use, group, fill = NULL, alph
   ################################################################################
   
   if(group == "subtype"){
-    gg_df$subtype <- factor(gg_df$subtype, levels=c("A","N","P",'M'))
+    gg_df$subtype <- factor(gg_df$subtype, levels=c("A","N","P",'Mes'))
   }
   
   plot_df <- gg_df %>%

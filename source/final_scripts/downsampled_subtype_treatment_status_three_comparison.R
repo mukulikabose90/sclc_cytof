@@ -133,7 +133,7 @@ plot_df$left_label[plot_df$left_label=="CTX ± ICI"] <- "CTX ± ICI"
 plot_df$right_label[plot_df$right_label=="CTX ± ICI"] <- "CTX ± ICI"
 
 
-plot_df$subtype <- factor(plot_df$subtype, levels=c("A","N","P","M"))
+plot_df$subtype <- factor(plot_df$subtype, levels=c("A","N","P","Mes"))
 plot_df$comparison <- factor(plot_df$comparison, levels = c("Naive_CTX ± ICI","Naive_Tarla","CTX ± ICI_Tarla"))
 ################################################################################
 

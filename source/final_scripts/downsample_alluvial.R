@@ -37,7 +37,7 @@ plot_df <- sampled_data %>%
 
 plot_df$treatment_status <- factor(plot_df$treatment_status, levels=c("Naive","CTX ± ICI","Tarla"))
 
-plot_df$subtype <- factor(plot_df$subtype, levels=c("A","N","P","M"))
+plot_df$subtype <- factor(plot_df$subtype, levels=c("A","N","P","Mes"))
 
 plot_df %>% 
   count(subtype, treatment_status) %>% 

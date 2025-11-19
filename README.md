@@ -1,4 +1,4 @@
-# CyTOF-based profiling of small-cell lung cancer circulating tumor cells reveals treatment-associated subtypes and phenotypes in patient liquid biopsies
+# CyTOF-based profiling of circulating tumor cells reveals treatment-associated subtypes and phenotypes in small-cell lung cancer liquid biopsies.
 
 This project is fully reproducible using Docker and `renv`. 
 
@@ -35,7 +35,7 @@ sclc_cytof/
 
 ## Data download
 
-- All data needed to reproduce results available at [LINK](https://en.wikipedia.org/wiki/Data)  
+- All data needed to reproduce results available at [LINK](https://zenodo.org/records/17651946?preview=1&token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6IjBkNzE3YjlhLTc3YTQtNGI5ZS1hMjNkLWY0OWVmODNjYWQzNiIsImRhdGEiOnt9LCJyYW5kb20iOiIwMTZkZGFhNmM5NDZiMWI4MDU1ZWE1MGRhYzkyOTIxNSJ9.RUBmxpc3x5K9aS8Oc7kJc0Ls6x4WwL_azRQ4uMoUpQoz5Bw09DMFt3milQVPtckT8ylXKpuWZ6d5Aa9PaEZyqw)  
 
 - Download all data into `data/` in project directory
 

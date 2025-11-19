@@ -6,12 +6,13 @@ if (!dir.exists("figures/")) {
 
 if (!dir.exists("data/")) {
   dir.create("data/")
+  dir.create("data/cytof_objects")
 }
 ################################################################################
 # Process and QC
 ################################################################################
 source("source/final_scripts/process_samples.R")
-source("source/final_scripts/cytof_samples_ qc.R")
+source("source/final_scripts/cytof_samples_qc.R")
 
 ################################################################################
 # Identify cancer-enriched populations
@@ -31,11 +32,6 @@ source("source/final_scripts/ce_subcluster_expression_heatmap.R")
 source("source/final_scripts/ce_subcluster_expression_boxplots.R")
 
 ################################################################################
-# pRb of cell groups
-################################################################################
-source("source/final_scripts/ctcs_vs_normal_cells_expression.R")
-
-################################################################################
 # CTC analysis
 ################################################################################
 source("source/final_scripts/ctcs_subtype_detection_heatmap.R")
@@ -51,6 +47,11 @@ source("source/final_scripts/normal_subtype_expression_heatmap.R")
 source("source/final_scripts/normal_subtype_expression_boxplots.R")
 
 source("source/final_scripts/all_cells_subtype_treatment_status_three_comparison.R")
+
+################################################################################
+# pRb of cell groups
+################################################################################
+source("source/final_scripts/ctcs_vs_normal_cells_expression.R")
 
 ################################################################################
 # Treatment status analysis

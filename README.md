@@ -24,7 +24,8 @@ sclc_cytof/
 │       │
 │       └─run_all_scripts.R      # Master script to reproduce all results 
 │
-├─ data/                         # Input data files and intermediate files
+├─ data/                         # Input data files and intermediate files (available to download at [LINK]) www.github.com
+
 │
 └─ figures/                      # Generated figures. 
 ```  

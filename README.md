@@ -14,20 +14,19 @@ This project is fully reproducible using Docker and `renv`.
 ```
 sclc_cytof/   
 ├─ Dockerfile  
-│
 ├─ Makefile
-│
 ├─ renv/
-│
 ├─ renv.lock  
-│
-├─ run_all_scripts.R      # Master script to reproduce all results.   
 │ 
-├─ source/final_scripts   # scripts to be run.   
+├─ source/
+│   │
+│   └─final_scripts              # scripts to be run.   
+│       │
+│       └─run_all_scripts.R      # Master script to reproduce all results.  
 │
-├─ data/                  # Input data files and intermediate files
+├─ data/                         # Input data files and intermediate files
 │
-└─ figures/               # Generated figures.  
+└─ figures/                      # Generated figures.  
 ```  
 
 
@@ -55,5 +54,5 @@ make build
 3. **Reproduce results**
 
 ```bash 
-make build
+make reproduce
 ```

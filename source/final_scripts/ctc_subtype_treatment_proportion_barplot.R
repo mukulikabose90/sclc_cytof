@@ -162,7 +162,7 @@ plot_df %>%
   filter(treatment_status == "CTX ± ICI") %>% 
   pull(n) %>% 
   sum()
-  nrow()
+
 # SOC patients
 plot_df %>% 
   filter(treatment_status == "CTX ± ICI") %>% 

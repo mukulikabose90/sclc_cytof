@@ -12,8 +12,8 @@ library(RColorBrewer)
 library(circlize)
 library(limma)
 library(factoextra)
-library(iMUBAC)
-library(cyCombine)
+# library(iMUBAC)
+# library(cyCombine)
 library(egg)
 library(gridExtra)
 library(rstatix) 
@@ -25,6 +25,33 @@ library(purrr)
 library(tidyverse)
 
 scale_values <- function(x){(x-min(x))/(max(x)-min(x))}
+
+downsampleSCE <- function(
+    sce,
+    maxN=10000,
+    group_by=c("batch","group"),
+    indiv_by=NULL,
+    seed=12345
+){
+  set.seed(seed)
+  sce$"unique_cell_id" <- 1:ncol(sce)
+  dt <- colData(sce) %>%
+    as.data.frame() %>%
+    data.table::as.data.table()
+  if(!is.null(indiv_by)){
+    dt$"indiv_by" <- dt[[indiv_by]]
+    dt[,"n_individual":=length(unique(indiv_by)),by=group_by]
+    dt <- dt[, sample(unique_cell_id, min(maxN/n_individual, .N)), by=indiv_by]
+    colnames(dt)[length(indiv_by)+1] <- "unique_cell_id"
+  }else{
+    dt <- dt[, sample(unique_cell_id, min(maxN, .N)), by=group_by]
+    colnames(dt)[length(group_by)+1] <- "unique_cell_id"
+  }
+  sce <- sce[,sce$"unique_cell_id" %in% dt$"unique_cell_id"]
+  sce$"unique_cell_id" <- NULL
+  return(sce)
+}
+
 
 cytof_de <- function(sce, method = "wilcox", metric = "median", ident = "new_clusters"){
   

@@ -1,3 +1,5 @@
+renv::restore()
+
 if (!dir.exists("figures/")) {
   dir.create("figures/")
 }
@@ -9,7 +11,7 @@ if (!dir.exists("data/")) {
 # Process and QC
 ################################################################################
 source("source/final_scripts/process_samples.R")
-source("source/final_scripts/cytof_samples_qc.R")
+source("source/final_scripts/cytof_samples_ qc.R")
 
 ################################################################################
 # Identify cancer-enriched populations
@@ -22,7 +24,7 @@ source("source/final_scripts/all_samples_cluster_expression_heatmap.R")
 source("source/final_scripts/all_samples_cluster_expression_boxplots.R")
 
 ################################################################################
-# CTC detection 
+# CTC detection
 ################################################################################
 source("source/final_scripts/ce_subclustering.R")
 source("source/final_scripts/ce_subcluster_expression_heatmap.R")
@@ -51,7 +53,7 @@ source("source/final_scripts/normal_subtype_expression_boxplots.R")
 source("source/final_scripts/all_cells_subtype_treatment_status_three_comparison.R")
 
 ################################################################################
-# Treatment status analysis 
+# Treatment status analysis
 ################################################################################
 source("source/final_scripts/treatment_status_expr_boxplots.R")
 source("source/final_scripts/treatment_status_expr_heatmap.R")

@@ -26,10 +26,22 @@ state_markers <- readRDS("data/state_markers.rds")
 markers_to_use <- state_markers
 # markers_to_use <- markers_to_use[-which(markers_to_use %in% c("NeuroD1","ASCL1","POU2F3","p-YAP","SLUG","Twist"))]
 
-sce <- CATALYST::cluster(sce, features = markers_to_use,
+# Edit return line of function to return SOM
+body(cluster)[[23]] <- substitute(return(list("object" = x,"som" = som)))
+
+ret_val <- cluster(sce, features = markers_to_use,
                          xdim = 10, ydim = 10, maxK = 20, seed = 42)
+# Unedit function
+body(cluster)[[23]] <- substitute(return(x))
+
+som <- ret_val$som
+sce <- ret_val$object
 
 sce <- runDR(sce, "UMAP", cells = 5e3, features = markers_to_use)
+
+# saveRDS(sce, "data/cytof_objects/sclc_all_samples_with_umap.rds")
+# 
+# sce <- readRDS("data/cytof_objects/sclc_all_samples_with_umap.rds")
 
 ################################################################################
 # Identify optimal number of clusters and assign cells
@@ -44,6 +56,13 @@ CATALYST::plotDR(sce, color_by = "experiment_id")
 
 # Add new cluster assignments to colData
 colData(sce)$new_clusters <- cluster_ids(sce, "meta8")
+
+# cell_cluster_assignments <- colData(sce) %>% 
+#   as.data.frame() %>% 
+#   select(cell_id,new_clusters)
+
+# write.csv(cell_cluster_assignments, "data/cell_cluster_assignments.csv")
+# write.csv(cell_cluster_assignments, "data/cell_cluster_assignments2.csv")
 
 # Save data with cluster assignments
 saveRDS(sce, "data/cytof_objects/sclc_all_samples_with_clusters.rds")

@@ -680,34 +680,6 @@
       "Author": "Helena L. Crowell [aut, cre] (<https://orcid.org/0000-0002-4801-1767>), Vito R.T. Zanotelli [aut] (<https://orcid.org/0000-0001-7268-311X>), Stéphane Chevrier [aut, dtc] (<https://orcid.org/0000-0002-9216-7910>), Mark D. Robinson [aut, fnd] (<https://orcid.org/0000-0002-3048-5518>), Bernd Bodenmiller [fnd] (<https://orcid.org/0000-0002-6325-7861>)",
       "Maintainer": "Helena L. Crowell <helena@crowell.eu>"
     },
-    "Cairo": {
-      "Package": "Cairo",
-      "Version": "1.6-2",
-      "Source": "Repository",
-      "Title": "R Graphics Device using Cairo Graphics Library for Creating High-Quality Bitmap (PNG, JPEG, TIFF), Vector (PDF, SVG, PostScript) and Display (X11 and Win32) Output",
-      "Author": "Simon Urbanek <Simon.Urbanek@r-project.org>, Jeffrey Horner <jeff.horner@vanderbilt.edu>",
-      "Maintainer": "Simon Urbanek <Simon.Urbanek@r-project.org>",
-      "Depends": [
-        "R (>= 2.4.0)"
-      ],
-      "Imports": [
-        "grDevices",
-        "graphics"
-      ],
-      "Suggests": [
-        "png"
-      ],
-      "Enhances": [
-        "FastRWeb"
-      ],
-      "Description": "R graphics device using cairographics library that can be used to create high-quality vector (PDF, PostScript and SVG) and bitmap output (PNG,JPEG,TIFF), and high-quality rendering in displays (X11 and Win32). Since it uses the same back-end for all output, copying across formats is WYSIWYG. Files are created without the dependence on X11 or other external programs. This device supports alpha channel (semi-transparent drawing) and resulting images can contain transparent and semi-transparent regions. It is ideal for use in server environments (file output) and as a replacement for other devices that don't have Cairo's capabilities such as alpha support or anti-aliasing. Backends are modular such that any subset of backends is supported.",
-      "License": "GPL-2 | GPL-3",
-      "SystemRequirements": "cairo (>= 1.2 http://www.cairographics.org/)",
-      "URL": "http://www.rforge.net/Cairo/",
-      "NeedsCompilation": "yes",
-      "Repository": "RSPM",
-      "Encoding": "UTF-8"
-    },
     "ComplexHeatmap": {
       "Package": "ComplexHeatmap",
       "Version": "2.22.0",
@@ -2124,45 +2096,6 @@
       "Repository": "RSPM",
       "Encoding": "UTF-8"
     },
-    "RcppArmadillo": {
-      "Package": "RcppArmadillo",
-      "Version": "14.4.3-1",
-      "Source": "Repository",
-      "Type": "Package",
-      "Title": "'Rcpp' Integration for the 'Armadillo' Templated Linear Algebra Library",
-      "Date": "2025-05-21",
-      "Authors@R": "c(person(\"Dirk\", \"Eddelbuettel\", role = c(\"aut\", \"cre\"), email = \"edd@debian.org\", comment = c(ORCID = \"0000-0001-6419-907X\")), person(\"Romain\", \"Francois\", role = \"aut\", comment = c(ORCID = \"0000-0002-2444-4226\")), person(\"Doug\", \"Bates\", role = \"aut\", comment = c(ORCID = \"0000-0001-8316-9503\")), person(\"Binxiang\", \"Ni\", role = \"aut\"), person(\"Conrad\", \"Sanderson\", role = \"aut\", comment = c(ORCID = \"0000-0002-0049-4501\")))",
-      "Description": "'Armadillo' is a templated C++ linear algebra library (by Conrad Sanderson) that aims towards a good balance between speed and ease of use. Integer, floating point and complex numbers are supported, as well as a subset of trigonometric and statistics functions. Various matrix decompositions are provided through optional integration with LAPACK and ATLAS libraries.  The 'RcppArmadillo' package includes the header files from the templated 'Armadillo' library. Thus users do not need to install 'Armadillo' itself in order to use 'RcppArmadillo'. From release 7.800.0 on, 'Armadillo' is licensed under Apache License 2; previous releases were under licensed as MPL 2.0 from version 3.800.0 onwards and LGPL-3 prior to that; 'RcppArmadillo' (the 'Rcpp' bindings/bridge to Armadillo) is licensed under the GNU GPL version 2 or later, as is the rest of 'Rcpp'.",
-      "License": "GPL (>= 2)",
-      "LazyLoad": "yes",
-      "Depends": [
-        "R (>= 3.3.0)"
-      ],
-      "LinkingTo": [
-        "Rcpp"
-      ],
-      "Imports": [
-        "Rcpp (>= 1.0.12)",
-        "stats",
-        "utils",
-        "methods"
-      ],
-      "Suggests": [
-        "tinytest",
-        "Matrix (>= 1.3.0)",
-        "pkgKitten",
-        "reticulate",
-        "slam"
-      ],
-      "URL": "https://github.com/RcppCore/RcppArmadillo, https://dirk.eddelbuettel.com/code/rcpp.armadillo.html",
-      "BugReports": "https://github.com/RcppCore/RcppArmadillo/issues",
-      "RoxygenNote": "6.0.1",
-      "NeedsCompilation": "yes",
-      "Author": "Dirk Eddelbuettel [aut, cre] (ORCID: <https://orcid.org/0000-0001-6419-907X>), Romain Francois [aut] (ORCID: <https://orcid.org/0000-0002-2444-4226>), Doug Bates [aut] (ORCID: <https://orcid.org/0000-0001-8316-9503>), Binxiang Ni [aut], Conrad Sanderson [aut] (ORCID: <https://orcid.org/0000-0002-0049-4501>)",
-      "Maintainer": "Dirk Eddelbuettel <edd@debian.org>",
-      "Repository": "RSPM",
-      "Encoding": "UTF-8"
-    },
     "RcppEigen": {
       "Package": "RcppEigen",
       "Version": "0.3.4.0.2",
@@ -2333,22 +2266,6 @@
       "NeedsCompilation": "yes",
       "Author": "Mike Smith [ctb, cre] (<https://orcid.org/0000-0002-7800-3848>), The HDF Group [cph]",
       "Maintainer": "Mike Smith <grimbough@gmail.com>"
-    },
-    "RhpcBLASctl": {
-      "Package": "RhpcBLASctl",
-      "Version": "0.23-42",
-      "Source": "Repository",
-      "Date": "2023-02-11",
-      "Title": "Control the Number of Threads on 'BLAS'",
-      "Author": "Junji NAKANO <nakanoj@ism.ac.jp> and Ei-ji Nakama <nakama@ki.rim.or.jp>",
-      "Maintainer": "Ei-ji Nakama <nakama@ki.rim.or.jp>",
-      "Description": "Control the number of threads on 'BLAS' (Aka 'GotoBLAS', 'OpenBLAS', 'ACML', 'BLIS' and 'MKL'). And possible to control the number of threads in 'OpenMP'. Get a number of logical cores and physical cores if feasible.",
-      "License": "AGPL-3",
-      "URL": "https://prs.ism.ac.jp/~nakama/Rhpc/",
-      "ByteCompile": "true",
-      "NeedsCompilation": "yes",
-      "Repository": "RSPM",
-      "Encoding": "UTF-8"
     },
     "Rtsne": {
       "Package": "Rtsne",
@@ -3233,65 +3150,6 @@
       "Author": "Hadley Wickham [aut], Kirill Müller [cre], RStudio [cph, fnd]",
       "Maintainer": "Kirill Müller <kirill@cynkra.com>",
       "Repository": "CRAN"
-    },
-    "bluster": {
-      "Package": "bluster",
-      "Version": "1.16.0",
-      "Source": "Bioconductor",
-      "Date": "2024-09-05",
-      "Title": "Clustering Algorithms for Bioconductor",
-      "Description": "Wraps common clustering algorithms in an easily extended S4 framework. Backends are implemented for hierarchical, k-means and graph-based clustering. Several utilities are also provided to compare and evaluate clustering results.",
-      "Authors@R": "c( person(\"Aaron\", \"Lun\", role = c(\"aut\", \"cre\"), email = \"infinite.monkeys.with.keyboards@gmail.com\"), person(\"Stephanie\", \"Hicks\", role=\"ctb\"), person(\"Basil\", \"Courbayre\", role=\"ctb\"), person(\"Tuomas\", \"Borman\", role=\"ctb\"), person(\"Leo\", \"Lahti\", role=\"ctb\") )",
-      "Imports": [
-        "stats",
-        "methods",
-        "utils",
-        "cluster",
-        "Matrix",
-        "Rcpp",
-        "igraph",
-        "S4Vectors",
-        "BiocParallel",
-        "BiocNeighbors"
-      ],
-      "Suggests": [
-        "knitr",
-        "rmarkdown",
-        "testthat",
-        "BiocStyle",
-        "dynamicTreeCut",
-        "scRNAseq",
-        "scuttle",
-        "scater",
-        "scran",
-        "pheatmap",
-        "viridis",
-        "mbkmeans",
-        "kohonen",
-        "apcluster",
-        "DirichletMultinomial",
-        "vegan",
-        "fastcluster"
-      ],
-      "biocViews": "ImmunoOncology, Software, GeneExpression, Transcriptomics, SingleCell, Clustering",
-      "LinkingTo": [
-        "Rcpp",
-        "assorthead"
-      ],
-      "Collate": "AllClasses.R AllGenerics.R AgnesParam.R approxSilhouette.R bluster-package.R DbscanParam.R DianaParam.R AffinityParam.R BlusterParam.R bootstrapStability.R ClaraParam.R clusterRMSD.R clusterSweep.R compareClusterings.R DmmParam.R FixedNumberParam.R HclustParam.R HierarchicalParam.R KmeansParam.R linkClusters.R makeSNNGraph.R MbkmeansParam.R mergeCommunities.R neighborPurity.R nestedClusters.R NNGraphParam.R pairwiseModularity.R pairwiseRand.R PamParam.R RcppExports.R SomParam.R TwoStepParam.R utils.R",
-      "License": "GPL-3",
-      "NeedsCompilation": "yes",
-      "VignetteBuilder": "knitr",
-      "SystemRequirements": "C++17",
-      "RoxygenNote": "7.3.2",
-      "Encoding": "UTF-8",
-      "git_url": "https://git.bioconductor.org/packages/bluster",
-      "git_branch": "RELEASE_3_20",
-      "git_last_commit": "32aa5ea",
-      "git_last_commit_date": "2024-10-29",
-      "Repository": "Bioconductor 3.20",
-      "Author": "Aaron Lun [aut, cre], Stephanie Hicks [ctb], Basil Courbayre [ctb], Tuomas Borman [ctb], Leo Lahti [ctb]",
-      "Maintainer": "Aaron Lun <infinite.monkeys.with.keyboards@gmail.com>"
     },
     "boot": {
       "Package": "boot",
@@ -4223,66 +4081,6 @@
       "Maintainer": "Achim Zeileis <Achim.Zeileis@R-project.org>",
       "Repository": "RSPM"
     },
-    "colourpicker": {
-      "Package": "colourpicker",
-      "Version": "1.3.0",
-      "Source": "Repository",
-      "Title": "A Colour Picker Tool for Shiny and for Selecting Colours in Plots",
-      "Authors@R": "c( person(\"Dean\", \"Attali\",  email = \"daattali@gmail.com\", role = c(\"aut\", \"cre\"), comment= c(ORCID=\"0000-0002-5645-3493\")), person(\"David\", \"Griswold\", email=\"novachild@gmail.com\", role = \"ctb\") )",
-      "Description": "A colour picker that can be used as an input in 'Shiny' apps or Rmarkdown documents. The colour picker supports alpha opacity, custom colour palettes, and many more options. A Plot Colour Helper tool is available as an 'RStudio' Addin, which helps you pick colours to use in your plots. A more generic Colour Picker 'RStudio' Addin is also provided to let  you select colours to use in your R code.",
-      "URL": "https://github.com/daattali/colourpicker, https://daattali.com/shiny/colourInput/",
-      "BugReports": "https://github.com/daattali/colourpicker/issues",
-      "Depends": [
-        "R (>= 3.1.0)"
-      ],
-      "Imports": [
-        "ggplot2",
-        "htmltools",
-        "htmlwidgets (>= 0.7)",
-        "jsonlite",
-        "miniUI (>= 0.1.1)",
-        "shiny (>= 0.11.1)",
-        "shinyjs (>= 2.0.0)",
-        "utils"
-      ],
-      "Suggests": [
-        "knitr (>= 1.7)",
-        "rmarkdown",
-        "rstudioapi (>= 0.5)",
-        "shinydisconnect"
-      ],
-      "License": "MIT + file LICENSE",
-      "Encoding": "UTF-8",
-      "RoxygenNote": "7.2.3",
-      "NeedsCompilation": "no",
-      "Author": "Dean Attali [aut, cre] (<https://orcid.org/0000-0002-5645-3493>), David Griswold [ctb]",
-      "Maintainer": "Dean Attali <daattali@gmail.com>",
-      "Repository": "RSPM"
-    },
-    "commonmark": {
-      "Package": "commonmark",
-      "Version": "1.9.5",
-      "Source": "Repository",
-      "Type": "Package",
-      "Title": "High Performance CommonMark and Github Markdown Rendering in R",
-      "Authors@R": "c( person(\"Jeroen\", \"Ooms\", ,\"jeroenooms@gmail.com\", role = c(\"aut\", \"cre\"), comment = c(ORCID = \"0000-0002-4035-0289\")), person(\"John MacFarlane\", role = \"cph\", comment = \"Author of cmark\"))",
-      "Description": "The CommonMark specification <https://github.github.com/gfm/> defines a rationalized version of markdown syntax. This package uses the 'cmark'  reference implementation for converting markdown text into various formats including html, latex and groff man. In addition it exposes the markdown parse tree in xml format. Also includes opt-in support for GFM extensions including tables, autolinks, and strikethrough text.",
-      "License": "BSD_2_clause + file LICENSE",
-      "URL": "https://docs.ropensci.org/commonmark/ https://ropensci.r-universe.dev/commonmark",
-      "BugReports": "https://github.com/r-lib/commonmark/issues",
-      "Suggests": [
-        "curl",
-        "testthat",
-        "xml2"
-      ],
-      "RoxygenNote": "7.3.2",
-      "Language": "en-US",
-      "Encoding": "UTF-8",
-      "NeedsCompilation": "yes",
-      "Author": "Jeroen Ooms [aut, cre] (<https://orcid.org/0000-0002-4035-0289>), John MacFarlane [cph] (Author of cmark)",
-      "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
-      "Repository": "CRAN"
-    },
     "conflicted": {
       "Package": "conflicted",
       "Version": "1.2.0",
@@ -4592,71 +4390,14 @@
       "Depends": [
         "R (>= 4.0)"
       ],
+      "Author": "Christina Bligaard Pedersen [aut] (<https://orcid.org/0000-0002-9895-0930>), Søren Helweg Dam [aut, cre] (<https://orcid.org/0000-0003-0755-0016>), Lars Rønn Olsen [aut] (<https://orcid.org/0000-0002-6725-7850>)",
+      "Maintainer": "Søren Helweg Dam <sohdam@dtu.dk>",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "cyCombine",
       "RemoteUsername": "biosurf",
       "RemoteRef": "HEAD",
-      "RemoteSha": "ac5790e85e7fa3fd51b9fac39cef043a22be752e",
-      "NeedsCompilation": "no",
-      "Author": "Christina Bligaard Pedersen [aut] (<https://orcid.org/0000-0002-9895-0930>), Søren Helweg Dam [aut, cre] (<https://orcid.org/0000-0003-0755-0016>), Lars Rønn Olsen [aut] (<https://orcid.org/0000-0002-6725-7850>)",
-      "Maintainer": "Søren Helweg Dam <sohdam@dtu.dk>"
-    },
-    "cydar": {
-      "Package": "cydar",
-      "Version": "1.30.0",
-      "Source": "Bioconductor",
-      "Date": "2024-08-11",
-      "Title": "Using Mass Cytometry for Differential Abundance Analyses",
-      "Authors@R": "c(person(\"Aaron\", \"Lun\", role=c(\"aut\", \"cre\"), email =  \"infinite.monkeys.with.keyboards@gmail.com\"))",
-      "Depends": [
-        "SingleCellExperiment"
-      ],
-      "Imports": [
-        "viridis",
-        "methods",
-        "shiny",
-        "graphics",
-        "stats",
-        "grDevices",
-        "utils",
-        "BiocGenerics",
-        "S4Vectors",
-        "BiocParallel",
-        "SummarizedExperiment",
-        "flowCore",
-        "Biobase",
-        "Rcpp",
-        "BiocNeighbors"
-      ],
-      "Suggests": [
-        "ncdfFlow",
-        "testthat",
-        "rmarkdown",
-        "knitr",
-        "edgeR",
-        "limma",
-        "glmnet",
-        "BiocStyle",
-        "flowStats"
-      ],
-      "biocViews": "ImmunoOncology, FlowCytometry, MultipleComparison, Proteomics, SingleCell",
-      "Description": "Identifies differentially abundant populations between samples and groups in mass cytometry data. Provides methods for counting cells into hyperspheres, controlling the spatial false discovery rate, and visualizing changes in abundance in the high-dimensional marker space.",
-      "License": "GPL-3",
-      "NeedsCompilation": "yes",
-      "VignetteBuilder": "knitr",
-      "LinkingTo": [
-        "Rcpp"
-      ],
-      "SystemRequirements": "C++11",
-      "RoxygenNote": "7.3.2",
-      "git_url": "https://git.bioconductor.org/packages/cydar",
-      "git_branch": "RELEASE_3_20",
-      "git_last_commit": "2d3ca5d",
-      "git_last_commit_date": "2024-10-29",
-      "Repository": "Bioconductor 3.20",
-      "Author": "Aaron Lun [aut, cre]",
-      "Maintainer": "Aaron Lun <infinite.monkeys.with.keyboards@gmail.com>"
+      "RemoteSha": "ac5790e85e7fa3fd51b9fac39cef043a22be752e"
     },
     "cytolib": {
       "Package": "cytolib",
@@ -6270,53 +6011,6 @@
       "Maintainer": "Erik Clarke <erikclarke@gmail.com>",
       "Repository": "RSPM"
     },
-    "ggedit": {
-      "Package": "ggedit",
-      "Version": "0.4.1",
-      "Source": "Repository",
-      "Type": "Package",
-      "Title": "Interactive 'ggplot2' Layer and Theme Aesthetic Editor",
-      "Date": "2024-02-29",
-      "Author": "Jonathan Sidi [aut, cre]",
-      "Maintainer": "Jonathan Sidi <yonicd@gmail.com>",
-      "Description": "Interactively edit 'ggplot2' layer and theme aesthetics definitions.",
-      "Depends": [
-        "R (>= 4.3.0)",
-        "ggplot2 (>= 3.5.0)"
-      ],
-      "Imports": [
-        "plyr",
-        "dplyr",
-        "tidyr",
-        "purrr",
-        "rlang",
-        "tibble",
-        "scales",
-        "rstudioapi",
-        "shiny",
-        "miniUI",
-        "shinyBS",
-        "colourpicker",
-        "shinyAce",
-        "utils",
-        "graphics",
-        "grid",
-        "tools",
-        "stats"
-      ],
-      "Suggests": [
-        "testthat",
-        "covr"
-      ],
-      "License": "MIT + file LICENSE",
-      "URL": "https://github.com/yonicd/ggedit",
-      "BugReports": "https://github.com/yonicd/ggedit/issues",
-      "LazyData": "true",
-      "NeedsCompilation": "no",
-      "RoxygenNote": "7.3.1",
-      "Repository": "RSPM",
-      "Encoding": "UTF-8"
-    },
     "ggforce": {
       "Package": "ggforce",
       "Version": "0.4.2",
@@ -6518,47 +6212,6 @@
       "Author": "Alboukadel Kassambara [aut, cre]",
       "Maintainer": "Alboukadel Kassambara <alboukadel.kassambara@gmail.com>",
       "Repository": "CRAN"
-    },
-    "ggrastr": {
-      "Package": "ggrastr",
-      "Version": "1.0.2",
-      "Source": "GitHub",
-      "Type": "Package",
-      "Title": "Rasterize Layers for 'ggplot2'",
-      "Authors@R": "c(person(\"Viktor\", \"Petukhov\", email = \"viktor.s.petukhov@ya.ru\", role = c(\"aut\", \"cph\")), person(\"Teun\", \"van den Brand\", email = \"t.vd.brand@nki.nl\", role=c(\"aut\")), person(\"Evan\", \"Biederstedt\", email = \"evan.biederstedt@gmail.com\", role=c(\"cre\", \"aut\")))",
-      "Description": "Rasterize only specific layers of a 'ggplot2' plot while simultaneously keeping all labels and text in vector format. This allows users to keep plots within the reasonable size limit without loosing vector properties of the scale-sensitive information.",
-      "License": "MIT + file LICENSE",
-      "Encoding": "UTF-8",
-      "Imports": [
-        "ggplot2 (>= 2.1.0)",
-        "Cairo (>= 1.5.9)",
-        "ggbeeswarm",
-        "grid",
-        "png",
-        "ragg"
-      ],
-      "Depends": [
-        "R (>= 3.2.2)"
-      ],
-      "RoxygenNote": "7.2.3",
-      "Suggests": [
-        "knitr",
-        "maps",
-        "rmarkdown",
-        "sf"
-      ],
-      "VignetteBuilder": "knitr",
-      "URL": "https://github.com/VPetukhov/ggrastr",
-      "BugReports": "https://github.com/VPetukhov/ggrastr/issues",
-      "NeedsCompilation": "no",
-      "Author": "Viktor Petukhov [aut, cph], Teun van den Brand [aut], Evan Biederstedt [cre, aut]",
-      "Maintainer": "Evan Biederstedt <evan.biederstedt@gmail.com>",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "ggrastr",
-      "RemoteUsername": "VPetukhov",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "50ca3e012296ba73a8a421f8f02046d893bf2696"
     },
     "ggrepel": {
       "Package": "ggrepel",
@@ -7087,57 +6740,6 @@
       "Maintainer": "Hannah Frick <hannah@posit.co>",
       "Repository": "CRAN"
     },
-    "harmony": {
-      "Package": "harmony",
-      "Version": "1.2.3",
-      "Source": "Repository",
-      "Title": "Fast, Sensitive, and Accurate Integration of Single Cell Data",
-      "Authors@R": "c( person(\"Ilya\", \"Korsunsky\", email = \"ilya.korsunsky@gmail.com\", role = c(\"cre\", \"aut\"), comment = c(ORCID = \"0000-0003-4848-3948\")), person(\"Martin\", \"Hemberg\", email = \"mhemberg@bwh.harvard.edu\", role = c(\"aut\"), comment = c(ORCID = \"0000-0001-8895-5239\")), person(\"Nikolaos\", \"Patikas\", email = \"nik.patik@gmail.com\", role = c(\"aut\", \"ctb\"), comment = c(ORCID = \"0000-0002-3978-0134\")), person(\"Hongcheng\", \"Yao\", email = \"hongchengyaonk@gmail.com\", role = c(\"aut\", \"ctb\"), comment = c(ORCID = \"0000-0002-0743-4835\")), person(\"Nghia\", \"Millard\", email = \"nmillard@g.harvard.edu\", role = \"aut\", comment = c(ORCID = \"0000-0002-0518-7674\")), person(\"Jean\", \"Fan\", email = \"jeanfan@fas.harvard.edu\", role = c(\"aut\", \"ctb\"), comment = c(ORCID = \"0000-0002-0212-5451\")), person(\"Kamil\", \"Slowikowski\", email = \"kslowikowski@gmail.com\", role = c(\"aut\", \"ctb\"), comment = c(ORCID = \"0000-0002-2843-6370\")), person(\"Miles\", \"Smith\", role = c(\"ctb\")), person(\"Soumya\", \"Raychaudhuri\", role = c(\"aut\"), comment = c(ORCID = \"0000-0002-1901-8265\")) )",
-      "Description": "Implementation of the Harmony algorithm for single cell integration, described in Korsunsky et al <doi:10.1038/s41592-019-0619-0>. Package includes a standalone Harmony function and interfaces to external frameworks.",
-      "URL": "https://github.com/immunogenomics/harmony",
-      "License": "GPL-3",
-      "Encoding": "UTF-8",
-      "RoxygenNote": "7.2.3",
-      "Depends": [
-        "R(>= 3.5.0)",
-        "Rcpp"
-      ],
-      "LazyData": "true",
-      "LazyDataCompression": "gzip",
-      "LinkingTo": [
-        "Rcpp",
-        "RcppArmadillo",
-        "RcppProgress"
-      ],
-      "Imports": [
-        "dplyr",
-        "cowplot",
-        "ggplot2",
-        "Matrix",
-        "methods",
-        "tibble",
-        "rlang",
-        "RhpcBLASctl"
-      ],
-      "Suggests": [
-        "SingleCellExperiment",
-        "Seurat (>= 4.1.1)",
-        "testthat",
-        "knitr",
-        "rmarkdown",
-        "ggthemes",
-        "ggrepel",
-        "patchwork",
-        "tidyverse",
-        "tidyr",
-        "data.table"
-      ],
-      "VignetteBuilder": "knitr",
-      "NeedsCompilation": "yes",
-      "Author": "Ilya Korsunsky [cre, aut] (<https://orcid.org/0000-0003-4848-3948>), Martin Hemberg [aut] (<https://orcid.org/0000-0001-8895-5239>), Nikolaos Patikas [aut, ctb] (<https://orcid.org/0000-0002-3978-0134>), Hongcheng Yao [aut, ctb] (<https://orcid.org/0000-0002-0743-4835>), Nghia Millard [aut] (<https://orcid.org/0000-0002-0518-7674>), Jean Fan [aut, ctb] (<https://orcid.org/0000-0002-0212-5451>), Kamil Slowikowski [aut, ctb] (<https://orcid.org/0000-0002-2843-6370>), Miles Smith [ctb], Soumya Raychaudhuri [aut] (<https://orcid.org/0000-0002-1901-8265>)",
-      "Maintainer": "Ilya Korsunsky <ilya.korsunsky@gmail.com>",
-      "Repository": "CRAN"
-    },
     "haven": {
       "Package": "haven",
       "Version": "2.5.4",
@@ -7409,63 +7011,6 @@
       "Maintainer": "Hadley Wickham <hadley@posit.co>",
       "Repository": "CRAN"
     },
-    "iMUBAC": {
-      "Package": "iMUBAC",
-      "Version": "0.2.1",
-      "Source": "GitHub",
-      "Type": "Package",
-      "Title": "Integration of Multi-Batch Cytometry datasets",
-      "Author": "Masato Ogishi",
-      "Maintainer": "Masato Ogishi <oogishi-tky@umin.ac.jp>",
-      "Description": "High-dimentional cytometry, including spectral flow cytometry and mass cytometry (CyTOF), enables deep immunophenotyping at a single-cell resolution. Analysis of cytometry data from multiple batches of experiments remains to be challenging due to the high-dimentionality and batch effects. We designed iMUBAC (Integration of Multi-Batch Cytometry datasets) to enable a rational and streamlined inter-batch comparisons through i) preprocessing, ii) batch-correction, iii) unsupervised clustering, and iv) batch-specific cell-type identification.",
-      "License": "MIT + file LICENSE",
-      "Encoding": "UTF-8",
-      "RoxygenNote": "7.2.1",
-      "Imports": [
-        "caret",
-        "ComplexHeatmap",
-        "ConsensusClusterPlus",
-        "cydar",
-        "data.table",
-        "dplyr",
-        "flowCore",
-        "FlowSOM",
-        "ggedit",
-        "ggplot2",
-        "ggpubr",
-        "ggrastr",
-        "grDevices",
-        "grid",
-        "harmony",
-        "igraph",
-        "janitor",
-        "magrittr",
-        "Matrix",
-        "matrixStats",
-        "methods",
-        "ncdfFlow",
-        "parallel",
-        "purrr",
-        "RColorBrewer",
-        "S4Vectors",
-        "scater",
-        "scran",
-        "SingleCellExperiment",
-        "stats",
-        "stringr",
-        "SummarizedExperiment",
-        "tidyr",
-        "uwot",
-        "viridis"
-      ],
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "iMUBAC",
-      "RemoteUsername": "casanova-lab",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "a31ad08e9c0c94a6fe9771401548e298af1825a4",
-      "NeedsCompilation": "no"
-    },
     "ids": {
       "Package": "ids",
       "Version": "1.0.1",
@@ -7705,52 +7250,6 @@
       "Author": "Julia Silge [aut, cre] (<https://orcid.org/0000-0002-3671-836X>)",
       "Maintainer": "Julia Silge <julia.silge@gmail.com>",
       "Repository": "CRAN"
-    },
-    "janitor": {
-      "Package": "janitor",
-      "Version": "2.2.1",
-      "Source": "Repository",
-      "Title": "Simple Tools for Examining and Cleaning Dirty Data",
-      "Authors@R": "c(person(\"Sam\", \"Firke\", email = \"samuel.firke@gmail.com\", role = c(\"aut\", \"cre\")), person(\"Bill\", \"Denney\", email = \"wdenney@humanpredictions.com\", role = \"ctb\"), person(\"Chris\", \"Haid\", email = \"chrishaid@gmail.com\", role = \"ctb\"), person(\"Ryan\", \"Knight\", email = \"ryangknight@gmail.com\", role = \"ctb\"), person(\"Malte\", \"Grosser\", email = \"malte.grosser@gmail.com\", role = \"ctb\"), person(\"Jonathan\", \"Zadra\", email = \"jonathan.zadra@sorensonimpact.com\", role = \"ctb\"))",
-      "Description": "The main janitor functions can: perfectly format data.frame column names; provide quick counts of variable combinations (i.e., frequency tables and crosstabs); and explore duplicate records. Other janitor functions nicely format the tabulation results. These tabulate-and-report functions approximate popular features of SPSS and Microsoft Excel. This package follows the principles of the \"tidyverse\" and works well with the pipe function %>%. janitor was built with beginning-to-intermediate R users in mind and is optimized for user-friendliness.",
-      "URL": "https://github.com/sfirke/janitor, https://sfirke.github.io/janitor/",
-      "BugReports": "https://github.com/sfirke/janitor/issues",
-      "Depends": [
-        "R (>= 3.1.2)"
-      ],
-      "Imports": [
-        "dplyr (>= 1.0.0)",
-        "hms",
-        "lifecycle",
-        "lubridate",
-        "magrittr",
-        "purrr",
-        "rlang",
-        "stringi",
-        "stringr",
-        "snakecase (>= 0.9.2)",
-        "tidyselect (>= 1.0.0)",
-        "tidyr (>= 0.7.0)"
-      ],
-      "License": "MIT + file LICENSE",
-      "RoxygenNote": "7.2.3",
-      "Suggests": [
-        "dbplyr",
-        "knitr",
-        "rmarkdown",
-        "RSQLite",
-        "sf",
-        "testthat (>= 3.0.0)",
-        "tibble",
-        "tidygraph"
-      ],
-      "VignetteBuilder": "knitr",
-      "Encoding": "UTF-8",
-      "Config/testthat/edition": "3",
-      "NeedsCompilation": "no",
-      "Author": "Sam Firke [aut, cre], Bill Denney [ctb], Chris Haid [ctb], Ryan Knight [ctb], Malte Grosser [ctb], Jonathan Zadra [ctb]",
-      "Maintainer": "Sam Firke <samuel.firke@gmail.com>",
-      "Repository": "RSPM"
     },
     "jquerylib": {
       "Package": "jquerylib",
@@ -8458,40 +7957,6 @@
       "Maintainer": "Winston Chang <winston@rstudio.com>",
       "Repository": "CRAN"
     },
-    "metapod": {
-      "Package": "metapod",
-      "Version": "1.14.0",
-      "Source": "Bioconductor",
-      "Date": "2023-12-22",
-      "Title": "Meta-Analyses on P-Values of Differential Analyses",
-      "Authors@R": "person(\"Aaron\", \"Lun\", role=c(\"aut\", \"cre\"), email = \"infinite.monkeys.with.keyboards@gmail.com\")",
-      "Imports": [
-        "Rcpp"
-      ],
-      "Suggests": [
-        "testthat",
-        "knitr",
-        "BiocStyle",
-        "rmarkdown"
-      ],
-      "LinkingTo": [
-        "Rcpp"
-      ],
-      "biocViews": "MultipleComparison, DifferentialPeakCalling",
-      "Description": "Implements a variety of methods for combining p-values in differential analyses of genome-scale datasets. Functions can combine p-values across different tests in the same analysis (e.g., genomic windows in ChIP-seq, exons in RNA-seq) or for corresponding tests across separate analyses (e.g., replicated comparisons, effect of different treatment conditions). Support is provided for handling log-transformed input p-values, missing values and weighting where appropriate.",
-      "License": "GPL-3",
-      "NeedsCompilation": "yes",
-      "SystemRequirements": "C++11",
-      "VignetteBuilder": "knitr",
-      "RoxygenNote": "7.1.1",
-      "git_url": "https://git.bioconductor.org/packages/metapod",
-      "git_branch": "RELEASE_3_20",
-      "git_last_commit": "bf476aa",
-      "git_last_commit_date": "2024-10-29",
-      "Repository": "Bioconductor 3.20",
-      "Author": "Aaron Lun [aut, cre]",
-      "Maintainer": "Aaron Lun <infinite.monkeys.with.keyboards@gmail.com>"
-    },
     "mgcv": {
       "Package": "mgcv",
       "Version": "1.9-1",
@@ -8573,29 +8038,6 @@
       "NeedsCompilation": "yes",
       "Author": "Yihui Xie [aut, cre] (<https://orcid.org/0000-0003-0645-5666>, https://yihui.org), Jeffrey Horner [ctb], Beilei Bian [ctb]",
       "Maintainer": "Yihui Xie <xie@yihui.name>",
-      "Repository": "CRAN"
-    },
-    "miniUI": {
-      "Package": "miniUI",
-      "Version": "0.1.2",
-      "Source": "Repository",
-      "Type": "Package",
-      "Title": "Shiny UI Widgets for Small Screens",
-      "Authors@R": "c( person(\"Joe\", \"Cheng\", role = c(\"cre\", \"aut\"), email = \"joe@posit.co\"), person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"), comment = c(ROR = \"03wc8by49\")) )",
-      "Description": "Provides UI widget and layout functions for writing Shiny apps that work well on small screens.",
-      "License": "GPL-3",
-      "URL": "https://github.com/rstudio/miniUI",
-      "BugReports": "https://github.com/rstudio/miniUI/issues",
-      "Imports": [
-        "shiny (>= 0.13)",
-        "htmltools (>= 0.3)",
-        "utils"
-      ],
-      "RoxygenNote": "7.3.2",
-      "Encoding": "UTF-8",
-      "NeedsCompilation": "no",
-      "Author": "Joe Cheng [cre, aut], Posit Software, PBC [cph, fnd] (03wc8by49)",
-      "Maintainer": "Joe Cheng <joe@posit.co>",
       "Repository": "CRAN"
     },
     "minqa": {
@@ -8758,47 +8200,6 @@
       "Maintainer": "Torsten Hothorn <Torsten.Hothorn@R-project.org>",
       "Repository": "CRAN",
       "Encoding": "UTF-8"
-    },
-    "ncdfFlow": {
-      "Package": "ncdfFlow",
-      "Version": "2.52.1",
-      "Source": "Bioconductor",
-      "Title": "ncdfFlow: A package that provides HDF5 based storage for flow cytometry data.",
-      "Author": "Mike Jiang,Greg Finak,N. Gopalakrishnan",
-      "Description": "Provides HDF5 storage based methods and functions for manipulation of flow cytometry data.",
-      "Maintainer": "Mike Jiang <mike@ozette.com>",
-      "Depends": [
-        "R (>= 2.14.0)",
-        "flowCore(>= 1.51.7)",
-        "methods",
-        "BH"
-      ],
-      "Imports": [
-        "Biobase",
-        "BiocGenerics",
-        "flowCore"
-      ],
-      "Suggests": [
-        "testthat",
-        "parallel",
-        "flowStats",
-        "knitr"
-      ],
-      "License": "AGPL-3.0-only",
-      "biocViews": "ImmunoOncology, FlowCytometry",
-      "LinkingTo": [
-        "cpp11",
-        "BH",
-        "Rhdf5lib"
-      ],
-      "VignetteBuilder": "knitr",
-      "RoxygenNote": "7.1.1",
-      "git_url": "https://git.bioconductor.org/packages/ncdfFlow",
-      "git_branch": "RELEASE_3_20",
-      "git_last_commit": "e9b6fb5",
-      "git_last_commit_date": "2025-01-13",
-      "Repository": "Bioconductor 3.20",
-      "NeedsCompilation": "yes"
     },
     "nlme": {
       "Package": "nlme",
@@ -10732,79 +10133,6 @@
       "NeedsCompilation": "no",
       "Repository": "CRAN"
     },
-    "scran": {
-      "Package": "scran",
-      "Version": "1.34.0",
-      "Source": "Bioconductor",
-      "Date": "2024-09-05",
-      "Title": "Methods for Single-Cell RNA-Seq Data Analysis",
-      "Description": "Implements miscellaneous functions for interpretation of single-cell RNA-seq data. Methods are provided for assignment of cell cycle phase, detection of highly variable and significantly correlated genes, identification of marker genes, and other common tasks in routine single-cell analysis workflows.",
-      "Authors@R": "c(person(\"Aaron\", \"Lun\", role = c(\"aut\", \"cre\"), email = \"infinite.monkeys.with.keyboards@gmail.com\"),  person(\"Karsten\", \"Bach\", role = \"aut\"), person(\"Jong Kyoung\", \"Kim\", role = \"ctb\"),  person(\"Antonio\", \"Scialdone\", role=\"ctb\"))",
-      "Depends": [
-        "SingleCellExperiment",
-        "scuttle"
-      ],
-      "Imports": [
-        "SummarizedExperiment",
-        "S4Vectors",
-        "BiocGenerics",
-        "BiocParallel",
-        "Rcpp",
-        "stats",
-        "methods",
-        "utils",
-        "Matrix",
-        "edgeR",
-        "limma",
-        "igraph",
-        "statmod",
-        "MatrixGenerics",
-        "S4Arrays",
-        "DelayedArray",
-        "BiocSingular",
-        "bluster",
-        "metapod",
-        "dqrng",
-        "beachmat"
-      ],
-      "Suggests": [
-        "testthat",
-        "BiocStyle",
-        "knitr",
-        "rmarkdown",
-        "DelayedMatrixStats",
-        "HDF5Array",
-        "scRNAseq",
-        "dynamicTreeCut",
-        "ResidualMatrix",
-        "ScaledMatrix",
-        "DESeq2",
-        "pheatmap",
-        "scater"
-      ],
-      "biocViews": "ImmunoOncology, Normalization, Sequencing, RNASeq, Software, GeneExpression, Transcriptomics, SingleCell, Clustering",
-      "LinkingTo": [
-        "Rcpp",
-        "beachmat",
-        "BH",
-        "dqrng",
-        "scuttle"
-      ],
-      "License": "GPL-3",
-      "NeedsCompilation": "yes",
-      "VignetteBuilder": "knitr",
-      "SystemRequirements": "C++11",
-      "RoxygenNote": "7.3.2",
-      "URL": "https://github.com/MarioniLab/scran/",
-      "BugReports": "https://github.com/MarioniLab/scran/issues",
-      "git_url": "https://git.bioconductor.org/packages/scran",
-      "git_branch": "RELEASE_3_20",
-      "git_last_commit": "a517459",
-      "git_last_commit_date": "2024-10-29",
-      "Repository": "Bioconductor 3.20",
-      "Author": "Aaron Lun [aut, cre], Karsten Bach [aut], Jong Kyoung Kim [ctb], Antonio Scialdone [ctb]",
-      "Maintainer": "Aaron Lun <infinite.monkeys.with.keyboards@gmail.com>"
-    },
     "scuttle": {
       "Package": "scuttle",
       "Version": "1.16.0",
@@ -10915,162 +10243,6 @@
       "Repository": "CRAN",
       "Encoding": "UTF-8"
     },
-    "shiny": {
-      "Package": "shiny",
-      "Version": "1.10.0",
-      "Source": "Repository",
-      "Type": "Package",
-      "Title": "Web Application Framework for R",
-      "Authors@R": "c( person(\"Winston\", \"Chang\", role = c(\"aut\", \"cre\"), email = \"winston@posit.co\", comment = c(ORCID = \"0000-0002-1576-2126\")), person(\"Joe\", \"Cheng\", role = \"aut\", email = \"joe@posit.co\"), person(\"JJ\", \"Allaire\", role = \"aut\", email = \"jj@posit.co\"), person(\"Carson\", \"Sievert\", role = \"aut\", email = \"carson@posit.co\", comment = c(ORCID = \"0000-0002-4958-2844\")), person(\"Barret\", \"Schloerke\", role = \"aut\", email = \"barret@posit.co\", comment = c(ORCID = \"0000-0001-9986-114X\")), person(\"Yihui\", \"Xie\", role = \"aut\", email = \"yihui@posit.co\"), person(\"Jeff\", \"Allen\", role = \"aut\"), person(\"Jonathan\", \"McPherson\", role = \"aut\", email = \"jonathan@posit.co\"), person(\"Alan\", \"Dipert\", role = \"aut\"), person(\"Barbara\", \"Borges\", role = \"aut\"), person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\")), person(family = \"jQuery Foundation\", role = \"cph\", comment = \"jQuery library and jQuery UI library\"), person(family = \"jQuery contributors\", role = c(\"ctb\", \"cph\"), comment = \"jQuery library; authors listed in inst/www/shared/jquery-AUTHORS.txt\"), person(family = \"jQuery UI contributors\", role = c(\"ctb\", \"cph\"), comment = \"jQuery UI library; authors listed in inst/www/shared/jqueryui/AUTHORS.txt\"), person(\"Mark\", \"Otto\", role = \"ctb\", comment = \"Bootstrap library\"), person(\"Jacob\", \"Thornton\", role = \"ctb\", comment = \"Bootstrap library\"), person(family = \"Bootstrap contributors\", role = \"ctb\", comment = \"Bootstrap library\"), person(family = \"Twitter, Inc\", role = \"cph\", comment = \"Bootstrap library\"), person(\"Prem Nawaz\", \"Khan\", role = \"ctb\", comment = \"Bootstrap accessibility plugin\"), person(\"Victor\", \"Tsaran\", role = \"ctb\", comment = \"Bootstrap accessibility plugin\"), person(\"Dennis\", \"Lembree\", role = \"ctb\", comment = \"Bootstrap accessibility plugin\"), person(\"Srinivasu\", \"Chakravarthula\", role = \"ctb\", comment = \"Bootstrap accessibility plugin\"), person(\"Cathy\", \"O'Connor\", role = \"ctb\", comment = \"Bootstrap accessibility plugin\"), person(family = \"PayPal, Inc\", role = \"cph\", comment = \"Bootstrap accessibility plugin\"), person(\"Stefan\", \"Petre\", role = c(\"ctb\", \"cph\"), comment = \"Bootstrap-datepicker library\"), person(\"Andrew\", \"Rowls\", role = c(\"ctb\", \"cph\"), comment = \"Bootstrap-datepicker library\"), person(\"Brian\", \"Reavis\", role = c(\"ctb\", \"cph\"), comment = \"selectize.js library\"), person(\"Salmen\", \"Bejaoui\", role = c(\"ctb\", \"cph\"), comment = \"selectize-plugin-a11y library\"), person(\"Denis\", \"Ineshin\", role = c(\"ctb\", \"cph\"), comment = \"ion.rangeSlider library\"), person(\"Sami\", \"Samhuri\", role = c(\"ctb\", \"cph\"), comment = \"Javascript strftime library\"), person(family = \"SpryMedia Limited\", role = c(\"ctb\", \"cph\"), comment = \"DataTables library\"), person(\"John\", \"Fraser\", role = c(\"ctb\", \"cph\"), comment = \"showdown.js library\"), person(\"John\", \"Gruber\", role = c(\"ctb\", \"cph\"), comment = \"showdown.js library\"), person(\"Ivan\", \"Sagalaev\", role = c(\"ctb\", \"cph\"), comment = \"highlight.js library\"), person(family = \"R Core Team\", role = c(\"ctb\", \"cph\"), comment = \"tar implementation from R\") )",
-      "Description": "Makes it incredibly easy to build interactive web applications with R. Automatic \"reactive\" binding between inputs and outputs and extensive prebuilt widgets make it possible to build beautiful, responsive, and powerful applications with minimal effort.",
-      "License": "GPL-3 | file LICENSE",
-      "Depends": [
-        "R (>= 3.0.2)",
-        "methods"
-      ],
-      "Imports": [
-        "utils",
-        "grDevices",
-        "httpuv (>= 1.5.2)",
-        "mime (>= 0.3)",
-        "jsonlite (>= 0.9.16)",
-        "xtable",
-        "fontawesome (>= 0.4.0)",
-        "htmltools (>= 0.5.4)",
-        "R6 (>= 2.0)",
-        "sourcetools",
-        "later (>= 1.0.0)",
-        "promises (>= 1.3.2)",
-        "tools",
-        "crayon",
-        "rlang (>= 0.4.10)",
-        "fastmap (>= 1.1.1)",
-        "withr",
-        "commonmark (>= 1.7)",
-        "glue (>= 1.3.2)",
-        "bslib (>= 0.6.0)",
-        "cachem (>= 1.1.0)",
-        "lifecycle (>= 0.2.0)"
-      ],
-      "Suggests": [
-        "coro (>= 1.1.0)",
-        "datasets",
-        "DT",
-        "Cairo (>= 1.5-5)",
-        "testthat (>= 3.0.0)",
-        "knitr (>= 1.6)",
-        "markdown",
-        "rmarkdown",
-        "ggplot2",
-        "reactlog (>= 1.0.0)",
-        "magrittr",
-        "yaml",
-        "future",
-        "dygraphs",
-        "ragg",
-        "showtext",
-        "sass"
-      ],
-      "URL": "https://shiny.posit.co/, https://github.com/rstudio/shiny",
-      "BugReports": "https://github.com/rstudio/shiny/issues",
-      "Collate": "'globals.R' 'app-state.R' 'app_template.R' 'bind-cache.R' 'bind-event.R' 'bookmark-state-local.R' 'bookmark-state.R' 'bootstrap-deprecated.R' 'bootstrap-layout.R' 'conditions.R' 'map.R' 'utils.R' 'bootstrap.R' 'busy-indicators-spinners.R' 'busy-indicators.R' 'cache-utils.R' 'deprecated.R' 'devmode.R' 'diagnose.R' 'extended-task.R' 'fileupload.R' 'graph.R' 'reactives.R' 'reactive-domains.R' 'history.R' 'hooks.R' 'html-deps.R' 'image-interact-opts.R' 'image-interact.R' 'imageutils.R' 'input-action.R' 'input-checkbox.R' 'input-checkboxgroup.R' 'input-date.R' 'input-daterange.R' 'input-file.R' 'input-numeric.R' 'input-password.R' 'input-radiobuttons.R' 'input-select.R' 'input-slider.R' 'input-submit.R' 'input-text.R' 'input-textarea.R' 'input-utils.R' 'insert-tab.R' 'insert-ui.R' 'jqueryui.R' 'knitr.R' 'middleware-shiny.R' 'middleware.R' 'timer.R' 'shiny.R' 'mock-session.R' 'modal.R' 'modules.R' 'notifications.R' 'priorityqueue.R' 'progress.R' 'react.R' 'reexports.R' 'render-cached-plot.R' 'render-plot.R' 'render-table.R' 'run-url.R' 'runapp.R' 'serializers.R' 'server-input-handlers.R' 'server-resource-paths.R' 'server.R' 'shiny-options.R' 'shiny-package.R' 'shinyapp.R' 'shinyui.R' 'shinywrappers.R' 'showcase.R' 'snapshot.R' 'staticimports.R' 'tar.R' 'test-export.R' 'test-server.R' 'test.R' 'update-input.R' 'utils-lang.R' 'version_bs_date_picker.R' 'version_ion_range_slider.R' 'version_jquery.R' 'version_jqueryui.R' 'version_selectize.R' 'version_strftime.R' 'viewer.R'",
-      "RoxygenNote": "7.3.2",
-      "Encoding": "UTF-8",
-      "RdMacros": "lifecycle",
-      "Config/testthat/edition": "3",
-      "Config/Needs/check": "shinytest2",
-      "NeedsCompilation": "no",
-      "Author": "Winston Chang [aut, cre] (<https://orcid.org/0000-0002-1576-2126>), Joe Cheng [aut], JJ Allaire [aut], Carson Sievert [aut] (<https://orcid.org/0000-0002-4958-2844>), Barret Schloerke [aut] (<https://orcid.org/0000-0001-9986-114X>), Yihui Xie [aut], Jeff Allen [aut], Jonathan McPherson [aut], Alan Dipert [aut], Barbara Borges [aut], Posit Software, PBC [cph, fnd], jQuery Foundation [cph] (jQuery library and jQuery UI library), jQuery contributors [ctb, cph] (jQuery library; authors listed in inst/www/shared/jquery-AUTHORS.txt), jQuery UI contributors [ctb, cph] (jQuery UI library; authors listed in inst/www/shared/jqueryui/AUTHORS.txt), Mark Otto [ctb] (Bootstrap library), Jacob Thornton [ctb] (Bootstrap library), Bootstrap contributors [ctb] (Bootstrap library), Twitter, Inc [cph] (Bootstrap library), Prem Nawaz Khan [ctb] (Bootstrap accessibility plugin), Victor Tsaran [ctb] (Bootstrap accessibility plugin), Dennis Lembree [ctb] (Bootstrap accessibility plugin), Srinivasu Chakravarthula [ctb] (Bootstrap accessibility plugin), Cathy O'Connor [ctb] (Bootstrap accessibility plugin), PayPal, Inc [cph] (Bootstrap accessibility plugin), Stefan Petre [ctb, cph] (Bootstrap-datepicker library), Andrew Rowls [ctb, cph] (Bootstrap-datepicker library), Brian Reavis [ctb, cph] (selectize.js library), Salmen Bejaoui [ctb, cph] (selectize-plugin-a11y library), Denis Ineshin [ctb, cph] (ion.rangeSlider library), Sami Samhuri [ctb, cph] (Javascript strftime library), SpryMedia Limited [ctb, cph] (DataTables library), John Fraser [ctb, cph] (showdown.js library), John Gruber [ctb, cph] (showdown.js library), Ivan Sagalaev [ctb, cph] (highlight.js library), R Core Team [ctb, cph] (tar implementation from R)",
-      "Maintainer": "Winston Chang <winston@posit.co>",
-      "Repository": "CRAN"
-    },
-    "shinyAce": {
-      "Package": "shinyAce",
-      "Version": "0.4.4",
-      "Source": "Repository",
-      "Type": "Package",
-      "Title": "Ace Editor Bindings for Shiny",
-      "Date": "2025-2-2",
-      "Authors@R": "c( person(\"Vincent\", \"Nijs\", role = c(\"aut\", \"cre\"), email = \"radiant@rady.ucsd.edu\"), person(\"Forest\", \"Fang\", role = \"aut\", email = \"forest.fang@outlook.com\"), person(family = \"Trestle Technology, LLC\", role = \"aut\", email = \"cran@trestletechnology.net\"), person(\"Jeff\", \"Allen\", role = \"aut\", email = \"cran@trestletechnology.net\"), person(family = \"Institut de Radioprotection et de Surete Nucleaire\", role = c(\"cph\"), email = \"yann.richet@irsn.fr\"), person(family = \"Ajax.org B.V.\", role = c(\"ctb\", \"cph\"), comment = \"Ace\"))",
-      "Description": "Ace editor bindings to enable a rich text editing environment within Shiny.",
-      "License": "MIT + file LICENSE",
-      "Depends": [
-        "R (>= 3.3.0)"
-      ],
-      "Imports": [
-        "shiny (>= 1.0.5)",
-        "jsonlite",
-        "utils",
-        "tools"
-      ],
-      "Suggests": [
-        "testthat (>= 2.0.0)",
-        "dplyr (>= 0.8.3)"
-      ],
-      "BugReports": "https://github.com/trestletech/shinyAce/issues",
-      "Encoding": "UTF-8",
-      "RoxygenNote": "7.3.2",
-      "Language": "en-US",
-      "NeedsCompilation": "no",
-      "Author": "Vincent Nijs [aut, cre], Forest Fang [aut], Trestle Technology, LLC [aut], Jeff Allen [aut], Institut de Radioprotection et de Surete Nucleaire [cph], Ajax.org B.V. [ctb, cph] (Ace)",
-      "Maintainer": "Vincent Nijs <radiant@rady.ucsd.edu>",
-      "Repository": "RSPM"
-    },
-    "shinyBS": {
-      "Package": "shinyBS",
-      "Version": "0.61.1",
-      "Source": "Repository",
-      "Type": "Package",
-      "Title": "Twitter Bootstrap Components for Shiny",
-      "Date": "2015-03-30",
-      "Author": "Eric Bailey",
-      "Maintainer": "Eric Bailey <ebailey@idem.in.gov>",
-      "Description": "Adds additional Twitter Bootstrap components to Shiny.",
-      "Imports": [
-        "shiny (>= 0.11)",
-        "htmltools"
-      ],
-      "URL": "https://ebailey78.github.io/shinyBS",
-      "BugReports": "https://github.com/ebailey78/shinyBS/issues",
-      "License": "GPL-3",
-      "NeedsCompilation": "no",
-      "Repository": "RSPM",
-      "Encoding": "UTF-8"
-    },
-    "shinyjs": {
-      "Package": "shinyjs",
-      "Version": "2.1.0",
-      "Source": "Repository",
-      "Title": "Easily Improve the User Experience of Your Shiny Apps in Seconds",
-      "Authors@R": "person(\"Dean\", \"Attali\",  email = \"daattali@gmail.com\", role = c(\"aut\", \"cre\"), comment= c(ORCID=\"0000-0002-5645-3493\"))",
-      "Description": "Perform common useful JavaScript operations in Shiny apps that will greatly improve your apps without having to know any JavaScript. Examples include: hiding an element, disabling an input, resetting an input back to its original value, delaying code execution by a few seconds, and many more useful functions for both the end user and the developer. 'shinyjs' can also be used to easily call your own custom JavaScript functions from R.",
-      "URL": "https://deanattali.com/shinyjs/",
-      "BugReports": "https://github.com/daattali/shinyjs/issues",
-      "Depends": [
-        "R (>= 3.1.0)"
-      ],
-      "Imports": [
-        "digest (>= 0.6.8)",
-        "jsonlite",
-        "shiny (>= 1.0.0)"
-      ],
-      "Suggests": [
-        "htmltools (>= 0.2.9)",
-        "knitr (>= 1.7)",
-        "rmarkdown",
-        "shinyAce",
-        "shinydisconnect",
-        "testthat (>= 0.9.1)"
-      ],
-      "License": "MIT + file LICENSE",
-      "VignetteBuilder": "knitr",
-      "RoxygenNote": "7.1.1",
-      "Encoding": "UTF-8",
-      "NeedsCompilation": "no",
-      "Author": "Dean Attali [aut, cre] (<https://orcid.org/0000-0002-5645-3493>)",
-      "Maintainer": "Dean Attali <daattali@gmail.com>",
-      "Repository": "RSPM"
-    },
     "sitmo": {
       "Package": "sitmo",
       "Version": "2.0.2",
@@ -11103,41 +10275,6 @@
       "Maintainer": "James Balamuta <balamut2@illinois.edu>",
       "Repository": "RSPM"
     },
-    "snakecase": {
-      "Package": "snakecase",
-      "Version": "0.11.1",
-      "Source": "Repository",
-      "Date": "2023-08-27",
-      "Title": "Convert Strings into any Case",
-      "Description": "A consistent, flexible and easy to use tool to parse and convert strings into cases like snake or camel among others.",
-      "Authors@R": "c( person(\"Malte\", \"Grosser\", , \"malte.grosser@gmail.com\", role = c(\"aut\", \"cre\")))",
-      "Maintainer": "Malte Grosser <malte.grosser@gmail.com>",
-      "Depends": [
-        "R (>= 3.2)"
-      ],
-      "Imports": [
-        "stringr",
-        "stringi"
-      ],
-      "Suggests": [
-        "testthat",
-        "covr",
-        "tibble",
-        "purrrlyr",
-        "knitr",
-        "rmarkdown",
-        "magrittr"
-      ],
-      "URL": "https://github.com/Tazinho/snakecase",
-      "BugReports": "https://github.com/Tazinho/snakecase/issues",
-      "Encoding": "UTF-8",
-      "License": "GPL-3",
-      "RoxygenNote": "6.1.1",
-      "VignetteBuilder": "knitr",
-      "NeedsCompilation": "no",
-      "Author": "Malte Grosser [aut, cre]",
-      "Repository": "RSPM"
-    },
     "snow": {
       "Package": "snow",
       "Version": "0.4-4",
@@ -11160,28 +10297,6 @@
       "NeedsCompilation": "no",
       "Repository": "RSPM",
       "Encoding": "UTF-8"
-    },
-    "sourcetools": {
-      "Package": "sourcetools",
-      "Version": "0.1.7-1",
-      "Source": "Repository",
-      "Type": "Package",
-      "Title": "Tools for Reading, Tokenizing and Parsing R Code",
-      "Author": "Kevin Ushey",
-      "Maintainer": "Kevin Ushey <kevinushey@gmail.com>",
-      "Description": "Tools for the reading and tokenization of R code. The 'sourcetools' package provides both an R and C++ interface for the tokenization of R code, and helpers for interacting with the tokenized representation of R code.",
-      "License": "MIT + file LICENSE",
-      "Depends": [
-        "R (>= 3.0.2)"
-      ],
-      "Suggests": [
-        "testthat"
-      ],
-      "RoxygenNote": "5.0.1",
-      "BugReports": "https://github.com/kevinushey/sourcetools/issues",
-      "Encoding": "UTF-8",
-      "NeedsCompilation": "yes",
-      "Repository": "CRAN"
     },
     "sparseMatrixStats": {
       "Package": "sparseMatrixStats",

@@ -1,4 +1,4 @@
-# CyTOF-based profiling of circulating tumor cells reveals treatment-associated subtypes and phenotypes in small-cell lung cancer liquid biopsies.
+# CyTOF-based profiling of circulating tumor cells predicts aggressiveness and therapy response in SCLC liquid biopsies at a personalized level
 
 This project is fully reproducible using Docker and `renv`. 
 

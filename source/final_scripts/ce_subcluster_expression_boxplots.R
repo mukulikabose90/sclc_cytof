@@ -41,7 +41,11 @@ p2 <- p2+
        fill="")+
   scale_fill_manual(
     values = c("CTCs" = "#f46d43","Non-CTCs" = "#74add1"))+
-  rremove("legend")
+  # rremove("legend")+
+  theme(strip.text = element_text(size=20),
+        legend.text = element_text(size=16),
+        axis.text = element_text(size=14),
+        axis.title = element_text(size=20))
 
 ################################################################################
 # Save figures

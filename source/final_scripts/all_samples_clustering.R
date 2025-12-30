@@ -2,6 +2,7 @@
 # This script reads in the CyTOF data and clusters the cells into sub-populations. 
 # The cells are initially clustering using the FlowSOM algorithm then merged 
 # into consensus clusters. The clusters are then visualized using UMAP.
+# Mukulika is making changes to this code
 ################################################################################
 source("source/sclc_cytof_functions.R")
 
